@@ -11,17 +11,29 @@ import {
   HasOne,
 } from "sequelize-typescript";
 
-export const CrenditionalType = {
+export const CrenditionalTypes = {
   password: "password",
   kakao: "kakao",
   naver: "naver",
   google: "google",
 };
 
+export type CrenditionalType =
+  typeof CrenditionalTypes[keyof typeof CrenditionalTypes];
+
+export interface CreateUserCrenditionalInput {
+  type: CrenditionalType;
+  username: string;
+  password: string;
+}
+
 @Table({
   charset: "utf8",
 })
-export class UserCrenditional extends Model<UserCrenditional> {
+export class UserCrenditional extends Model<
+  UserCrenditional,
+  CreateUserCrenditionalInput
+> {
   @PrimaryKey
   @NotNull
   @Column({
@@ -38,7 +50,7 @@ export class UserCrenditional extends Model<UserCrenditional> {
     }),
     allowNull: false,
   })
-  type!: typeof CrenditionalType;
+  type!: CrenditionalType;
 
   /**
    * 소셜 로그인의 경우 username과 value과 동일함

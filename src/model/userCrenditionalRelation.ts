@@ -15,10 +15,18 @@ import { UUID, UUIDV4 } from "sequelize";
 import { User } from "./user";
 import { UserCrenditional } from "./userCreditional";
 
+export interface CreateUserCrenditionalRealtionInput {
+  userId: number;
+  crenditionalId: string;
+}
+
 @Table({
   charset: "utf8",
 })
-export class UserCrenditionalRealtion extends Model<UserCrenditionalRealtion> {
+export class UserCrenditionalRealtion extends Model<
+  UserCrenditionalRealtion,
+  CreateUserCrenditionalRealtionInput
+> {
   @PrimaryKey
   @NotNull
   @Column({

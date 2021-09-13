@@ -13,6 +13,7 @@ import {
   RefreshToken,
 } from "oauth2-server";
 import * as jwt from "jsonwebtoken";
+import { CrenditionalTypes } from "../model/userCreditional";
 import {
   UserToken,
   User as UserEntity,
@@ -223,7 +224,7 @@ async function getUser(
         where: {
           // Password validate
           username,
-          type: CrenditionalType.password,
+          type: CrenditionalTypes.password,
         },
       },
     ],

@@ -1,5 +1,5 @@
 import { Model, ModelCtor, Sequelize } from "sequelize-typescript";
-import { getSequelizeConfigure } from "../../configures";
+import { getSequelizeConfigure, initialize } from "../../configures";
 ///import your models
 // import foo from "./foo";
 
@@ -29,4 +29,6 @@ const models = [
 
 export const sequelize = new Sequelize(getSequelizeConfigure(models));
 sequelize.sync();
+initialize();
+
 export default sequelize;

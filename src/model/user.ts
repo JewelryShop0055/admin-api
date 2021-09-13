@@ -13,10 +13,17 @@ import {
   BelongsToMany,
 } from "sequelize-typescript";
 
+export interface CreateUserInput {
+  name: string;
+  phone: string;
+  email: string;
+  scope: ScopeType;
+}
+
 @Table({
   charset: "utf8",
 })
-export class User extends Model<User> {
+export class User extends Model<User, CreateUserInput> {
   @AutoIncrement
   @PrimaryKey
   @NotNull

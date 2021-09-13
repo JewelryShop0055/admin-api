@@ -5,15 +5,27 @@ import {
   NotNull,
   Column,
   HasMany,
+  Unique,
 } from "sequelize-typescript";
 import { ARRAY, UUID, TEXT, UUIDV4 } from "sequelize";
 import UserToken from "./userTokens";
 import { ScopeTypes, ScopeType } from "./scope";
 
+export interface CreateClientInput {
+  name: string;
+  clientId: string;
+  clientSecret: string;
+  grants: string[];
+  scope: ScopeType;
+  redirectUris: string[];
+  accessTokenLifetime?: number;
+  refreshTokenLifetime?: number;
+}
+
 @Table({
   charset: "utf8",
 })
-export class Client extends Model<Client> {
+export class Client extends Model<Client, CreateClientInput> {
   @PrimaryKey
   @NotNull
   @Column({
@@ -30,6 +42,10 @@ export class Client extends Model<Client> {
   })
   name!: string;
 
+  @Unique({
+    name: "clientUniq",
+    msg: "",
+  })
   @NotNull
   @Column({
     type: TEXT,
