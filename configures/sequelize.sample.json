@@ -1,0 +1,33 @@
+{
+  "dialect": "postgres",
+  "database": "jwerly",
+  "username": "postgres",
+  "password": "postgres",
+  "host": "localhost",
+  "port": 5432,
+  "sync": {
+    "force": false,
+    "alter": {
+      "drop": false
+    }
+  },
+  "replication": {
+    "read": [
+      {
+        "database": "jwerly",
+        "username": "postgres",
+        "password": "postgres",
+        "host": "localhost",
+        "port": 5432
+      }
+    ],
+    "write": {
+      "database": "jwerly",
+      "username": "postgres",
+      "password": "postgres",
+      "host": "localhost",
+      "port": 5432
+    }
+  },
+  "timezone": "+09:00"
+}

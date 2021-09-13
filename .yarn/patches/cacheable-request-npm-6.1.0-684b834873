@@ -1,0 +1,13 @@
+diff --git a/package.json b/package.json
+index 7734e03c5e48959fce864b611fc5af2fe15ebc97..ee95095b667be4286642a900ea37ff34c5a9ff52 100644
+--- a/package.json
++++ b/package.json
+@@ -34,7 +34,7 @@
+ 		"http-cache-semantics": "^4.0.0",
+ 		"keyv": "^3.0.0",
+ 		"lowercase-keys": "^2.0.0",
+-		"normalize-url": "^4.1.0",
++		"normalize-url": "^4.5.1",
+ 		"responselike": "^1.0.2"
+ 	},
+ 	"devDependencies": {

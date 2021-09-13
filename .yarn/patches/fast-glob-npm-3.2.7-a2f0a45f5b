@@ -1,0 +1,22 @@
+diff --git a/package.json b/package.json
+index 73296a3a4eb708709e5885bd2d32c2959b85f60d..c9a452e359beba78d4d72828c0c174d7c10aa615 100644
+--- a/package.json
++++ b/package.json
+@@ -30,7 +30,7 @@
+     "@types/compute-stdev": "^1.0.0",
+     "@types/easy-table": "^0.0.32",
+     "@types/glob": "^7.1.1",
+-    "@types/glob-parent": "^5.1.0",
++    "@types/glob-parent": "^6.0.1",
+     "@types/is-ci": "^2.0.0",
+     "@types/merge2": "^1.1.4",
+     "@types/micromatch": "^4.0.0",
+@@ -59,7 +59,7 @@
+   "dependencies": {
+     "@nodelib/fs.stat": "^2.0.2",
+     "@nodelib/fs.walk": "^1.2.3",
+-    "glob-parent": "^5.1.2",
++    "glob-parent": "^6.0.1",
+     "merge2": "^1.3.0",
+     "micromatch": "^4.0.4"
+   },
