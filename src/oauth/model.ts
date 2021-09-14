@@ -82,6 +82,7 @@ async function getAccessToken(accessToken: string): Promise<Token | Falsey> {
         model: ClientEntity,
       },
     ],
+    benchmark: process.env.NODE_ENV !== "production",
   });
 
   // TODO: check expired
@@ -121,6 +122,7 @@ async function getRefreshToken(
         model: UserEntity,
       },
     ],
+    benchmark: process.env.NODE_ENV !== "production",
   });
 
   // TODO: check expired
@@ -147,6 +149,7 @@ async function getClient(
     where: {
       clientId,
     },
+    benchmark: process.env.NODE_ENV !== "production",
   });
 
   if (!client || client.clientSecret !== clientSecret) {
@@ -172,15 +175,20 @@ async function saveToken(
   client: ClientEntity,
   user: User,
 ): Promise<Token | Falsey> {
-  const userToken = await UserToken.create({
-    userId: user.id,
-    clientId: client.id,
-    accessToken: token.accessToken,
-    expiredIn: token.accessTokenExpiresAt!,
-    refreshToken: token.refreshToken!,
-    refreshExpiredIn: token.refreshTokenExpiresAt!,
-    scope: token.scope as string,
-  });
+  const userToken = await UserToken.create(
+    {
+      userId: user.id,
+      clientId: client.id,
+      accessToken: token.accessToken,
+      expiredIn: token.accessTokenExpiresAt!,
+      refreshToken: token.refreshToken!,
+      refreshExpiredIn: token.refreshTokenExpiresAt!,
+      scope: token.scope as string,
+    },
+    {
+      benchmark: process.env.NODE_ENV !== "production",
+    },
+  );
 
   return {
     accessToken: userToken.accessToken,
@@ -204,10 +212,13 @@ async function revokeToken(token: RefreshToken | Token): Promise<boolean> {
       accessToken: token.accessToken,
       userId: token.user.id,
     },
+    benchmark: process.env.NODE_ENV !== "production",
   });
 
   if (userToken) {
-    userToken.destroy();
+    userToken.destroy({
+      benchmark: process.env.NODE_ENV !== "production",
+    });
   }
 
   return true;
@@ -228,6 +239,7 @@ async function getUser(
         },
       },
     ],
+    benchmark: process.env.NODE_ENV !== "production",
   });
 
   if (!user || !user.crenditionals![0]) {

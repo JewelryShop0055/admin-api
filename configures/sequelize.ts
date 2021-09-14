@@ -40,6 +40,7 @@ export async function initialize() {
     where: {
       scope: ScopeTypes.operator,
     },
+    benchmark: process.env.NODE_ENV !== "production",
   });
 
   if (!operator) {
@@ -56,6 +57,7 @@ export async function initialize() {
         },
         {
           transaction,
+          benchmark: process.env.NODE_ENV !== "production",
         },
       );
 
@@ -68,6 +70,7 @@ export async function initialize() {
         },
         {
           transaction,
+          benchmark: process.env.NODE_ENV !== "production",
         },
       );
 
@@ -78,6 +81,7 @@ export async function initialize() {
         },
         {
           transaction,
+          benchmark: process.env.NODE_ENV !== "production",
         },
       );
 
@@ -94,20 +98,26 @@ export async function initialize() {
     where: {
       scope: ScopeTypes.operator,
     },
+    benchmark: process.env.NODE_ENV !== "production",
   });
 
   if (!adminClient) {
     try {
-      await Client.create({
-        name: "shop manager client",
-        clientId: "shopClient",
-        clientSecret: "shopClient1234",
-        scope: ScopeTypes.operator,
-        grants: ["password", "refresh_token"],
-        redirectUris: ["http://localhost:3000/redirect"],
-        accessTokenLifetime: 3600,
-        refreshTokenLifetime: 7200,
-      });
+      await Client.create(
+        {
+          name: "shop manager client",
+          clientId: "shopClient",
+          clientSecret: "shopClient1234",
+          scope: ScopeTypes.operator,
+          grants: ["password", "refresh_token"],
+          redirectUris: ["http://localhost:3000/redirect"],
+          accessTokenLifetime: 3600,
+          refreshTokenLifetime: 7200,
+        },
+        {
+          benchmark: process.env.NODE_ENV !== "production",
+        },
+      );
     } catch (e) {
       throw e;
     }
