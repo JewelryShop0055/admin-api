@@ -74,7 +74,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["sequelize", "virtual:fcee1f3cc7a557de4e07277f0cc6bd9e2c9fcb8ea62cabea4fe7f0c6c938bc6a7dd39f3fd67d85f036349926f162c9a3293456f2b135726b845f83e3c5b7ef45#npm:6.6.5"],
             ["sequelize-typescript", "virtual:fcee1f3cc7a557de4e07277f0cc6bd9e2c9fcb8ea62cabea4fe7f0c6c938bc6a7dd39f3fd67d85f036349926f162c9a3293456f2b135726b845f83e3c5b7ef45#npm:2.1.0"],
             ["swagger-ui-express", "virtual:fcee1f3cc7a557de4e07277f0cc6bd9e2c9fcb8ea62cabea4fe7f0c6c938bc6a7dd39f3fd67d85f036349926f162c9a3293456f2b135726b845f83e3c5b7ef45#npm:4.1.6"],
-            ["typescript", "patch:typescript@npm%3A4.4.3#~builtin<compat/typescript>::version=4.4.3&hash=32657b"]
+            ["typescript", "patch:typescript@npm%3A4.4.3#~builtin<compat/typescript>::version=4.4.3&hash=32657b"],
+            ["uuid", "npm:8.3.2"]
           ],
           "linkType": "SOFT",
         }]
@@ -3114,7 +3115,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["sequelize", "virtual:fcee1f3cc7a557de4e07277f0cc6bd9e2c9fcb8ea62cabea4fe7f0c6c938bc6a7dd39f3fd67d85f036349926f162c9a3293456f2b135726b845f83e3c5b7ef45#npm:6.6.5"],
             ["sequelize-typescript", "virtual:fcee1f3cc7a557de4e07277f0cc6bd9e2c9fcb8ea62cabea4fe7f0c6c938bc6a7dd39f3fd67d85f036349926f162c9a3293456f2b135726b845f83e3c5b7ef45#npm:2.1.0"],
             ["swagger-ui-express", "virtual:fcee1f3cc7a557de4e07277f0cc6bd9e2c9fcb8ea62cabea4fe7f0c6c938bc6a7dd39f3fd67d85f036349926f162c9a3293456f2b135726b845f83e3c5b7ef45#npm:4.1.6"],
-            ["typescript", "patch:typescript@npm%3A4.4.3#~builtin<compat/typescript>::version=4.4.3&hash=32657b"]
+            ["typescript", "patch:typescript@npm%3A4.4.3#~builtin<compat/typescript>::version=4.4.3&hash=32657b"],
+            ["uuid", "npm:8.3.2"]
           ],
           "linkType": "SOFT",
         }]
