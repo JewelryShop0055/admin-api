@@ -2,7 +2,11 @@
   "name": "jwerly-api",
   "packageManager": "yarn@3.0.2",
   "scripts": {
-    "build": "tsc"
+    "format": "prettier --write \"./**/*.ts\" --ignore-path \"./node_modules/**/*.ts\";eslint --fix",
+    "watch": "nodemon -e ts -w . -x node dist/index.js",
+    "build": "tsc",
+    "dev": "ts-node index.ts",
+    "start": "NODE_ENV=production node dist/index.js"
   },
   "devDependencies": {
     "@types/aws-serverless-express": "^3",
@@ -24,6 +28,7 @@
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "nodemon": "^2.0.12",
     "prettier": "^2.4.0",
     "typescript": "^4.4.3"
   },
