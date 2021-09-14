@@ -1,14 +1,13 @@
 import { Model, ModelCtor, SequelizeOptions } from "sequelize-typescript";
 import configure from "./sequelize.json";
-import User from "../src/model/user";
-import { ScopeTypes } from "../src/model/scope";
-import sequelize, { UserCrenditionalRealtion } from "../src/model";
-import UserCrenditional from "../src/model/userCreditional";
-import Client from "../src/model/client";
-import {
-  CrenditionalType,
+import sequelize, {
   CrenditionalTypes,
-} from "../src/model/userCreditional";
+  Client,
+  User,
+  ScopeTypes,
+  UserCrenditionalRealtion,
+  UserCrenditional,
+} from "../src/model";
 
 export function getSequelizeConfigure(
   models: ModelCtor<Model<any, any>>[],
@@ -19,6 +18,23 @@ export function getSequelizeConfigure(
   };
 }
 
+/**
+ * 첫 시스템 구성시 기본 계정 설정 함수
+ *
+ * 1. 유저
+ * 관리자 권한을 가진 아래 계정 생성
+ * username: shopoperator
+ * PW: sh0pOperatorTmpPwd
+ *
+ * 2. 클라이언트(매장 관리 클라이언트)
+ * 관리자 권한을 가진 아래 클라이언트 생성
+ *
+ * client id: shopClient
+ * client secret: shopClient1234
+ *
+ * 초기화 이후 유저 비밀번호 변경 반드시 할것
+ * 클라이언트의 경우 "client secret" DB에서 유추하기 어려운 것으로 반드시 변경
+ */
 export async function initialize() {
   const operator = await User.findOne({
     where: {
@@ -32,7 +48,9 @@ export async function initialize() {
     try {
       const crenditional = await UserCrenditional.create(
         {
-          password: "sh0pOperatorTmpPwd",
+          password: await UserCrenditional.encryptPassword(
+            "sh0pOperatorTmpPwd",
+          ),
           username: "shopoperator",
           type: CrenditionalTypes.password,
         },

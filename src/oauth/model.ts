@@ -235,7 +235,7 @@ async function getUser(
   }
 
   // Password validate
-  if (user.crenditionals![0].password !== password) {
+  if (!(await user.crenditionals![0].verifyPassword(password))) {
     return false;
   }
 

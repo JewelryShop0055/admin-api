@@ -1,6 +1,3 @@
-import { UserCrenditionalRealtion } from "./userCrenditionalRelation";
-import { UUID, DataTypes, UUIDV4 } from "sequelize";
-import { User } from "./user";
 import {
   Model,
   Table,
@@ -10,6 +7,14 @@ import {
   BelongsToMany,
   HasOne,
 } from "sequelize-typescript";
+import { UserCrenditionalRealtion } from "./userCrenditionalRelation";
+import { UUID, DataTypes, UUIDV4 } from "sequelize";
+import { User } from "./user";
+import crypto from "crypto";
+import util from "util";
+
+const randomBytes = util.promisify(crypto.randomBytes);
+const pbkdf2 = util.promisify(crypto.pbkdf2);
 
 export const CrenditionalTypes = {
   password: "password",
@@ -75,6 +80,32 @@ export class UserCrenditional extends Model<
 
   @BelongsToMany(() => User, () => UserCrenditionalRealtion)
   user?: User[];
+
+  static async encryptPassword(plainPassword: string) {
+    const salt = (await randomBytes(32)).toString("base64");
+    const hashed = (
+      await pbkdf2(plainPassword, salt, 624, 64, "sha512")
+    ).toString("base64");
+
+    return `${salt}:${hashed}`;
+  }
+
+  async verifyPassword(plainPassword: string) {
+    if (this.type === CrenditionalTypes.password) {
+      const [salt, envcyptedPassword] = this.password.split(":");
+      const hashed = (
+        await pbkdf2(plainPassword, salt, 624, 64, "sha512")
+      ).toString("base64");
+
+      if (envcyptedPassword === hashed) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      throw new Error(`Unsupport CrenditionalType ${this.type}`);
+    }
+  }
 }
 
 export default UserCrenditional;
