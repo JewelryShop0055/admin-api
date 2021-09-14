@@ -49,9 +49,7 @@ export async function initialize() {
     try {
       const crenditional = await UserCrenditional.create(
         {
-          password: await UserCrenditional.encryptPassword(
-            "sh0pOperatorTmpPwd",
-          ),
+          password: "sh0pOperatorTmpPwd",
           username: "shopoperator",
           type: CrenditionalTypes.password,
         },

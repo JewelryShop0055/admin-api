@@ -6,7 +6,6 @@ import {
   NotNull,
   BelongsToMany,
   HasOne,
-  Unique,
 } from "sequelize-typescript";
 import { UserCrenditionalRealtion } from "./userCrenditionalRelation";
 import { UUID, DataTypes, UUIDV4 } from "sequelize";
@@ -33,6 +32,34 @@ export interface CreateUserCrenditionalInput {
   password: string;
 }
 
+const hashPasswordHook = async (crendition: UserCrenditional, options) => {
+  if (crendition.type == CrenditionalTypes.password) {
+    if (crendition.changed("password")) {
+      const plainPassword = crendition.password;
+
+      if (!plainPassword || plainPassword === "") {
+        throw new Error("Not validate Passowrd. Password Must Not Null");
+      }
+
+      const salt = (await randomBytes(32)).toString("base64");
+      const hashed = (
+        await pbkdf2(plainPassword, salt, 624, 64, "sha512")
+      ).toString("base64");
+
+      crendition.password = `${salt}:${hashed}`;
+    }
+  } else {
+    if (
+      !crendition.password ||
+      crendition.password === "" ||
+      crendition.changed("password") ||
+      crendition.changed("username")
+    ) {
+      crendition.password = crendition.username;
+    }
+  }
+};
+
 @Table({
   charset: "utf8",
   indexes: [
@@ -42,7 +69,10 @@ export interface CreateUserCrenditionalInput {
       fields: ["type", "username"],
     },
   ],
-})
+  hooks: {
+    beforeSave: hashPasswordHook,
+  },
+}) //
 export class UserCrenditional extends Model<
   UserCrenditional,
   CreateUserCrenditionalInput
@@ -102,15 +132,6 @@ export class UserCrenditional extends Model<
 
   @BelongsToMany(() => User, () => UserCrenditionalRealtion)
   user?: User[];
-
-  static async encryptPassword(plainPassword: string) {
-    const salt = (await randomBytes(32)).toString("base64");
-    const hashed = (
-      await pbkdf2(plainPassword, salt, 624, 64, "sha512")
-    ).toString("base64");
-
-    return `${salt}:${hashed}`;
-  }
 
   async verifyPassword(plainPassword: string) {
     if (this.type === CrenditionalTypes.password) {
