@@ -26,6 +26,7 @@ export class ItemRelation extends Model<ItemRelation> {
   @ForeignKey(() => Item)
   @NotNull
   @Column({
+    type: UUID,
     allowNull: false,
     validate: {
       isUUID: 4,
@@ -37,6 +38,7 @@ export class ItemRelation extends Model<ItemRelation> {
   @ForeignKey(() => Item)
   @NotNull
   @Column({
+    type: UUID,
     allowNull: false,
     validate: {
       isUUID: 4,
@@ -52,4 +54,4 @@ export class ItemRelation extends Model<ItemRelation> {
   parts?: Item;
 }
 
-export default ItemCategoryRelation;
+export default ItemRelation;

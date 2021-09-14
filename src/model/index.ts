@@ -17,6 +17,7 @@ export * from "./itemType";
 export * from "./category";
 export * from "./categroyTree";
 export * from "./ItemCategoryRelation";
+export * from "./ItemRelation";
 
 import User from "./user";
 import UserCrenditionalRelation from "./userCrenditionalRelation";
@@ -27,6 +28,7 @@ import Item from "./item";
 import Category from "./category";
 import CategoryTree from "./categroyTree";
 import ItemCategoryRelation from "./ItemCategoryRelation";
+import ItemRelation from "./ItemRelation";
 
 const models = [
   User,
@@ -38,6 +40,7 @@ const models = [
   ItemCategoryRelation,
   Category,
   CategoryTree,
+  ItemRelation,
 ] as ModelCtor<Model<any, any>>[];
 
 export const sequelize = new Sequelize(getSequelizeConfigure(models));
