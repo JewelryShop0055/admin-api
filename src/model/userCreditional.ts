@@ -6,6 +6,7 @@ import {
   NotNull,
   BelongsToMany,
   HasOne,
+  Unique,
 } from "sequelize-typescript";
 import { UserCrenditionalRealtion } from "./userCrenditionalRelation";
 import { UUID, DataTypes, UUIDV4 } from "sequelize";
@@ -34,6 +35,13 @@ export interface CreateUserCrenditionalInput {
 
 @Table({
   charset: "utf8",
+  indexes: [
+    {
+      unique: true,
+      name: "unique_user",
+      fields: ["type", "username"],
+    },
+  ],
 })
 export class UserCrenditional extends Model<
   UserCrenditional,
@@ -54,6 +62,7 @@ export class UserCrenditional extends Model<
       values: ["password", "kakao", "naver", "google"],
     }),
     allowNull: false,
+    unique: "unique_user",
   })
   type!: CrenditionalType;
 
@@ -63,6 +72,7 @@ export class UserCrenditional extends Model<
   @NotNull
   @Column({
     allowNull: false,
+    unique: "unique_user",
   })
   username!: string;
 
