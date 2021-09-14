@@ -35,13 +35,28 @@ export class User extends Model<User, CreateUserInput> {
   @Column
   @Column({
     allowNull: false,
+    validate: {
+      notEmpty: true,
+      notNull: true,
+      len: [2, 10],
+    },
   })
   name!: string;
 
-  @Column
+  @Column({
+    validate: {
+      notEmpty: true,
+      len: [9, 11],
+    },
+  })
   phone!: string;
 
-  @Column
+  @Column({
+    validate: {
+      notEmpty: true,
+      isEmail: true,
+    },
+  })
   email!: string;
 
   @NotNull
@@ -49,6 +64,11 @@ export class User extends Model<User, CreateUserInput> {
     allowNull: false,
     defaultValue: ScopeTypes.customer,
     type: ScopeEnum,
+    validate: {
+      notEmpty: true,
+      notNull: true,
+      isLowercase: true,
+    },
   })
   scope!: ScopeType;
 

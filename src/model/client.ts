@@ -5,7 +5,6 @@ import {
   NotNull,
   Column,
   HasMany,
-  Unique,
 } from "sequelize-typescript";
 import { ARRAY, UUID, TEXT, UUIDV4 } from "sequelize";
 import UserToken from "./userTokens";
@@ -24,6 +23,18 @@ export interface CreateClientInput {
 
 @Table({
   charset: "utf8",
+  indexes: [
+    {
+      unique: true,
+      name: "client_unique",
+      fields: ["clientId"],
+    },
+    {
+      unique: true,
+      name: "client_name_unique",
+      fields: ["name"],
+    },
+  ],
 })
 export class Client extends Model<Client, CreateClientInput> {
   @PrimaryKey
@@ -39,17 +50,21 @@ export class Client extends Model<Client, CreateClientInput> {
   @Column({
     type: TEXT,
     allowNull: false,
+    validate: {
+      notEmpty: true,
+      isNull: false,
+    },
   })
   name!: string;
 
-  @Unique({
-    name: "clientUniq",
-    msg: "",
-  })
   @NotNull
   @Column({
     type: TEXT,
     allowNull: false,
+    validate: {
+      notEmpty: true,
+      isNull: false,
+    },
   })
   clientId!: string;
 
@@ -57,6 +72,10 @@ export class Client extends Model<Client, CreateClientInput> {
   @Column({
     type: TEXT,
     allowNull: false,
+    validate: {
+      notEmpty: true,
+      isNull: false,
+    },
   })
   clientSecret!: string;
 
@@ -64,6 +83,11 @@ export class Client extends Model<Client, CreateClientInput> {
   @Column({
     allowNull: false,
     defaultValue: ScopeTypes.customer,
+    validate: {
+      notEmpty: true,
+      isNull: false,
+      isLowercase: true,
+    },
   })
   scope!: ScopeType;
 
@@ -71,6 +95,11 @@ export class Client extends Model<Client, CreateClientInput> {
   @Column({
     allowNull: false,
     type: ARRAY(TEXT),
+    validate: {
+      isArray: true,
+      notEmpty: true,
+      isNull: false,
+    },
   })
   redirectUris!: string[];
 
@@ -78,6 +107,11 @@ export class Client extends Model<Client, CreateClientInput> {
   @Column({
     allowNull: false,
     type: ARRAY(TEXT),
+    validate: {
+      isArray: true,
+      notEmpty: true,
+      isNull: false,
+    },
   })
   grants!: string[];
 
@@ -85,6 +119,11 @@ export class Client extends Model<Client, CreateClientInput> {
   @Column({
     allowNull: false,
     defaultValue: 600,
+    validate: {
+      isNumeric: true,
+      min: 60,
+      isNull: false,
+    },
   })
   accessTokenLifetime!: number;
 
@@ -92,6 +131,11 @@ export class Client extends Model<Client, CreateClientInput> {
   @Column({
     allowNull: false,
     defaultValue: 3600,
+    validate: {
+      isNumeric: true,
+      min: 60,
+      isNull: false,
+    },
   })
   refreshTokenLifetime!: number;
 

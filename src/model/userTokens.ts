@@ -26,6 +26,18 @@ export interface CreateUserTokenInput {
 
 @Table({
   charset: "utf8",
+  indexes: [
+    {
+      unique: true,
+      name: "access_unique",
+      fields: ["accessToken"],
+    },
+    {
+      unique: true,
+      name: "refresh_unique",
+      fields: ["refreshToken"],
+    },
+  ],
 })
 export class UserToken extends Model<UserToken, CreateUserTokenInput> {
   @PrimaryKey
@@ -41,6 +53,11 @@ export class UserToken extends Model<UserToken, CreateUserTokenInput> {
   @Column({
     type: UUID,
     allowNull: false,
+    validate: {
+      isNull: false,
+      notEmpty: true,
+      isUUID: 4,
+    },
   })
   clientId!: string;
 
@@ -53,6 +70,11 @@ export class UserToken extends Model<UserToken, CreateUserTokenInput> {
   @Column({
     type: ScopeEnum,
     allowNull: false,
+    validate: {
+      notEmpty: true,
+      isNull: false,
+      isLowercase: true,
+    },
   })
   scope!: ScopeType;
 
@@ -60,6 +82,11 @@ export class UserToken extends Model<UserToken, CreateUserTokenInput> {
   @Column({
     type: TEXT,
     allowNull: false,
+    unique: "access_unique",
+    validate: {
+      isNull: false,
+      notEmpty: true,
+    },
   })
   accessToken!: string;
 
@@ -67,6 +94,10 @@ export class UserToken extends Model<UserToken, CreateUserTokenInput> {
   @Column({
     type: DATE,
     allowNull: false,
+    validate: {
+      isNull: false,
+      isDate: true,
+    },
   })
   expiredIn!: Date;
 
@@ -74,6 +105,11 @@ export class UserToken extends Model<UserToken, CreateUserTokenInput> {
   @Column({
     type: TEXT,
     allowNull: false,
+    unique: "refresh_unique",
+    validate: {
+      isNull: false,
+      notEmpty: true,
+    },
   })
   refreshToken!: string;
 
@@ -81,6 +117,10 @@ export class UserToken extends Model<UserToken, CreateUserTokenInput> {
   @Column({
     type: DATE,
     allowNull: false,
+    validate: {
+      isNull: false,
+      isDate: true,
+    },
   })
   refreshExpiredIn!: Date;
 
