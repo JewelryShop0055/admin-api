@@ -50,10 +50,6 @@ export class Client extends Model<Client, CreateClientInput> {
   @Column({
     type: TEXT,
     allowNull: false,
-    validate: {
-      notEmpty: true,
-      isNull: false,
-    },
   })
   name!: string;
 
@@ -61,10 +57,6 @@ export class Client extends Model<Client, CreateClientInput> {
   @Column({
     type: TEXT,
     allowNull: false,
-    validate: {
-      notEmpty: true,
-      isNull: false,
-    },
   })
   clientId!: string;
 
@@ -72,10 +64,6 @@ export class Client extends Model<Client, CreateClientInput> {
   @Column({
     type: TEXT,
     allowNull: false,
-    validate: {
-      notEmpty: true,
-      isNull: false,
-    },
   })
   clientSecret!: string;
 
@@ -83,11 +71,6 @@ export class Client extends Model<Client, CreateClientInput> {
   @Column({
     allowNull: false,
     defaultValue: ScopeTypes.customer,
-    validate: {
-      notEmpty: true,
-      isNull: false,
-      isLowercase: true,
-    },
   })
   scope!: ScopeType;
 
@@ -95,11 +78,6 @@ export class Client extends Model<Client, CreateClientInput> {
   @Column({
     allowNull: false,
     type: ARRAY(TEXT),
-    validate: {
-      isArray: true,
-      notEmpty: true,
-      isNull: false,
-    },
   })
   redirectUris!: string[];
 
@@ -107,11 +85,6 @@ export class Client extends Model<Client, CreateClientInput> {
   @Column({
     allowNull: false,
     type: ARRAY(TEXT),
-    validate: {
-      isArray: true,
-      notEmpty: true,
-      isNull: false,
-    },
   })
   grants!: string[];
 
@@ -119,11 +92,6 @@ export class Client extends Model<Client, CreateClientInput> {
   @Column({
     allowNull: false,
     defaultValue: 600,
-    validate: {
-      isNumeric: true,
-      min: 60,
-      isNull: false,
-    },
   })
   accessTokenLifetime!: number;
 
@@ -131,11 +99,6 @@ export class Client extends Model<Client, CreateClientInput> {
   @Column({
     allowNull: false,
     defaultValue: 3600,
-    validate: {
-      isNumeric: true,
-      min: 60,
-      isNull: false,
-    },
   })
   refreshTokenLifetime!: number;
 

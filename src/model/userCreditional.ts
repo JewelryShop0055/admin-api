@@ -93,10 +93,6 @@ export class UserCrenditional extends Model<
     }),
     allowNull: false,
     unique: "unique_user",
-    validate: {
-      notEmpty: true,
-      notNull: true,
-    },
   })
   type!: CrenditionalType;
 
@@ -107,10 +103,6 @@ export class UserCrenditional extends Model<
   @Column({
     allowNull: false,
     unique: "unique_user",
-    validate: {
-      notEmpty: true,
-      notNull: true,
-    },
   })
   username!: string;
 
@@ -120,10 +112,6 @@ export class UserCrenditional extends Model<
   @NotNull
   @Column({
     allowNull: false,
-    validate: {
-      notEmpty: true,
-      notNull: true,
-    },
   })
   password!: string;
 

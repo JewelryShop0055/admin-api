@@ -26,10 +26,6 @@ export class CategoryTree extends Model<CategoryTree> {
   @NotNull
   @Column({
     allowNull: false,
-    validate: {
-      isNumeric: true,
-      isNull: false,
-    },
   })
   parentId!: number;
 
@@ -37,10 +33,6 @@ export class CategoryTree extends Model<CategoryTree> {
   @NotNull
   @Column({
     allowNull: false,
-    validate: {
-      isNumeric: true,
-      isNull: false,
-    },
   })
   childId!: number;
 
@@ -50,10 +42,6 @@ export class CategoryTree extends Model<CategoryTree> {
   @NotNull
   @Column({
     allowNull: false,
-    validate: {
-      isNumeric: true,
-      isNull: false,
-    },
   })
   depth!: number;
 

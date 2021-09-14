@@ -27,20 +27,12 @@ export class Category extends Model<Category> {
   @Column({
     allowNull: false,
     type: ItemTypeEnum,
-    validate: {
-      notEmpty: true,
-      isNull: false,
-    },
   })
   type!: ItemType;
 
   @NotNull
   @Column({
     allowNull: false,
-    validate: {
-      notEmpty: true,
-      isNull: false,
-    },
   })
   name!: string;
 
@@ -48,10 +40,6 @@ export class Category extends Model<Category> {
   @Column({
     allowNull: false,
     defaultValue: 0,
-    validate: {
-      isNumeric: true,
-      isNull: false,
-    },
   })
   depth!: number;
 

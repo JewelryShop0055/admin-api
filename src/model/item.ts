@@ -66,20 +66,12 @@ export class Item extends Model<Item> {
   @Column({
     allowNull: false,
     unique: "part_unique",
-    validate: {
-      notEmpty: true,
-      isNull: false,
-    },
   })
   partNo!: string;
 
   @NotNull
   @Column({
     allowNull: false,
-    validate: {
-      notEmpty: true,
-      isNull: false,
-    },
   })
   name!: string;
 
@@ -87,10 +79,6 @@ export class Item extends Model<Item> {
   @Column({
     type: ItemUnitTypeEnum,
     allowNull: false,
-    validate: {
-      notEmpty: true,
-      isNull: false,
-    },
     defaultValue: ItemUnitTypes.ea,
   })
   unit!: ItemUnitType;
@@ -103,11 +91,6 @@ export class Item extends Model<Item> {
   @Column({
     allowNull: false,
     defaultValue: 0,
-    validate: {
-      isNumeric: true,
-      min: 0,
-      isNull: false,
-    },
   })
   defaultFee!: number;
 
@@ -119,11 +102,6 @@ export class Item extends Model<Item> {
   @Column({
     allowNull: false,
     defaultValue: 0,
-    validate: {
-      isNumeric: true,
-      min: 0,
-      isNull: false,
-    },
   })
   extraFee!: number;
 

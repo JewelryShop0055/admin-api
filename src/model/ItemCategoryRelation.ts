@@ -27,10 +27,6 @@ export class ItemCategoryRelation extends Model<ItemCategoryRelation> {
   @NotNull
   @Column({
     allowNull: false,
-    validate: {
-      isUUID: 4,
-      notNull: true,
-    },
   })
   itemId!: string;
 
@@ -38,11 +34,6 @@ export class ItemCategoryRelation extends Model<ItemCategoryRelation> {
   @NotNull
   @Column({
     allowNull: false,
-    validate: {
-      isNumeric: true,
-      min: 1,
-      isNull: false,
-    },
   })
   categoryId!: number;
 

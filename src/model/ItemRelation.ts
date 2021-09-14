@@ -28,10 +28,6 @@ export class ItemRelation extends Model<ItemRelation> {
   @Column({
     type: UUID,
     allowNull: false,
-    validate: {
-      isUUID: 4,
-      notNull: true,
-    },
   })
   productId!: string;
 
@@ -40,10 +36,6 @@ export class ItemRelation extends Model<ItemRelation> {
   @Column({
     type: UUID,
     allowNull: false,
-    validate: {
-      isUUID: 4,
-      notNull: true,
-    },
   })
   partsId!: string;
 
