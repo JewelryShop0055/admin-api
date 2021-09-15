@@ -15,6 +15,7 @@ export function getSequelizeConfigure(
   return {
     models,
     ...(configure as SequelizeOptions),
+    benchmark: process.env.NODE_ENV !== "production",
   };
 }
 
