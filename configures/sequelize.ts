@@ -64,7 +64,7 @@ export async function initialize() {
         {
           email: "dummy@dummy.com",
           name: "운영자",
-          phone: "010-0000-0000",
+          phone: "01000000000",
           scope: ScopeTypes.operator,
         },
         {

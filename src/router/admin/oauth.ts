@@ -8,8 +8,18 @@ const router = express.Router({
 /**
  * @openapi
  *
+ * tags:
+ *   - name: "admin-auth"
+ *     description: "Shop manage service Authorization"
+ */
+
+/**
+ * @openapi
+ *
  * /admin/auth/token:
  *   post:
+ *     tags:
+ *       - "admin-auth"
  *     summary: Login. token API.
  *     requestBody:
  *        content:
@@ -75,5 +85,32 @@ const router = express.Router({
  *                      example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjEifQ.eyJ0b2tlblR5cGUiOiJyZWZyZXNoVG9rZW4iLCJzY29wZSI6Im9wZXJhdG9yIiwiaWF0IjoxNjMxNjMxNjM4LCJleHAiOjE2MzE2Mzg4MzgsImlzcyI6IjNmYWMxZmU4LWE5Y2ItNDMxZS1iMDZlLTliN2FlN2YwNjQ5ZSJ9.qoBqcfBnHYI4t6tBZYE387xERF5aZbsu4MCUBD8j5Sg"
  */
 router.post("/token", oAuth2Server.token());
+
+/**
+ * Sample from "https://github.com/oauthjs/express-oauth-server/blob/master/examples/postgresql/index.js"
+ */
+router.get("/authorize", function (req, res) {
+  // Redirect anonymous users to login page.
+  if (!req.app.locals.user) {
+    return res.sendStatus(401);
+  }
+
+  return res.render("authorize", {
+    client_id: req.query.client_id,
+    redirect_uri: req.query.redirect_uri,
+  });
+});
+
+/**
+ * Sample from "https://github.com/oauthjs/express-oauth-server/blob/master/examples/postgresql/index.js"
+ */
+router.post("/authorize", function (req, res) {
+  // Redirect anonymous users to login page.
+  if (!req.app.locals.user) {
+    return res.sendStatus(401);
+  }
+
+  return oAuth2Server.authorize();
+});
 
 export default router;

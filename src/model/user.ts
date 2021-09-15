@@ -13,6 +13,29 @@ import {
   BelongsToMany,
 } from "sequelize-typescript";
 
+/**
+ * @openapi
+ *
+ * components:
+ *   schemas:
+ *     CreateUserInput:
+ *       type: object
+ *       properties:
+ *         name:
+ *           description: "name of user that needs to be created"
+ *           required: true
+ *           type: "string"
+ *         phone:
+ *           description: "phone of user that needs to be created"
+ *           required: true
+ *           type: "string"
+ *           example: "01012341234"
+ *         email:
+ *           description: "email of user that needs to be created"
+ *           required: true
+ *           type: "string"
+ *           format: email
+ */
 export interface CreateUserInput {
   name: string;
   phone: string;
@@ -20,6 +43,79 @@ export interface CreateUserInput {
   scope: ScopeType;
 }
 
+/**
+ * @openapi
+ *
+ * components:
+ *   schemas:
+ *     UpdateUserInput:
+ *       type: object
+ *       properties:
+ *         name:
+ *           description: "name of user that needs to be updated"
+ *           required: false
+ *           type: "string"
+ *         phone:
+ *           description: "phone of user that needs to be updated"
+ *           required: false
+ *           type: "string"
+ *           example: "01012341234"
+ *         email:
+ *           description: "email of user that needs to be updated"
+ *           required: false
+ *           type: "string"
+ *           format: email
+ */
+export class UpdateUserInput {
+  name?: string;
+  phone?: string;
+  email?: string;
+}
+
+/**
+ * @openapi
+ *
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         id:
+ *           description: "id of user"
+ *           required: true
+ *           type: "string"
+ *         name:
+ *           description: "name of user"
+ *           required: true
+ *           type: "string"
+ *         phone:
+ *           description: "phone of user"
+ *           required: true
+ *           type: "string"
+ *           example: "01012341234"
+ *         email:
+ *           description: "email of user"
+ *           required: true
+ *           type: "string"
+ *           format: email
+ *         scope:
+ *           description: User allow Permissions Type
+ *           required: true
+ *           type: "string"
+ *           enum:
+ *             - operator
+ *             - customer
+ *         createdAt:
+ *           description: "email of user"
+ *           required: true
+ *           type: "string"
+ *           format: date
+ *         updatedAt:
+ *           description: "email of user"
+ *           required: false
+ *           type: "string"
+ *           format: date
+ */
 @Table({
   charset: "utf8",
 })

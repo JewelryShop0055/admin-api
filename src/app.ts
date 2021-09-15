@@ -49,7 +49,7 @@ const options: swaggereJsdoc.Options = {
       bearerAuth: [],
     },
   },
-  apis: [`${__dirname}/router/**/*.js`],
+  apis: [`${__dirname}/router/**/*.js`, `${__dirname}/model/**/*.js`],
 };
 
 const specs = swaggereJsdoc(options);

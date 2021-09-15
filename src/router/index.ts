@@ -9,6 +9,17 @@ const router = express.Router({
 // write here your router with prefix
 router.use("/admin", admin);
 router.use("/v1", v1);
+
+/**
+ * @openapi
+ * /health:
+ *   get:
+ *     description: Check Api server Lives
+ *     responses:
+ *       200:
+ *         description: Health OK
+ *         example: OK
+ */
 router.get("/health", (req, res) => {
   res.send({
     status: "OK",
