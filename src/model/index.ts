@@ -44,7 +44,8 @@ const models = [
 ] as ModelCtor<Model<any, any>>[];
 
 export const sequelize = new Sequelize(getSequelizeConfigure(models));
-sequelize.sync();
-initialize();
+sequelize.sync().then(async () => {
+  await initialize();
+});
 
 export default sequelize;
