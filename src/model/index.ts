@@ -1,10 +1,5 @@
 import { Model, ModelCtor, Sequelize } from "sequelize-typescript";
 import { getSequelizeConfigure, initialize } from "../../configures";
-///import your models
-// import foo from "./foo";
-
-//export your models
-// export * from "./foo";
 
 export * from "./user";
 export * from "./userCrenditionalRelation";
@@ -18,6 +13,8 @@ export * from "./category";
 export * from "./categroyTree";
 export * from "./ItemCategoryRelation";
 export * from "./ItemRelation";
+export * from "./craftShop";
+export * from "./itemCraftShopRelation";
 
 import User from "./user";
 import UserCrenditionalRelation from "./userCrenditionalRelation";
@@ -29,6 +26,8 @@ import Category from "./category";
 import CategoryTree from "./categroyTree";
 import ItemCategoryRelation from "./ItemCategoryRelation";
 import ItemRelation from "./ItemRelation";
+import CraftShop from "./craftShop";
+import ItemCraftShopRelation from "./itemCraftShopRelation";
 
 const models = [
   User,
@@ -41,6 +40,8 @@ const models = [
   Category,
   CategoryTree,
   ItemRelation,
+  CraftShop,
+  ItemCraftShopRelation,
 ] as ModelCtor<Model<any, any>>[];
 
 export const sequelize = new Sequelize(getSequelizeConfigure(models));

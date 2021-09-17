@@ -21,6 +21,8 @@ import { v4 as uuidv4 } from "uuid";
 import ItemCategoryRelation from "./ItemCategoryRelation";
 import Category from "./category";
 import { ItemUnitTypes } from "./itemType";
+import ItemCraftShopRelation from "./itemCraftShopRelation";
+import CraftShop from "./craftShop";
 
 @Table({
   charset: "utf8",
@@ -110,6 +112,12 @@ export class Item extends Model<Item> {
 
   @BelongsToMany(() => Category, () => ItemCategoryRelation)
   categories?: Category[];
+
+  @HasMany(() => ItemCraftShopRelation)
+  craftShopRelations?: ItemCraftShopRelation[];
+
+  @BelongsToMany(() => CraftShop, () => ItemCraftShopRelation)
+  craftShops?: CraftShop[];
 }
 
 export default Item;
