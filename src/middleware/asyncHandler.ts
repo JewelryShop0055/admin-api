@@ -6,7 +6,7 @@ type AsyncHandler<T = void> = (
   next: NextFunction,
 ) => Promise<T>;
 
-export default function asyncHandler(func: RequestHandler) {
+export function asyncHandler(func: RequestHandler) {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       return (await (func(req, res, next) as unknown)) as AsyncHandler;
