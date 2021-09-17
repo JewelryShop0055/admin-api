@@ -505,7 +505,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/swagger-ui-express@npm:^4":
+"@types/swagger-ui-express@npm:^4.1.3":
   version: 4.1.3
   resolution: "@types/swagger-ui-express@npm:4.1.3"
   dependencies:
@@ -2581,6 +2581,15 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
+"json-ignore@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "json-ignore@npm:0.4.0"
+  dependencies:
+    reflect-metadata: ^0.1.9
+  checksum: 06be29e243e16ac8e013c1a22be1df5635d7e16e46442997340dbb6776a87aba7ec0d352384919c80fa7a3bed04f46a02bd7642b8c6499e286deaaf7a8d85e09
+  languageName: node
+  linkType: hard
+
 "json-schema-traverse@npm:^0.4.1":
   version: 0.4.1
   resolution: "json-schema-traverse@npm:0.4.1"
@@ -2649,7 +2658,7 @@ fsevents@~2.3.2:
     "@types/pg": ^8
     "@types/prettier": ^2
     "@types/swagger-jsdoc": ^6
-    "@types/swagger-ui-express": ^4
+    "@types/swagger-ui-express": ^4.1.3
     "@typescript-eslint/eslint-plugin": ^4.31.0
     "@typescript-eslint/parser": ^4.31.0
     aws-lambda: ^1.0.6
@@ -2663,6 +2672,7 @@ fsevents@~2.3.2:
     express: ^4.17.1
     express-oauth-server: ^2.0.0
     helmet: ^4.6.0
+    json-ignore: ^0.4.0
     jsonwebtoken: ^8.5.1
     nodemon: ^2.0.12
     oauth2-server: ^3.1.1
@@ -3721,7 +3731,7 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"reflect-metadata@npm:^0.1.13":
+"reflect-metadata@npm:^0.1.13, reflect-metadata@npm:^0.1.9":
   version: 0.1.13
   resolution: "reflect-metadata@npm:0.1.13"
   checksum: 798d379a7b6f6455501145419505c97dd11cbc23857a386add2b9ef15963ccf15a48d9d15507afe01d4cd74116df8a213247200bac00320bd7c11ddeaa5e8fb4

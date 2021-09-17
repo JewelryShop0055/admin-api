@@ -63,6 +63,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["express", "npm:4.17.1"],
             ["express-oauth-server", "npm:2.0.0"],
             ["helmet", "npm:4.6.0"],
+            ["json-ignore", "npm:0.4.0"],
             ["jsonwebtoken", "npm:8.5.1"],
             ["nodemon", "npm:2.0.12"],
             ["oauth2-server", "npm:3.1.1"],
@@ -3132,6 +3133,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["json-ignore", [
+        ["npm:0.4.0", {
+          "packageLocation": "./.yarn/cache/json-ignore-npm-0.4.0-020faea081-06be29e243.zip/node_modules/json-ignore/",
+          "packageDependencies": [
+            ["json-ignore", "npm:0.4.0"],
+            ["reflect-metadata", "npm:0.1.13"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["json-schema-traverse", [
         ["npm:0.4.1", {
           "packageLocation": "./.yarn/cache/json-schema-traverse-npm-0.4.1-4759091693-7486074d3b.zip/node_modules/json-schema-traverse/",
@@ -3221,6 +3232,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["express", "npm:4.17.1"],
             ["express-oauth-server", "npm:2.0.0"],
             ["helmet", "npm:4.6.0"],
+            ["json-ignore", "npm:0.4.0"],
             ["jsonwebtoken", "npm:8.5.1"],
             ["nodemon", "npm:2.0.12"],
             ["oauth2-server", "npm:3.1.1"],
