@@ -12,6 +12,7 @@ import { UUID, DataTypes, UUIDV4 } from "sequelize";
 import { User } from "./user";
 import crypto from "crypto";
 import util from "util";
+import { jsonIgnore } from "json-ignore";
 
 const randomBytes = util.promisify(crypto.randomBytes);
 const pbkdf2 = util.promisify(crypto.pbkdf2);
@@ -109,6 +110,7 @@ export class UserCrenditional extends Model<
   /**
    * 소셜 로그인의 경우 username과 value과 동일함
    */
+  @jsonIgnore()
   @NotNull
   @Column({
     allowNull: false,
