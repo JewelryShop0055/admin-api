@@ -99,19 +99,14 @@ export class UpdateUserInput {
  *           type: "string"
  *           format: email
  *         scope:
- *           description: User allow Permissions Type
- *           required: true
- *           type: "string"
- *           enum:
- *             - operator
- *             - customer
+ *           $ref: "#/components/schemas/ScopeType"
  *         createdAt:
- *           description: "email of user"
+ *           description: "Created Date of user"
  *           required: true
  *           type: "string"
  *           format: date
  *         updatedAt:
- *           description: "email of user"
+ *           description: "Last Modified Date of user"
  *           required: false
  *           type: "string"
  *           format: date

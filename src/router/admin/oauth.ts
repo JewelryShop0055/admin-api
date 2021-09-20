@@ -47,9 +47,7 @@ const router = express.Router({
  *                      - password
  *                      - refresh_token
  *                 scope:
- *                   type: string
- *                   required: true
- *                   example: "operator"
+ *                   $ref: "#/components/schemas/ScopeType"
  *                 username:
  *                   type: string
  *                   example: "shopoperator"

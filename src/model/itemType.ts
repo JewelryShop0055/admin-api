@@ -1,7 +1,33 @@
 import { DataTypes } from "sequelize";
 
+/**
+ * @openapi
+ *
+ * components:
+ *   schemas:
+ *     ItemType:
+ *       type: string
+ *       enum:
+ *          - product
+ *          - parts
+ *   parameters:
+ *     ItemType:
+ *       name: itemType
+ *       required: true
+ *       allowEmptyValue: false
+ *       description: See "ItemType".
+ *       in: path
+ *       schema:
+ *         $ref: "#/components/schemas/ItemType"
+ */
 export const ItemTypes = {
+  /**
+   * 제품
+   */
   product: "product",
+  /**
+   * 부속품
+   */
   parts: "parts",
 } as const;
 

@@ -1,4 +1,17 @@
 import { DataTypes } from "sequelize";
+
+/**
+ * @openapi
+ *
+ * components:
+ *   schemas:
+ *     ScopeType:
+ *       description: User allow Permissions Type
+ *       type: string
+ *       enum:
+ *          - operator
+ *          - customer
+ */
 export const ScopeTypes = {
   operator: "operator",
   customer: "customer",
