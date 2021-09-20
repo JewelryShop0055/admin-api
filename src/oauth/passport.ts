@@ -10,7 +10,9 @@ passport.serializeUser((user: any, done: (err: any, id?: any) => void) => {
 });
 
 passport.deserializeUser<any, any>(
-  (id: any, done: (err: any, user?: any) => void) => {},
+  (id: any, done: (err: any, user?: any) => void) => {
+    /* TODO */
+  },
 );
 
 passport.use(
@@ -26,7 +28,9 @@ passport.use(
         user?: any,
         options?: IVerifyOptions | string,
       ) => void,
-    ) => {},
+    ) => {
+      /* TODO */
+    },
   ),
 );
 
