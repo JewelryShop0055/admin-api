@@ -4,8 +4,12 @@ import {
   PrimaryKey,
   Table,
   Model,
+  HasMany,
+  BelongsToMany,
 } from "sequelize-typescript";
 import { UUID, UUIDV4 } from "sequelize";
+import ItemCraftShopRelation from "./itemCraftShopRelation";
+import Item from "./item";
 
 export class CreateCraftShoptInput {
   name!: string;
@@ -55,6 +59,14 @@ export class CraftShop extends Model<CraftShop, CreateCraftShoptInput> {
     allowNull: false,
   })
   phone!: string;
+
+  @HasMany(() => ItemCraftShopRelation, {
+    onDelete: "CASCADE",
+  })
+  itemRelations?: ItemCraftShopRelation[];
+
+  @BelongsToMany(() => Item, () => ItemCraftShopRelation)
+  items?: Item[];
 }
 
 export default CraftShop;

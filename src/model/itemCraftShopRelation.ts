@@ -6,7 +6,7 @@ import {
   Model,
   ForeignKey,
   Unique,
-  HasOne,
+  BelongsTo,
 } from "sequelize-typescript";
 import { UUID, UUIDV4 } from "sequelize";
 import CraftShop from "./craftShop";
@@ -56,10 +56,10 @@ export class ItemCraftShopRelation extends Model<
   })
   craftShopid!: string;
 
-  @HasOne(() => Item)
+  @BelongsTo(() => Item, "itemId")
   item?: Item;
 
-  @HasOne(() => CraftShop)
+  @BelongsTo(() => CraftShop, "craftShopid")
   craftShop?: CraftShop;
 }
 
