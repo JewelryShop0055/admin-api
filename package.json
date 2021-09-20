@@ -2,6 +2,7 @@
   "name": "jwerly-api",
   "packageManager": "yarn@3.0.2",
   "scripts": {
+    "lint": "prettier -c \"./**/*.ts\";eslint **/*.ts",
     "format": "prettier --write \"./**/*.ts\" --ignore-path \"./node_modules/**/*.ts\";eslint --fix",
     "watch": "nodemon -e ts -w . -x node dist/index.js",
     "build": "tsc",
