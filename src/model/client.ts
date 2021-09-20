@@ -102,7 +102,9 @@ export class Client extends Model<Client, CreateClientInput> {
   })
   refreshTokenLifetime!: number;
 
-  @HasMany(() => UserToken)
+  @HasMany(() => UserToken, {
+    onDelete: "CASCADE",
+  })
   tokens?: UserToken[];
 }
 

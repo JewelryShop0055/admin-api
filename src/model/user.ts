@@ -143,10 +143,14 @@ export class User extends Model<User, CreateUserInput> {
   })
   scope!: ScopeType;
 
-  @HasMany(() => UserToken)
+  @HasMany(() => UserToken, {
+    onDelete: "CASCADE",
+  })
   tokens?: UserToken[];
 
-  @HasMany(() => UserCrenditionalRealtion)
+  @HasMany(() => UserCrenditionalRealtion, {
+    onDelete: "CASCADE",
+  })
   crenditionalRealtions?: UserCrenditionalRealtion[];
 
   @BelongsToMany(() => UserCrenditional, () => UserCrenditionalRealtion)

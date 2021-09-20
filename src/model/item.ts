@@ -22,6 +22,12 @@ import { ItemUnitTypes } from "./itemType";
 import ItemCraftShopRelation from "./itemCraftShopRelation";
 import CraftShop from "./craftShop";
 
+export class CreateItemInput {
+  type!: ItemType;
+  partNo?: string;
+  name!: string;
+}
+
 @Table({
   charset: "utf8",
   indexes: [
@@ -44,7 +50,7 @@ import CraftShop from "./craftShop";
     },
   },
 })
-export class Item extends Model<Item> {
+export class Item extends Model<Item, CreateItemInput> {
   @PrimaryKey
   @NotNull
   @Column({
@@ -105,13 +111,25 @@ export class Item extends Model<Item> {
   })
   extraFee!: number;
 
-  @HasMany(() => ItemCategoryRelation)
+  @Column
+  @NotNull
+  @Column({
+    allowNull: false,
+    defaultValue: false,
+  })
+  disable!: boolean;
+
+  @HasMany(() => ItemCategoryRelation, {
+    onDelete: "CASCADE",
+  })
   categoryRelations?: ItemCategoryRelation[];
 
   @BelongsToMany(() => Category, () => ItemCategoryRelation)
   categories?: Category[];
 
-  @HasMany(() => ItemCraftShopRelation)
+  @HasMany(() => ItemCraftShopRelation, {
+    onDelete: "CASCADE",
+  })
   craftShopRelations?: ItemCraftShopRelation[];
 
   @BelongsToMany(() => CraftShop, () => ItemCraftShopRelation)
