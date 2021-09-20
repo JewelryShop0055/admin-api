@@ -16,6 +16,7 @@ export * from "./ItemRelation";
 export * from "./craftShop";
 export * from "./itemCraftShopRelation";
 export * from "./defaultErrorResponse";
+export * from "./pagenationQuery";
 
 import User from "./user";
 import UserCrenditionalRelation from "./userCrenditionalRelation";
