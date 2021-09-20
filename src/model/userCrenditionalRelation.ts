@@ -5,10 +5,6 @@ import {
   PrimaryKey,
   ForeignKey,
   NotNull,
-  AutoIncrement,
-  HasMany,
-  BelongsToMany,
-  HasOne,
   BelongsTo,
 } from "sequelize-typescript";
 import { UUID, UUIDV4 } from "sequelize";

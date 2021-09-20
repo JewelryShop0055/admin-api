@@ -4,9 +4,7 @@ import {
   PrimaryKey,
   Table,
   NotNull,
-  HasOne,
   HasMany,
-  BelongsTo,
   BelongsToMany,
 } from "sequelize-typescript";
 import { UUIDV4, UUID } from "sequelize";

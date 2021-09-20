@@ -1,10 +1,12 @@
 import { Router, Request, Response } from "express";
-import asyncHandler from "../../middleware/asyncHandler";
-import authenticate from "../../middleware/authenticate";
-import { UpdateUserInput, User } from "../../model";
-import UserCrenditional from "../../model/userCreditional";
-import UserCrenditionalRealtion from "../../model/userCrenditionalRelation";
-import { CrenditionalTypes } from "../../model/userCreditional";
+import { asyncHandler, authenticate } from "../../middleware";
+import {
+  UpdateUserInput,
+  User,
+  UserCrenditional,
+  UserCrenditionalRealtion,
+  CrenditionalTypes,
+} from "../../model";
 
 const router = Router({
   mergeParams: true,

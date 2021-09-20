@@ -8,7 +8,6 @@ import {
   ForeignKey,
   BelongsTo,
 } from "sequelize-typescript";
-import { Category } from ".";
 import Item from "./item";
 
 @Table({

@@ -6,8 +6,6 @@ import {
   PrimaryKey,
   ForeignKey,
   NotNull,
-  AutoIncrement,
-  HasOne,
   BelongsTo,
 } from "sequelize-typescript";
 import { User } from "./user";

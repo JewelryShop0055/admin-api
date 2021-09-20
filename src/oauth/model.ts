@@ -233,7 +233,6 @@ async function getUser(
       {
         model: UserCrenditional,
         where: {
-          // Password validate
           username,
           type: CrenditionalTypes.password,
         },
