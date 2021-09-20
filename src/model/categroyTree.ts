@@ -10,10 +10,27 @@ import {
 } from "sequelize-typescript";
 import { Category } from ".";
 
+export class CreateCategoryTreeInput {
+  parentId!: number;
+  childId!: number;
+  topId!: number;
+  depth!: number;
+}
+
 @Table({
   charset: "utf8",
+  hooks: {
+    beforeValidate: (tree: CategoryTree, _options) => {
+      if (
+        (tree.depth !== 0 && (tree.parentId === 0 || tree.topId == 0)) ||
+        (tree.depth === 0 && (tree.parentId !== 0 || tree.topId !== 0))
+      ) {
+        throw new Error("Invalidate Category Depth");
+      }
+    },
+  },
 })
-export class CategoryTree extends Model<CategoryTree> {
+export class CategoryTree extends Model<CategoryTree, CreateCategoryTreeInput> {
   @PrimaryKey
   @NotNull
   @Column({
@@ -26,6 +43,7 @@ export class CategoryTree extends Model<CategoryTree> {
   @NotNull
   @Column({
     allowNull: false,
+    defaultValue: 0,
   })
   parentId!: number;
 
@@ -36,12 +54,21 @@ export class CategoryTree extends Model<CategoryTree> {
   })
   childId!: number;
 
+  @ForeignKey(() => Category)
+  @NotNull
+  @Column({
+    allowNull: false,
+    defaultValue: 0,
+  })
+  topId!: number;
+
   /**
    * 자식의 Depth와 동일해야함
    */
   @NotNull
   @Column({
     allowNull: false,
+    defaultValue: 0,
   })
   depth!: number;
 
@@ -50,6 +77,9 @@ export class CategoryTree extends Model<CategoryTree> {
 
   @BelongsTo(() => Category, "childId")
   child?: Category;
+
+  @BelongsTo(() => Category, "topId")
+  top?: Category;
 }
 
 export default CategoryTree;
