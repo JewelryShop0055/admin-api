@@ -120,7 +120,6 @@ router.get(
  *               $ref: "#/components/schemas/DefaultErrorResponse"
  *       401: {}
  *
- *
  */
 router.post(
   "/:type",
@@ -183,7 +182,7 @@ router.post(
  *             schema:
  *               $ref: "#/components/schemas/DefaultErrorResponse"
  *       401: {}
- *
+ *       404: {}
  *
  */
 router.get(
@@ -243,6 +242,7 @@ router.get(
  *             schema:
  *               $ref: "#/components/schemas/DefaultErrorResponse"
  *       401: {}
+ *       404: {}
  *
  */
 router.get(
@@ -303,7 +303,7 @@ router.get(
  *             schema:
  *               $ref: "#/components/schemas/DefaultErrorResponse"
  *       401: {}
- *
+ *       404: {}
  *
  */
 router.put(
@@ -346,7 +346,7 @@ router.put(
  * @openapi
  *
  * /admin/category/{itemType}/{id}:
- *   delte:
+ *   delete:
  *     tags:
  *       - admin-category
  *     security:
@@ -366,7 +366,7 @@ router.put(
  *             schema:
  *               $ref: "#/components/schemas/DefaultErrorResponse"
  *       401: {}
- *
+ *       404: {}
  *
  */
 router.delete(
@@ -426,7 +426,7 @@ router.delete(
  *             schema:
  *               $ref: "#/components/schemas/DefaultErrorResponse"
  *       401: {}
- *
+ *       404: {}
  */
 router.post(
   "/:type/:id",
