@@ -12,9 +12,11 @@ import ItemCraftShopRelation from "./itemCraftShopRelation";
 import Item from "./item";
 
 /**
+ * @openapi
+ *
  * components:
- *   schema:
- *     CreateCraftShoptInput:
+ *   schemas:
+ *     CreateCraftShopInput:
  *       type: object
  *       properties:
  *         name:
@@ -26,13 +28,13 @@ import Item from "./item";
  *           required: true
  *           type: string
  *           example: 13494
- *         addresss:
- *           description: Craftshop addresss
+ *         address:
+ *           description: Craftshop address
  *           required: true
  *           type: string
  *           example: 경기 성남시 분당구 판교역로 235 (에이치스퀘어 엔동)
  *         detailAddresss:
- *           description: Craftshop detail addresss, like 동, 호
+ *           description: Craftshop detail address, like 동, 호
  *           required: true
  *           type: string
  *           example: 404호
@@ -41,16 +43,62 @@ import Item from "./item";
  *           required: true
  *           type: string
  *           example: 01012341234
-
+ *   requestBodies:
+ *     CreateCraftShopInput:
+ *       description: A JSON object containing item data
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: "#/components/schemas/CreateCraftShopInput"
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             $ref: "#/components/schemas/CreateCraftShopInput"
  */
 export class CreateCraftShoptInput {
   name!: string;
   postCode!: string;
-  addresss!: string;
-  detailAddresss?: string;
+  address!: string;
+  detailAddress?: string;
   phone!: string;
 }
 
+/**
+ * @openapi
+ *
+ * components:
+ *   schemas:
+ *     CraftShop:
+ *       type: object
+ *       properties:
+ *         id:
+ *           description: Craftshop id
+ *           required: true
+ *           type: string
+ *         name:
+ *           description: Craftshop name
+ *           required: true
+ *           type: string
+ *         postCode:
+ *           description: Craftshop postcode
+ *           required: true
+ *           type: string
+ *           example: 13494
+ *         address:
+ *           description: Craftshop address
+ *           required: true
+ *           type: string
+ *           example: 경기 성남시 분당구 판교역로 235 (에이치스퀘어 엔동)
+ *         detailAddresss:
+ *           description: Craftshop detail address, like 동, 호
+ *           required: true
+ *           type: string
+ *           example: 404호
+ *         phone:
+ *           description: Craftshop phone number
+ *           required: true
+ *           type: string
+ *           example: 01012341234
+ */
 @Table({
   charset: "utf8",
   indexes: [],
@@ -81,10 +129,10 @@ export class CraftShop extends Model<CraftShop, CreateCraftShoptInput> {
   @Column({
     allowNull: false,
   })
-  addresss!: string;
+  address!: string;
 
   @Column({})
-  detailAddresss?: string;
+  detailAddress?: string;
 
   @NotNull
   @Column({

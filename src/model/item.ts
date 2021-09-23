@@ -26,6 +26,7 @@ export class CreateItemInput {
   type!: ItemType;
   partNo?: string;
   name!: string;
+  unit!: ItemUnitType;
 }
 
 @Table({

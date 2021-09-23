@@ -17,6 +17,46 @@ export class CreateCategoryTreeInput {
   depth!: number;
 }
 
+/**
+ * @openapi
+ *
+ * components:
+ *   schemas:
+ *     CategoryTree:
+ *       type: object
+ *       properties:
+ *         id:
+ *           description: "id of Category Tree"
+ *           required: true
+ *           type: "integer"
+ *         parentId:
+ *           description: "Parent Catrgory ID. may Top Category's Parent ID is Must '0'"
+ *           required: true
+ *           type: "number"
+ *         topId:
+ *           description: "Parent Catrgory ID. may Top Category's Parent ID is Must '0'"
+ *           required: true
+ *           type: "number"
+ *         childId:
+ *           description: "Child Catrgory ID"
+ *           required: true
+ *           type: "number"
+ *         depth:
+ *           description: "depth of Catrgory Tree, this value is equel Category.depth"
+ *           required: true
+ *           type: "integer"
+ *           min: 0
+ *         createdAt:
+ *           description: "Created Date of Catrgory Tree"
+ *           required: true
+ *           type: "string"
+ *           format: date
+ *         updatedAt:
+ *           description: "Last Modified Date of Catrgory Tree"
+ *           required: false
+ *           type: "string"
+ *           format: date
+ */
 @Table({
   charset: "utf8",
   hooks: {
@@ -72,13 +112,22 @@ export class CategoryTree extends Model<CategoryTree, CreateCategoryTreeInput> {
   })
   depth!: number;
 
-  @BelongsTo(() => Category, "parentId")
+  @BelongsTo(() => Category, {
+    foreignKey: "parentId",
+    as: "parent",
+  })
   parent?: Category;
 
-  @BelongsTo(() => Category, "childId")
+  @BelongsTo(() => Category, {
+    foreignKey: "childId",
+    as: "child",
+  })
   child?: Category;
 
-  @BelongsTo(() => Category, "topId")
+  @BelongsTo(() => Category, {
+    foreignKey: "topId",
+    as: "top",
+  })
   top?: Category;
 }
 

@@ -11,14 +11,10 @@ import {
   asyncHandler,
   authenticate,
   itemTypeValidateMiddelware,
+  ItemTypeCommonParam,
 } from "../../middleware";
 
-interface CategoryCommonParam {
-  [key: string]: string;
-  type: ItemType;
-}
-
-interface GetCategryParam extends CategoryCommonParam {
+interface GetCategryParam extends ItemTypeCommonParam {
   id: string;
 }
 
@@ -77,23 +73,25 @@ router.get(
   "/:type",
   itemTypeValidateMiddelware,
   authenticate(false),
-  asyncHandler(async (req: Request<any, any, PagenationQuery>, res) => {
-    const { type } = req.params as CategoryCommonParam;
-    const { page, limit } = pagenationValidator(
-      Number(req.query.page),
-      Number(req.query.limit),
-    );
+  asyncHandler(
+    async (req: Request<any, any, undefined, PagenationQuery>, res) => {
+      const { type } = req.params as ItemTypeCommonParam;
+      const { page, limit } = pagenationValidator(
+        Number(req.query.page),
+        Number(req.query.limit),
+      );
 
-    const categoies = await Category.findAll({
-      where: {
-        type,
-      },
-      limit,
-      offset: limit * page,
-    });
+      const categoies = await Category.findAll({
+        where: {
+          type,
+        },
+        limit,
+        offset: limit * page,
+      });
 
-    return res.json(categoies);
-  }),
+      return res.json(categoies);
+    },
+  ),
 );
 
 /**
@@ -129,7 +127,7 @@ router.post(
   itemTypeValidateMiddelware,
   authenticate(false),
   asyncHandler(async (req, res) => {
-    const { type } = req.params as CategoryCommonParam;
+    const { type } = req.params as ItemTypeCommonParam;
     const { name } = req.body as Pick<CreateCategoryInput, "name">;
 
     const value: CreateCategoryInput = {
@@ -171,7 +169,6 @@ router.post(
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - $ref: "#/components/parameters/ItemType"
  *       - $ref: "#/components/parameters/ItemType"
  *       - $ref: "#/components/parameters/CategoryId"
  *     responses:

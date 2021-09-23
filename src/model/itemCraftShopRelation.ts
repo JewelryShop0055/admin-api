@@ -14,7 +14,7 @@ import Item from "./item";
 
 export class CreateItemCraftShopRelationInput {
   itemId!: string;
-  craftShopid!: string;
+  craftShopId!: string;
 }
 
 @Table({
@@ -54,12 +54,12 @@ export class ItemCraftShopRelation extends Model<
   @Column({
     allowNull: false,
   })
-  craftShopid!: string;
+  craftShopId!: string;
 
   @BelongsTo(() => Item, "itemId")
   item?: Item;
 
-  @BelongsTo(() => CraftShop, "craftShopid")
+  @BelongsTo(() => CraftShop, "craftShopId")
   craftShop?: CraftShop;
 }
 

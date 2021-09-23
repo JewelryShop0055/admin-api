@@ -1,10 +1,15 @@
-import express from "express";
-import { ItemTypes } from "../model/itemType";
+import express, { Request, Response, NextFunction } from "express";
+import { ParamsDictionary } from "express-serve-static-core";
+import { ItemTypes, ItemType } from "../model";
+
+export interface ItemTypeCommonParam extends ParamsDictionary {
+  type: ItemType;
+}
 
 export const itemTypeValidateMiddelware = (
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction,
+  req: Request<ItemTypeCommonParam>,
+  res: Response,
+  next: NextFunction,
 ) => {
   const type = req.params.type;
 

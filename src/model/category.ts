@@ -109,12 +109,14 @@ export class Category extends Model<Category, CreateCategoryInput> {
   @HasOne(() => CategoryTree, {
     foreignKey: "childId",
     onDelete: "CASCADE",
+    as: "parentTree",
   })
   parentTree?: CategoryTree;
 
   @HasMany(() => CategoryTree, {
     foreignKey: "parentId",
     onDelete: "CASCADE",
+    as: "childTree",
   })
   childTree?: CategoryTree[];
 }

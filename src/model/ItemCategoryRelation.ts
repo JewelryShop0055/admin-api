@@ -11,10 +11,18 @@ import {
 import { Category } from ".";
 import Item from "./item";
 
+export class CreateItemCategoryInput {
+  itemId!: string;
+  categoryId!: number;
+}
+
 @Table({
   charset: "utf8",
 })
-export class ItemCategoryRelation extends Model<ItemCategoryRelation> {
+export class ItemCategoryRelation extends Model<
+  ItemCategoryRelation,
+  CreateItemCategoryInput
+> {
   @PrimaryKey
   @NotNull
   @Column({
