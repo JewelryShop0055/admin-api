@@ -42,7 +42,7 @@ import Item from "./item";
  *           description: Craftshop phone number
  *           required: true
  *           type: string
- *           ex   ample: "01012341234"
+ *           example: "01012341234"
  *   requestBodies:
  *     CreateCraftShopInput:
  *       content:
