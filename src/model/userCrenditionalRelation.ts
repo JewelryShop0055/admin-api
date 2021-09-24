@@ -10,6 +10,7 @@ import {
 import { UUID, UUIDV4 } from "sequelize";
 import { User } from "./user";
 import { UserCrenditional } from "./userCreditional";
+import { jsonIgnore } from "json-ignore";
 
 export interface CreateUserCrenditionalRealtionInput {
   userId: number;
@@ -23,6 +24,7 @@ export class UserCrenditionalRealtion extends Model<
   UserCrenditionalRealtion,
   CreateUserCrenditionalRealtionInput
 > {
+  @jsonIgnore()
   @PrimaryKey
   @NotNull
   @Column({
@@ -32,6 +34,7 @@ export class UserCrenditionalRealtion extends Model<
   })
   id!: string;
 
+  @jsonIgnore()
   @ForeignKey(() => User)
   @NotNull
   @Column({
@@ -39,6 +42,7 @@ export class UserCrenditionalRealtion extends Model<
   })
   userId!: number;
 
+  @jsonIgnore()
   @ForeignKey(() => UserCrenditional)
   @NotNull
   @Column({
@@ -47,9 +51,11 @@ export class UserCrenditionalRealtion extends Model<
   })
   crenditionalId!: string;
 
+  @jsonIgnore()
   @BelongsTo(() => User, "userId")
   user?: User;
 
+  @jsonIgnore()
   @BelongsTo(() => UserCrenditional, "crenditionalId")
   crenditional?: UserCrenditional;
 }

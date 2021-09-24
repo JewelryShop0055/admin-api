@@ -69,6 +69,21 @@ export class CreateCategoryInput {
  */
 @Table({
   charset: "utf8",
+  hooks: {
+    beforeDestroy: async (category: Category, options) => {
+      const childTrees = await CategoryTree.findAll({
+        where: {
+          parentId: category.id,
+        },
+        transaction: options.transaction,
+      });
+
+      if (childTrees.length > 0) {
+        await options.transaction?.rollback();
+        throw new Error("Before remove Child Categorie");
+      }
+    },
+  },
 })
 export class Category extends Model<Category, CreateCategoryInput> {
   @AutoIncrement

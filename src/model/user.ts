@@ -12,6 +12,7 @@ import {
   HasMany,
   BelongsToMany,
 } from "sequelize-typescript";
+import { jsonIgnore } from "json-ignore";
 
 /**
  * @openapi
@@ -137,16 +138,19 @@ export class User extends Model<User, CreateUserInput> {
   })
   scope!: ScopeType;
 
+  @jsonIgnore()
   @HasMany(() => UserToken, {
     onDelete: "CASCADE",
   })
   tokens?: UserToken[];
 
+  @jsonIgnore()
   @HasMany(() => UserCrenditionalRealtion, {
     onDelete: "CASCADE",
   })
   crenditionalRealtions?: UserCrenditionalRealtion[];
 
+  @jsonIgnore()
   @BelongsToMany(() => UserCrenditional, () => UserCrenditionalRealtion)
   crenditionals?: UserCrenditional[];
 }

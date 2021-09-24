@@ -1,4 +1,4 @@
-import { UUID } from "sequelize";
+import { FLOAT, UUID } from "sequelize";
 import {
   Column,
   Model,
@@ -9,6 +9,7 @@ import {
   BelongsTo,
 } from "sequelize-typescript";
 import Item from "./item";
+import { ItemTypes } from "./itemType";
 
 /**
  * @openapi
@@ -68,8 +69,42 @@ export class CreateItemRealtionInput {
  */
 @Table({
   charset: "utf8",
+  hooks: {
+    beforeCreate: async (relation: ItemRelation, options) => {
+      const product = await Item.findOne({
+        where: {
+          type: ItemTypes.product,
+          id: relation.productId,
+        },
+        transaction: options.transaction,
+      });
+
+      if (!product) {
+        await options.transaction?.rollback();
+        throw new Error(
+          "Invalidate `productId`. Not exist product or target type is not `product`",
+        );
+      }
+
+      const parts = await Item.findOne({
+        where: {
+          type: ItemTypes.parts,
+          id: relation.partsId,
+        },
+        transaction: options.transaction,
+      });
+
+      if (!parts) {
+        await options.transaction?.rollback();
+        throw new Error(
+          "Invalidate `partsId`. Not exist parts or target type is not `parts`",
+        );
+      }
+    },
+    beforeUpdate: async (relation: ItemRelation, options) => {},
+  },
 })
-export class ItemRelation extends Model<ItemRelation> {
+export class ItemRelation extends Model<ItemRelation, CreateItemRealtionInput> {
   @PrimaryKey
   @NotNull
   @Column({
@@ -93,6 +128,13 @@ export class ItemRelation extends Model<ItemRelation> {
     allowNull: false,
   })
   partsId!: string;
+
+  @Column({
+    type: FLOAT,
+    allowNull: false,
+    defaultValue: 0,
+  })
+  amount!: number;
 
   @BelongsTo(() => Item, "productId")
   product?: Item;
