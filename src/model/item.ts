@@ -22,6 +22,7 @@ import { ItemUnitTypes } from "./itemType";
 import ItemCraftShopRelation from "./itemCraftShopRelation";
 import CraftShop from "./craftShop";
 import { jsonIgnore } from "json-ignore";
+import { ItemRelation } from "./ItemRelation";
 
 /**
  * @openapi
@@ -74,6 +75,7 @@ export class CreateItemInput {
  * components:
  *   schemas:
  *     Item:
+ *       required: false
  *       type: object
  *       properties:
  *         id:
@@ -218,6 +220,36 @@ export class Item extends Model<Item, CreateItemInput> {
 
   @BelongsToMany(() => CraftShop, () => ItemCraftShopRelation)
   craftShops?: CraftShop[];
+
+  @HasMany(() => ItemRelation, {
+    onDelete: "CASCADE",
+    foreignKey: "partsId",
+    as: "productRelation",
+  })
+  productRelation?: ItemRelation[];
+
+  @HasMany(() => ItemRelation, {
+    onDelete: "CASCADE",
+    foreignKey: "productId",
+    as: "partsRelations",
+  })
+  partsRelations?: ItemRelation[];
+
+  @BelongsToMany(() => Item, {
+    through: () => ItemRelation,
+    foreignKey: "productId",
+    otherKey: "partsId",
+    as: "parts",
+  })
+  parts?: Item[];
+
+  @BelongsToMany(() => Item, {
+    through: () => ItemRelation,
+    foreignKey: "partsId",
+    otherKey: "productId",
+    as: "products",
+  })
+  products?: Item[];
 }
 
 export default Item;

@@ -19,6 +19,7 @@ import sequelize, {
   PagenationQuery,
 } from "../../model";
 import { pagenationValidator, unitValidator } from "../../util";
+import ItemRelation from "../../model/ItemRelation";
 
 /**
  * @openapi
@@ -30,6 +31,13 @@ import { pagenationValidator, unitValidator } from "../../util";
  *   parameters:
  *     ItemId:
  *       name: id
+ *       in: path
+ *       required: true
+ *       allowEmptyValue: false
+ *       schema:
+ *         type: string
+ *     partsId:
+ *       name: partsId
  *       in: path
  *       required: true
  *       allowEmptyValue: false
@@ -680,6 +688,291 @@ router.delete(
       where: {
         itemId: id,
         categoryId,
+      },
+    });
+
+    return res.sendStatus(204);
+  }),
+);
+
+/**
+ * @openapi
+ * /admin/item/product/{id}/parts:
+ *   get:
+ *     tags:
+ *       - admin-item
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - $ref: "#/components/parameters/ItemId"
+ *       - $ref: "#/components/parameters/PagenationPage"
+ *       - $ref: "#/components/parameters/PagenationLimit"
+ *     responses:
+ *       200:
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: "#/components/schemas/Item"
+ *       400:
+ *         $ref: "#/components/responses/GenericError"
+ *       401: {}
+ *       404: {}
+ *       500:
+ *         $ref: "#/components/responses/GenericError"
+ */
+router.get(
+  "/product/:id/parts",
+  authenticate(false),
+  asyncHandler(async (req, res) => {
+    const productId = req.params.id;
+    const { page, limit } = pagenationValidator(
+      Number(req.query.page),
+      Number(req.query.limit),
+    );
+    const parts = await Item.findAll({
+      include: [
+        {
+          model: ItemRelation,
+          where: {
+            productId,
+          },
+          as: "productRelation",
+        },
+      ],
+      limit,
+      offset: page * limit,
+    });
+
+    return res.json(parts);
+  }),
+);
+
+/**
+ * @openapi
+ *
+ *
+ * /admin/item/product/{id}/parts:
+ *   post:
+ *     tags:
+ *       - admin-item
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - $ref: "#/components/parameters/ItemId"
+ *     requestBody:
+ *         content:
+ *            application/json:
+ *               schema:
+ *                 $ref: "#/components/schemas/CreateItemRealtionInput"
+ *            application/x-www-form-urlencoded:
+ *               schema:
+ *                 $ref: "#/components/schemas/CreateItemRealtionInput"
+ *     responses:
+ *       200:
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/ItemRelation"
+ *       400:
+ *         $ref: "#/components/responses/GenericError"
+ *       401: {}
+ *       404: {}
+ *       500:
+ *         $ref: "#/components/responses/GenericError"
+ */
+router.post(
+  "/product/:id/parts",
+  authenticate(false),
+  asyncHandler(async (req, res) => {
+    const id = req.params.id;
+    const values = {
+      productId: id,
+      partsId: req.body.partsId,
+      amount: Number(req.body.amount),
+    };
+
+    const product = await Item.findOne({
+      where: {
+        type: ItemTypes.product,
+        id,
+      },
+    });
+
+    if (!product) {
+      return res.sendStatus(404);
+    }
+
+    const relation = await ItemRelation.findOne({
+      where: {
+        productId: id,
+        partsId: values.partsId,
+      },
+    });
+
+    if (relation) {
+      return res.status(400).json({
+        status: 400,
+        message: "Already Exist Product-Parts Relation",
+      });
+    }
+
+    const parts = await Item.findOne({
+      where: {
+        type: ItemTypes.parts,
+        id: values.partsId,
+      },
+    });
+
+    if (!parts) {
+      return res.status(400).json({
+        status: 400,
+        message: "Not Exists Parts",
+      });
+    }
+
+    const newRelation = await ItemRelation.create(values);
+
+    return res.json(newRelation);
+  }),
+);
+
+/**
+ * @openapi
+ *
+ * components:
+ *   schemas:
+ *     UpdateItemRelationInput:
+ *       type: object
+ *       properties:
+ *         amount:
+ *           description: Parts Amount for Product
+ *           required: true
+ *           type: number
+ *           format: float
+ *           example: 3.14
+ *
+ * /admin/item/product/{id}/parts/{partsId}:
+ *   put:
+ *     tags:
+ *       - admin-item
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - $ref: "#/components/parameters/ItemId"
+ *       - $ref: "#/components/parameters/partsId"
+ *     requestBody:
+ *         content:
+ *            application/json:
+ *               schema:
+ *                 $ref: "#/components/schemas/UpdateItemRelationInput"
+ *            application/x-www-form-urlencoded:
+ *               schema:
+ *                 $ref: "#/components/schemas/UpdateItemRelationInput"
+ *     responses:
+ *       200:
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/ItemRelation"
+ *       400:
+ *         $ref: "#/components/responses/GenericError"
+ *       401: {}
+ *       404: {}
+ *       500:
+ *         $ref: "#/components/responses/GenericError"
+ */
+router.put(
+  "/product/:id/parts/:partsId",
+  authenticate(false),
+  asyncHandler(async (req, res) => {
+    const { id, partsId } = req.params;
+
+    const whereOption = {
+      productId: id,
+      partsId,
+    };
+
+    const values = {
+      amount: Number(req.body.amount),
+    };
+
+    const relation = await ItemRelation.findOne({
+      where: whereOption,
+    });
+
+    if (!relation) {
+      return res.sendStatus(404);
+    }
+
+    await relation.update(values);
+
+    return res.json(relation);
+  }),
+);
+
+/**
+ * @openapi
+ *
+ * /admin/item/product/{id}/parts/{partsId}:
+ *   delete:
+ *     tags:
+ *       - admin-item
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - $ref: "#/components/parameters/ItemId"
+ *       - $ref: "#/components/parameters/partsId"
+ *     responses:
+ *       204: {}
+ *       400:
+ *         $ref: "#/components/responses/GenericError"
+ *       401: {}
+ *       404: {}
+ *       500:
+ *         $ref: "#/components/responses/GenericError"
+ *
+ */
+router.delete(
+  "/product/:id/parts/:partsId",
+  authenticate(false),
+  asyncHandler(async (req, res) => {
+    const { id, partsId } = req.params;
+
+    if (!id || !partsId) {
+      return res.status(400).json({
+        status: 400,
+        message: "Invalidate product Id or parts Id",
+      });
+    }
+
+    const product = await Item.findOne({
+      where: {
+        type: ItemTypes.product,
+        id,
+      },
+    });
+
+    if (!product) {
+      return res.sendStatus(404);
+    }
+
+    const parts = await Item.findOne({
+      where: {
+        type: ItemTypes.parts,
+        id: partsId,
+      },
+    });
+
+    if (!parts) {
+      return res.sendStatus(404);
+    }
+
+    await ItemRelation.destroy({
+      where: {
+        productId: id,
+        partsId,
       },
     });
 
