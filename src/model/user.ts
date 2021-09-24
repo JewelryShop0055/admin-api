@@ -101,15 +101,9 @@ export class UpdateUserInput {
  *         scope:
  *           $ref: "#/components/schemas/ScopeType"
  *         createdAt:
- *           description: "Created Date of user"
- *           required: true
- *           type: "string"
- *           format: date
+ *           $ref: "#/components/schemas/createdAt"
  *         updatedAt:
- *           description: "Last Modified Date of user"
- *           required: false
- *           type: "string"
- *           format: date
+ *           $ref: "#/components/schemas/updatedAt"
  */
 @Table({
   charset: "utf8",

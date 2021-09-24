@@ -27,6 +27,20 @@ const options: swaggereJsdoc.Options = {
       description: "Jwerly API with express",
     },
     components: {
+      schemas: {
+        createdAt: {
+          description: "Created Date",
+          required: true,
+          type: "string",
+          format: "date-time",
+        },
+        updatedAt: {
+          description: "Last Modified Date",
+          required: true,
+          type: "string",
+          format: "date-time",
+        },
+      },
       securitySchemes: {
         bearerAuth: {
           type: "oauth2",

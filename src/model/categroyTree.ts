@@ -33,29 +33,29 @@ export class CreateCategoryTreeInput {
  *           description: "Parent Catrgory ID. may Top Category's Parent ID is Must '0'"
  *           required: true
  *           type: "number"
- *         topId:
- *           description: "Parent Catrgory ID. may Top Category's Parent ID is Must '0'"
- *           required: true
- *           type: "number"
  *         childId:
  *           description: "Child Catrgory ID"
  *           required: true
  *           type: "number"
+ *         topId:
+ *           description: "Top Catrgory ID. may Top Category's Parent ID is Must '0'"
+ *           required: true
+ *           type: "number"
+ *         parent:
+ *           $ref: "#/components/schemas/Category"
+ *         child:
+ *           $ref: "#/components/schemas/Category"
+ *         top:
+ *           $ref: "#/components/schemas/Category"
  *         depth:
  *           description: "depth of Catrgory Tree, this value is equel Category.depth"
  *           required: true
  *           type: "integer"
  *           min: 0
  *         createdAt:
- *           description: "Created Date of Catrgory Tree"
- *           required: true
- *           type: "string"
- *           format: date
+ *           $ref: "#/components/schemas/createdAt"
  *         updatedAt:
- *           description: "Last Modified Date of Catrgory Tree"
- *           required: false
- *           type: "string"
- *           format: date
+ *           $ref: "#/components/schemas/updatedAt"
  */
 @Table({
   charset: "utf8",

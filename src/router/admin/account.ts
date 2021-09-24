@@ -134,6 +134,13 @@ router.put(
  *                      type: string
  *                      format: password
  *                      required: true
+ *     responses:
+ *       204: {}
+ *       400:
+ *         $ref: "#/components/responses/GenericError"
+ *       401: {}
+ *       500:
+ *         $ref: "#/components/responses/GenericError"
  */
 router.put(
   "/password",

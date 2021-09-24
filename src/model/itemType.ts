@@ -6,6 +6,7 @@ import { DataTypes } from "sequelize";
  * components:
  *   schemas:
  *     ItemType:
+ *       require: true
  *       type: string
  *       enum:
  *          - product
@@ -39,6 +40,20 @@ export const ItemTypeEnum = DataTypes.ENUM({
 
 /**
  * 아이템 단위
+ *
+ * @openapi
+ *
+ * components:
+ *   schemas:
+ *     ItemUnitType:
+ *       require: true
+ *       type: string
+ *       enum:
+ *          - ea
+ *          - g
+ *          - kg
+ *          - carat
+ *          - mace
  */
 export const ItemUnitTypes = {
   /**
@@ -66,5 +81,5 @@ export const ItemUnitTypes = {
 export type ItemUnitType = typeof ItemUnitTypes[keyof typeof ItemUnitTypes];
 
 export const ItemUnitTypeEnum = DataTypes.ENUM({
-  values: ["ea", "g", "kg", "carat"],
+  values: ["ea", "g", "kg", "carat", "mace"],
 });

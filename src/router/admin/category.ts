@@ -2,7 +2,6 @@ import express, { Request } from "express";
 import sequelize, {
   Category,
   CategoryTree,
-  ItemType,
   CreateCategoryInput,
   PagenationQuery,
 } from "../../model";
@@ -62,11 +61,10 @@ const router = express.Router({
  *               items:
  *                 $ref: "#/components/schemas/Category"
  *       400:
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/DefaultErrorResponse"
+ *         $ref: "#/components/responses/GenericError"
  *       401: {}
+ *       500:
+ *         $ref: "#/components/responses/GenericError"
  *
  */
 router.get(
@@ -114,11 +112,10 @@ router.get(
  *             schema:
  *               $ref: "#/components/schemas/Category"
  *       400:
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/DefaultErrorResponse"
+ *         $ref: "#/components/responses/GenericError"
  *       401: {}
+ *       500:
+ *         $ref: "#/components/responses/GenericError"
  *
  */
 router.post(
@@ -177,13 +174,11 @@ router.post(
  *             schema:
  *               $ref: "#/components/schemas/Category"
  *       400:
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/DefaultErrorResponse"
+ *         $ref: "#/components/responses/GenericError"
  *       401: {}
  *       404: {}
- *
+ *       500:
+ *         $ref: "#/components/responses/GenericError"
  */
 router.get(
   "/:type/:id",
@@ -237,13 +232,11 @@ router.get(
  *               items:
  *                 $ref: "#/components/schemas/Category"
  *       400:
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/DefaultErrorResponse"
+ *         $ref: "#/components/responses/GenericError"
  *       401: {}
  *       404: {}
- *
+ *       500:
+ *         $ref: "#/components/responses/GenericError"
  */
 router.get(
   "/:type/:id/list",
@@ -282,6 +275,17 @@ router.get(
 /**
  * @openapi
  *
+ * components:
+ *   schemas:
+ *     UpdateCateogryInput:
+ *       type: object
+ *       properties:
+ *         name:
+ *           description: Category name
+ *           required: false
+ *           type: string
+ *
+ *
  * /admin/category/{itemType}/{id}:
  *   put:
  *     tags:
@@ -291,6 +295,14 @@ router.get(
  *     parameters:
  *       - $ref: "#/components/parameters/ItemType"
  *       - $ref: "#/components/parameters/CategoryId"
+ *     requestBody:
+ *         content:
+ *            application/json:
+ *               schema:
+ *                 $ref: "#/components/schemas/UpdateCateogryInput"
+ *            application/x-www-form-urlencoded:
+ *               schema:
+ *                 $ref: "#/components/schemas/UpdateCateogryInput"
  *     responses:
  *       200:
  *         content:
@@ -298,13 +310,11 @@ router.get(
  *             schema:
  *               $ref: "#/components/schemas/Category"
  *       400:
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/DefaultErrorResponse"
+ *         $ref: "#/components/responses/GenericError"
  *       401: {}
  *       404: {}
- *
+ *       500:
+ *         $ref: "#/components/responses/GenericError"
  */
 router.put(
   "/:type/:id",
@@ -355,19 +365,13 @@ router.put(
  *       - $ref: "#/components/parameters/ItemType"
  *       - $ref: "#/components/parameters/CategoryId"
  *     responses:
- *       200:
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/Category"
+ *       204: {}
  *       400:
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/DefaultErrorResponse"
+ *         $ref: "#/components/responses/GenericError"
  *       401: {}
  *       404: {}
- *
+ *       500:
+ *         $ref: "#/components/responses/GenericError"
  */
 router.delete(
   "/:type/:id",
@@ -411,7 +415,7 @@ router.delete(
  *       - bearerAuth: []
  *     parameters:
  *       - $ref: "#/components/parameters/ItemType"
- *       - $ref: "#/components/parameters/CategoryId"
+ *       - $ref1: "#/components/parameters/CategoryId"
  *     requestBody:
  *       $ref: "#/components/requestBodies/CreateCategoryInput"
  *     responses:
@@ -421,12 +425,11 @@ router.delete(
  *             schema:
  *               $ref: "#/components/schemas/Category"
  *       400:
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/DefaultErrorResponse"
+ *         $ref: "#/components/responses/GenericError"
  *       401: {}
  *       404: {}
+ *       500:
+ *         $ref: "#/components/responses/GenericError"
  */
 router.post(
   "/:type/:id",

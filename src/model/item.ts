@@ -21,14 +21,96 @@ import Category from "./category";
 import { ItemUnitTypes } from "./itemType";
 import ItemCraftShopRelation from "./itemCraftShopRelation";
 import CraftShop from "./craftShop";
+import { jsonIgnore } from "json-ignore";
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     CreateItemInput:
+ *       type: object
+ *       properties:
+ *         type:
+ *           $ref: "#/components/schemas/ItemType"
+ *         partNo:
+ *           description: Product management No. If Product type required.
+ *           type: string
+ *           required: false
+ *         name:
+ *           description: item name.
+ *           type: string
+ *           required: true
+ *         unit:
+ *           $ref: "#/components/schemas/ItemUnitType"
+ *         defaultFee:
+ *           description: 공임비.
+ *           type: integer
+ *           required: false
+ *         extraFee:
+ *           description: 기타 공임비(세공비 등).
+ *           type: integer
+ *           required: false
+ *   requestBodies:
+ *     CreateItemInput:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: "#/components/schemas/CreateItemInput"
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             $ref: "#/components/schemas/CreateItemInput"
+ */
 export class CreateItemInput {
   type!: ItemType;
   partNo?: string;
   name!: string;
   unit!: ItemUnitType;
+  defaultFee?: number;
+  extraFee?: number;
 }
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     Item:
+ *       type: object
+ *       properties:
+ *         id:
+ *           description: Item Id.
+ *           type: string
+ *           required: true
+ *         type:
+ *           $ref: "#/components/schemas/ItemType"
+ *         partNo:
+ *           description: Product management No. If Product type required.
+ *           type: string
+ *           required: true
+ *         name:
+ *           description: item name.
+ *           type: string
+ *           required: true
+ *         unit:
+ *           $ref: "#/components/schemas/ItemUnitType"
+ *         defaultFee:
+ *           description: 공임비.
+ *           type: integer
+ *           required: true
+ *         extraFee:
+ *           description: 기타 공임비(세공비 등).
+ *           type: integer
+ *           required: true
+ *         categories:
+ *           type: array
+ *           required: false
+ *           items:
+ *             $ref: "#/components/schemas/Category"
+ *         createdAt:
+ *           $ref: "#/components/schemas/createdAt"
+ *         updatedAt:
+ *           $ref: "#/components/schemas/updatedAt"
+ *
+ */
 @Table({
   charset: "utf8",
   indexes: [
@@ -112,6 +194,7 @@ export class Item extends Model<Item, CreateItemInput> {
   })
   extraFee!: number;
 
+  @jsonIgnore()
   @Column
   @NotNull
   @Column({

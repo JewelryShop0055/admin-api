@@ -25,7 +25,6 @@ import {
  *           example: 목걸이
  *   requestBodies:
  *     CreateCategoryInput:
- *       description: A JSON object containing item data
  *       content:
  *         application/json:
  *           schema:
@@ -64,15 +63,9 @@ export class CreateCategoryInput {
  *           type: "integer"
  *           min: 0
  *         createdAt:
- *           description: "Created Date of Catrgory"
- *           required: true
- *           type: "string"
- *           format: date
+ *           $ref: "#/components/schemas/createdAt"
  *         updatedAt:
- *           description: "Last Modified Date of Catrgory"
- *           required: false
- *           type: "string"
- *           format: date
+ *           $ref: "#/components/schemas/updatedAt"
  */
 @Table({
   charset: "utf8",

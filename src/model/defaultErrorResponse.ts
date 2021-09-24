@@ -15,6 +15,12 @@
  *           required: true
  *           type: "string"
  *           example: Invalidate id foramt. id is numberic
+ *   responses:
+ *     GenericError:
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/DefaultErrorResponse"
  */
 export class DefaultErrorResponse {
   status!: number;

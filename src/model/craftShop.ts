@@ -42,10 +42,9 @@ import Item from "./item";
  *           description: Craftshop phone number
  *           required: true
  *           type: string
- *           example: 01012341234
+ *           ex   ample: "01012341234"
  *   requestBodies:
  *     CreateCraftShopInput:
- *       description: A JSON object containing item data
  *       content:
  *         application/json:
  *           schema:
@@ -97,7 +96,11 @@ export class CreateCraftShoptInput {
  *           description: Craftshop phone number
  *           required: true
  *           type: string
- *           example: 01012341234
+ *           example: "01012341234"
+ *         createdAt:
+ *           $ref: "#/components/schemas/createdAt"
+ *         updatedAt:
+ *           $ref: "#/components/schemas/updatedAt"
  */
 @Table({
   charset: "utf8",
