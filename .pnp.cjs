@@ -51,6 +51,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/prettier", "npm:2.3.2"],
             ["@types/swagger-jsdoc", "npm:6.0.1"],
             ["@types/swagger-ui-express", "npm:4.1.3"],
+            ["@types/yaml", "npm:1.9.6"],
             ["@typescript-eslint/eslint-plugin", "virtual:fcee1f3cc7a557de4e07277f0cc6bd9e2c9fcb8ea62cabea4fe7f0c6c938bc6a7dd39f3fd67d85f036349926f162c9a3293456f2b135726b845f83e3c5b7ef45#npm:4.31.0"],
             ["@typescript-eslint/parser", "virtual:fcee1f3cc7a557de4e07277f0cc6bd9e2c9fcb8ea62cabea4fe7f0c6c938bc6a7dd39f3fd67d85f036349926f162c9a3293456f2b135726b845f83e3c5b7ef45#npm:4.31.0"],
             ["aws-lambda", "npm:1.0.6"],
@@ -79,7 +80,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["swagger-jsdoc", "npm:6.1.0"],
             ["swagger-ui-express", "virtual:fcee1f3cc7a557de4e07277f0cc6bd9e2c9fcb8ea62cabea4fe7f0c6c938bc6a7dd39f3fd67d85f036349926f162c9a3293456f2b135726b845f83e3c5b7ef45#npm:4.1.6"],
             ["typescript", "patch:typescript@npm%3A4.4.3#~builtin<compat/typescript>::version=4.4.3&hash=32657b"],
-            ["uuid", "npm:8.3.2"]
+            ["uuid", "npm:8.3.2"],
+            ["yaml", "npm:1.10.2"]
           ],
           "linkType": "SOFT",
         }]
@@ -678,6 +680,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/swagger-ui-express", "npm:4.1.3"],
             ["@types/express", "npm:4.17.13"],
             ["@types/serve-static", "npm:1.13.10"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/yaml", [
+        ["npm:1.9.6", {
+          "packageLocation": "./.yarn/cache/@types-yaml-npm-1.9.6-25a1e52ff0-3df74c9d40.zip/node_modules/@types/yaml/",
+          "packageDependencies": [
+            ["@types/yaml", "npm:1.9.6"],
+            ["yaml", "npm:1.10.2"]
           ],
           "linkType": "HARD",
         }]
@@ -3221,6 +3233,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/prettier", "npm:2.3.2"],
             ["@types/swagger-jsdoc", "npm:6.0.1"],
             ["@types/swagger-ui-express", "npm:4.1.3"],
+            ["@types/yaml", "npm:1.9.6"],
             ["@typescript-eslint/eslint-plugin", "virtual:fcee1f3cc7a557de4e07277f0cc6bd9e2c9fcb8ea62cabea4fe7f0c6c938bc6a7dd39f3fd67d85f036349926f162c9a3293456f2b135726b845f83e3c5b7ef45#npm:4.31.0"],
             ["@typescript-eslint/parser", "virtual:fcee1f3cc7a557de4e07277f0cc6bd9e2c9fcb8ea62cabea4fe7f0c6c938bc6a7dd39f3fd67d85f036349926f162c9a3293456f2b135726b845f83e3c5b7ef45#npm:4.31.0"],
             ["aws-lambda", "npm:1.0.6"],
@@ -3249,7 +3262,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["swagger-jsdoc", "npm:6.1.0"],
             ["swagger-ui-express", "virtual:fcee1f3cc7a557de4e07277f0cc6bd9e2c9fcb8ea62cabea4fe7f0c6c938bc6a7dd39f3fd67d85f036349926f162c9a3293456f2b135726b845f83e3c5b7ef45#npm:4.1.6"],
             ["typescript", "patch:typescript@npm%3A4.4.3#~builtin<compat/typescript>::version=4.4.3&hash=32657b"],
-            ["uuid", "npm:8.3.2"]
+            ["uuid", "npm:8.3.2"],
+            ["yaml", "npm:1.10.2"]
           ],
           "linkType": "SOFT",
         }]
@@ -5615,6 +5629,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["yaml", [
+        ["npm:1.10.2", {
+          "packageLocation": "./.yarn/cache/yaml-npm-1.10.2-0e780aebdf-ce4ada136e.zip/node_modules/yaml/",
+          "packageDependencies": [
+            ["yaml", "npm:1.10.2"]
+          ],
+          "linkType": "HARD",
+        }],
         ["npm:2.0.0-1", {
           "packageLocation": "./.yarn/cache/yaml-npm-2.0.0-1-230a208429-ccfbd1424d.zip/node_modules/yaml/",
           "packageDependencies": [

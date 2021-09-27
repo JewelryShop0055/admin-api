@@ -1,5 +1,5 @@
 import { Model, ModelCtor, Sequelize } from "sequelize-typescript";
-import { getSequelizeConfigure, initialize } from "../../configures";
+import { getSequelizeConfigure, initialize } from "../../configures/sequelize";
 
 export * from "./user";
 export * from "./userCrenditionalRelation";
@@ -47,8 +47,15 @@ const models = [
 ] as ModelCtor<Model<any, any>>[];
 
 export const sequelize = new Sequelize(getSequelizeConfigure(models));
-sequelize.sync().then(async () => {
-  await initialize();
-});
+
+export async function sync(isSync = false) {
+  if (isSync) {
+    await sequelize.sync().then(async () => {
+      await initialize();
+    });
+  } else {
+    console.log("Skip Sync");
+  }
+}
 
 export default sequelize;

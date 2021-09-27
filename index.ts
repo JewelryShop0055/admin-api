@@ -1,23 +1,15 @@
 import * as http from "http";
 import { AddressInfo } from "net";
-// import * as dotenv from "dotenv";
-// import * as path from "path";
-
-if (process.env.NODE_ENV !== "production") {
-  process.env.NODE_ENV = "development";
-}
-
-// dotenv.config({ path: path.join(__dirname, "./.env") });
-
+import { config } from "./configures/config";
 import { app } from "./src";
+import { sync } from "./src/model";
 
-function bootstrap() {
-  const PORT = Number(process.env.PORT) || 3000;
-  app.set("port", PORT);
+async function bootstrap() {
+  await sync(config.db.allowSync);
 
   const server = http.createServer(app);
 
-  server.listen(PORT, () => {
+  server.listen(config.app.port, () => {
     const { address, port } = server.address() as AddressInfo;
     console.info("process", `server running at ${address}:${port}`);
     if (process.connected) {
@@ -25,4 +17,5 @@ function bootstrap() {
     }
   });
 }
+
 bootstrap();
