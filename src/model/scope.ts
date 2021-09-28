@@ -8,6 +8,7 @@ import { DataTypes } from "sequelize";
  *     ScopeType:
  *       description: User allow Permissions Type
  *       type: string
+ *       example: "operator"
  *       enum:
  *          - operator
  *          - customer

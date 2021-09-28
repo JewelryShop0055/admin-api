@@ -49,15 +49,18 @@ const router = express.Router({
  *                 scope:
  *                   $ref: "#/components/schemas/ScopeType"
  *                 username:
+ *                   description: grant type이 password인 경우 필수
  *                   type: string
  *                   example: "shopoperator"
  *                   required: false
  *                 password:
+ *                   description: grant type이 password인 경우 필수
  *                   type: string
  *                   format: password
  *                   example: "sh0pOperatorTmpPwd"
  *                   required: false
  *                 refresh_token:
+ *                   description: grant type이 refresh_token인 경우 필수
  *                   type: string
  *                   required: false
  *             example:
