@@ -6,7 +6,10 @@ import { DataTypes } from "sequelize";
  * components:
  *   schemas:
  *     ScopeType:
- *       description: User allow Permissions Type
+ *       description: >
+ *         User allow Permissions Type:
+ *          * operator: 관리자 권한
+ *          * customer: 소비자 권한
  *       type: string
  *       example: "operator"
  *       enum:

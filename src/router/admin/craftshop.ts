@@ -48,7 +48,8 @@ const router = express.Router({
  *                 $ref: "#/components/schemas/CraftShop"
  *       400:
  *         $ref: "#/components/responses/GenericError"
- *       401: {}
+ *       401:
+ *         $ref: "#/components/responses/401"
  *       500:
  *         $ref: "#/components/responses/GenericError"
  *
@@ -90,7 +91,8 @@ router.get(
  *               $ref: "#/components/schemas/CraftShop"
  *       400:
  *         $ref: "#/components/responses/GenericError"
- *       401: {}
+ *       401:
+ *         $ref: "#/components/responses/401"
  *       500:
  *         $ref: "#/components/responses/GenericError"
  *
@@ -133,8 +135,10 @@ router.post(
  *               $ref: "#/components/schemas/CraftShop"
  *       400:
  *         $ref: "#/components/responses/GenericError"
- *       401: {}
- *       404: {}
+ *       401:
+ *         $ref: "#/components/responses/401"
+ *       404:
+ *         $ref: "#/components/responses/404"
  *       500:
  *         $ref: "#/components/responses/GenericError"
  */
@@ -215,8 +219,10 @@ router.get(
  *               $ref: "#/components/schemas/CraftShop"
  *       400:
  *         $ref: "#/components/responses/GenericError"
- *       401: {}
- *       404: {}
+ *       401:
+ *         $ref: "#/components/responses/401"
+ *       404:
+ *         $ref: "#/components/responses/404"
  *       500:
  *         $ref: "#/components/responses/GenericError"
  *
@@ -266,11 +272,14 @@ router.put(
  *     parameters:
  *       - $ref: "#/components/parameters/CraftShopId"
  *     responses:
- *       204: {}
+ *       204:
+ *         $ref: "#/components/responses/204"
  *       400:
  *         $ref: "#/components/responses/GenericError"
- *       401: {}
- *       404: {}
+ *       401:
+ *         $ref: "#/components/responses/401"
+ *       404:
+ *         $ref: "#/components/responses/404"
  *       500:
  *         $ref: "#/components/responses/GenericError"
  */

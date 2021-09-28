@@ -31,12 +31,13 @@ const router = Router({
  *       - bearerAuth: []
  *     summary: Current Login User infomation
  *     responses:
- *       '200':
+ *       200:
  *          content:
  *            application/json:
  *                schema:
  *                  $ref: "#/components/schemas/User"
- *       '401': {}
+ *       401:
+ *         $ref: "#/components/responses/401"
  */
 router.get("/me", authenticate(false), function (req, res) {
   return res.json(res.locals.oauth.token.user);
@@ -135,10 +136,12 @@ router.put(
  *                      format: password
  *                      required: true
  *     responses:
- *       204: {}
+ *       204:
+ *         $ref: "#/components/responses/204"
  *       400:
  *         $ref: "#/components/responses/GenericError"
- *       401: {}
+ *       401:
+ *         $ref: "#/components/responses/401"
  *       500:
  *         $ref: "#/components/responses/GenericError"
  */

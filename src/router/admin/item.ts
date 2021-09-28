@@ -74,7 +74,8 @@ const router = express.Router({
  *                 $ref: "#/components/schemas/Item"
  *       400:
  *         $ref: "#/components/responses/GenericError"
- *       401: {}
+ *       401:
+ *         $ref: "#/components/responses/401"
  *       500:
  *         $ref: "#/components/responses/GenericError"
  */
@@ -123,7 +124,8 @@ router.get(
  *               $ref: "#/components/schemas/Item"
  *       400:
  *         $ref: "#/components/responses/GenericError"
- *       401: {}
+ *       401:
+ *         $ref: "#/components/responses/401"
  *       500:
  *         $ref: "#/components/responses/GenericError"
  */
@@ -234,8 +236,10 @@ router.post(
  *               $ref: "#/components/schemas/Item"
  *       400:
  *         $ref: "#/components/responses/GenericError"
- *       401: {}
- *       404: {}
+ *       401:
+ *         $ref: "#/components/responses/401"
+ *       404:
+ *         $ref: "#/components/responses/404"
  *       500:
  *         $ref: "#/components/responses/GenericError"
  */
@@ -313,8 +317,10 @@ router.get(
  *               $ref: "#/components/schemas/Item"
  *       400:
  *         $ref: "#/components/responses/GenericError"
- *       401: {}
- *       404: {}
+ *       401:
+ *         $ref: "#/components/responses/401"
+ *       404:
+ *         $ref: "#/components/responses/404"
  *       500:
  *         $ref: "#/components/responses/GenericError"
  */
@@ -383,11 +389,14 @@ router.put(
  *               schema:
  *                 $ref: "#/components/schemas/UpdateItemCateogryInput"
  *     responses:
- *       204: {}
+ *       204:
+ *         $ref: "#/components/responses/204"
  *       400:
  *         $ref: "#/components/responses/GenericError"
- *       401: {}
- *       404: {}
+ *       401:
+ *         $ref: "#/components/responses/401"
+ *       404:
+ *         $ref: "#/components/responses/404"
  *       500:
  *         $ref: "#/components/responses/GenericError"
  */
@@ -455,11 +464,14 @@ router.put(
  *       - $ref: "#/components/parameters/ItemType"
  *       - $ref: "#/components/parameters/ItemId"
  *     responses:
- *       204: {}
+ *       204:
+ *         $ref: "#/components/responses/204"
  *       400:
  *         $ref: "#/components/responses/GenericError"
- *       401: {}
- *       404: {}
+ *       401:
+ *         $ref: "#/components/responses/401"
+ *       404:
+ *         $ref: "#/components/responses/404"
  *       500:
  *         $ref: "#/components/responses/GenericError"
  */
@@ -529,11 +541,14 @@ router.put(
  *       - $ref: "#/components/parameters/ItemType"
  *       - $ref: "#/components/parameters/ItemId"
  *     responses:
- *       204: {}
+ *       204:
+ *         $ref: "#/components/responses/204"
  *       400:
  *         $ref: "#/components/responses/GenericError"
- *       401: {}
- *       404: {}
+ *       401:
+ *         $ref: "#/components/responses/401"
+ *       404:
+ *         $ref: "#/components/responses/404"
  *       500:
  *         $ref: "#/components/responses/GenericError"
  */
@@ -585,8 +600,10 @@ router.delete(
  *                 $ref: "#/components/schemas/Category"
  *       400:
  *         $ref: "#/components/responses/GenericError"
- *       401: {}
- *       404: {}
+ *       401:
+ *         $ref: "#/components/responses/401"
+ *       404:
+ *         $ref: "#/components/responses/404"
  *       500:
  *         $ref: "#/components/responses/GenericError"
  */
@@ -649,11 +666,14 @@ router.get(
  *         schema:
  *           type: integer
  *     responses:
- *       204: {}
+ *       204:
+ *         $ref: "#/components/responses/204"
  *       400:
  *         $ref: "#/components/responses/GenericError"
- *       401: {}
- *       404: {}
+ *       401:
+ *         $ref: "#/components/responses/401"
+ *       404:
+ *         $ref: "#/components/responses/404"
  *       500:
  *         $ref: "#/components/responses/GenericError"
  */
@@ -717,8 +737,10 @@ router.delete(
  *                 $ref: "#/components/schemas/Item"
  *       400:
  *         $ref: "#/components/responses/GenericError"
- *       401: {}
- *       404: {}
+ *       401:
+ *         $ref: "#/components/responses/401"
+ *       404:
+ *         $ref: "#/components/responses/404"
  *       500:
  *         $ref: "#/components/responses/GenericError"
  */
@@ -777,8 +799,10 @@ router.get(
  *               $ref: "#/components/schemas/ItemRelation"
  *       400:
  *         $ref: "#/components/responses/GenericError"
- *       401: {}
- *       404: {}
+ *       401:
+ *         $ref: "#/components/responses/401"
+ *       404:
+ *         $ref: "#/components/responses/404"
  *       500:
  *         $ref: "#/components/responses/GenericError"
  */
@@ -878,8 +902,10 @@ router.post(
  *               $ref: "#/components/schemas/ItemRelation"
  *       400:
  *         $ref: "#/components/responses/GenericError"
- *       401: {}
- *       404: {}
+ *       401:
+ *         $ref: "#/components/responses/401"
+ *       404:
+ *         $ref: "#/components/responses/404"
  *       500:
  *         $ref: "#/components/responses/GenericError"
  */
@@ -925,11 +951,14 @@ router.put(
  *       - $ref: "#/components/parameters/ItemId"
  *       - $ref: "#/components/parameters/partsId"
  *     responses:
- *       204: {}
+ *       204:
+ *         $ref: "#/components/responses/204"
  *       400:
  *         $ref: "#/components/responses/GenericError"
- *       401: {}
- *       404: {}
+ *       401:
+ *         $ref: "#/components/responses/401"
+ *       404:
+ *         $ref: "#/components/responses/404"
  *       500:
  *         $ref: "#/components/responses/GenericError"
  *

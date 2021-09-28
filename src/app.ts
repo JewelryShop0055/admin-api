@@ -58,6 +58,19 @@ const options: swaggereJsdoc.Options = {
           },
         } as SecurityScheme,
       },
+      responses: {
+        204: {
+          description: `No Content.
+            success status response code indicates that a request has succeeded.
+            https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/204`,
+        },
+        401: {
+          description: "Unauthorized",
+        },
+        404: {
+          description: "NOT FOUND",
+        },
+      },
     } as Components,
     security: {
       bearerAuth: [],

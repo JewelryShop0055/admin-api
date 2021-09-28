@@ -62,7 +62,8 @@ const router = express.Router({
  *                 $ref: "#/components/schemas/Category"
  *       400:
  *         $ref: "#/components/responses/GenericError"
- *       401: {}
+ *       401:
+ *         $ref: "#/components/responses/401"
  *       500:
  *         $ref: "#/components/responses/GenericError"
  *
@@ -113,7 +114,8 @@ router.get(
  *               $ref: "#/components/schemas/Category"
  *       400:
  *         $ref: "#/components/responses/GenericError"
- *       401: {}
+ *       401:
+ *         $ref: "#/components/responses/401"
  *       500:
  *         $ref: "#/components/responses/GenericError"
  *
@@ -175,8 +177,10 @@ router.post(
  *               $ref: "#/components/schemas/Category"
  *       400:
  *         $ref: "#/components/responses/GenericError"
- *       401: {}
- *       404: {}
+ *       401:
+ *         $ref: "#/components/responses/401"
+ *       404:
+ *         $ref: "#/components/responses/404"
  *       500:
  *         $ref: "#/components/responses/GenericError"
  */
@@ -233,8 +237,10 @@ router.get(
  *                 $ref: "#/components/schemas/Category"
  *       400:
  *         $ref: "#/components/responses/GenericError"
- *       401: {}
- *       404: {}
+ *       401:
+ *         $ref: "#/components/responses/401"
+ *       404:
+ *         $ref: "#/components/responses/404"
  *       500:
  *         $ref: "#/components/responses/GenericError"
  */
@@ -311,8 +317,10 @@ router.get(
  *               $ref: "#/components/schemas/Category"
  *       400:
  *         $ref: "#/components/responses/GenericError"
- *       401: {}
- *       404: {}
+ *       401:
+ *         $ref: "#/components/responses/401"
+ *       404:
+ *         $ref: "#/components/responses/404"
  *       500:
  *         $ref: "#/components/responses/GenericError"
  */
@@ -365,11 +373,14 @@ router.put(
  *       - $ref: "#/components/parameters/ItemType"
  *       - $ref: "#/components/parameters/CategoryId"
  *     responses:
- *       204: {}
+ *       204:
+ *         $ref: "#/components/responses/204"
  *       400:
  *         $ref: "#/components/responses/GenericError"
- *       401: {}
- *       404: {}
+ *       401:
+ *         $ref: "#/components/responses/401"
+ *       404:
+ *         $ref: "#/components/responses/404"
  *       500:
  *         $ref: "#/components/responses/GenericError"
  */
@@ -426,8 +437,10 @@ router.delete(
  *               $ref: "#/components/schemas/Category"
  *       400:
  *         $ref: "#/components/responses/GenericError"
- *       401: {}
- *       404: {}
+ *       401:
+ *         $ref: "#/components/responses/401"
+ *       404:
+ *         $ref: "#/components/responses/404"
  *       500:
  *         $ref: "#/components/responses/GenericError"
  */
