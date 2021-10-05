@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-// import helmet from "helmet";
+import helmet from "helmet";
 import compression from "compression";
 import SwaggerUi from "swagger-ui-express";
 import bodyParser from "body-parser";
@@ -11,7 +11,7 @@ import swaggereJsdoc, { Components, SecurityScheme } from "swagger-jsdoc";
 
 const app: express.Application = express();
 app.use(cors());
-// app.use(helmet());
+app.use(helmet());
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
