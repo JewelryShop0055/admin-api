@@ -17,9 +17,16 @@ import sequelize, {
   ItemTypes,
   ItemUnitTypes,
   PagenationQuery,
+  ItemResource,
+  ItemFileType,
+  FileStatus,
+  FileExt,
 } from "../../model";
 import { pagenationValidator, unitValidator } from "../../util";
 import ItemRelation from "../../model/ItemRelation";
+import { v4 as uuidv4 } from "uuid";
+import { S3Manager } from "../../util/s3Manager";
+import { Op } from "sequelize";
 
 /**
  * @openapi
@@ -43,7 +50,13 @@ import ItemRelation from "../../model/ItemRelation";
  *       allowEmptyValue: false
  *       schema:
  *         type: string
- *
+ *     resourceId:
+ *       name: resourceId
+ *       in: path
+ *       required: true
+ *       allowEmptyValue: false
+ *       schema:
+ *         type: string
  */
 
 const router = express.Router({
@@ -650,7 +663,7 @@ router.get(
 
 /**
  * @openapi
- * /admin/item/{type}/{id}/category/{categoryId}:
+ * /admin/item/{itemType}/{id}/category/{categoryId}:
  *   delete:
  *     tags:
  *       - admin-item
@@ -1004,6 +1017,251 @@ router.delete(
         partsId,
       },
     });
+
+    return res.sendStatus(204);
+  }),
+);
+
+/**
+ * @openapi
+ *
+ * /admin/item/{itemType}/{id}/resource:
+ *   post:
+ *     tags:
+ *       - admin-item
+ *       - files
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - $ref: "#/components/parameters/ItemType"
+ *       - $ref: "#/components/parameters/ItemId"
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               fileType:
+ *                 $ref: "#/components/schemas/ItemFileType"
+ *               ext:
+ *                 $ref: "#/components/schemas/FileExt"
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               fileType:
+ *                 $ref: "#/components/schemas/ItemFileType"
+ *               ext:
+ *                 $ref: "#/components/schemas/FileExt"
+ *     responses:
+ *       200:
+ *         description: get s3 upload crenditional. The expiration time is a minute. <br>
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 crenditional:
+ *                   description: S3 Upload Infomation. more info <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-UsingHTTPPOST.html">here</a>
+ *                   required: true
+ *                   type: object
+ *                   properties:
+ *                     url:
+ *                       type: sting
+ *                       description: Request this URL as a POST
+ *                       example: https://s3.ap-northeast-2.amazonaws.com/resource.raviluz.com
+ *                     fields:
+ *                       type: object
+ *                       description: Request this fields as a Body. This field is flexible.
+ *                       properties:
+ *                         key:
+ *                           type: string
+ *                         bucket:
+ *                           type: string
+ *                         X-Amz-Algorithm:
+ *                           type: string
+ *                         X-Amz-Credential:
+ *                           type: string
+ *                         X-Amz-Date:
+ *                           type: string
+ *                         Policy:
+ *                           type: string
+ *                         X-Amz-Signature:
+ *                           type: string
+ *                         x-amz-meta-resourceId:
+ *                           type: string
+ *                 resourceId:
+ *                   description: This file manage id. if sucesss, send this id to `PUT /admin/item/{itemType}/{id}/resource/{resourceId}`
+ *                   required: true
+ *                   type: string
+ *                   example: "b80b61a3-039a-40a4-b61f-9578340e0707"
+ *       400:
+ *         $ref: "#/components/responses/GenericError"
+ *       401:
+ *         $ref: "#/components/responses/401"
+ *       404:
+ *         $ref: "#/components/responses/404"
+ *       500:
+ *         $ref: "#/components/responses/GenericError"
+ */
+router.post(
+  "/:type/:id/resource",
+  itemTypeValidateMiddelware,
+  authenticate(false),
+  asyncHandler(async (req, res) => {
+    const { type, id } = req.params;
+    const { ext, fileType } = req.body;
+
+    const contentType = FileExt[fileType]?.[ext];
+
+    if (!contentType) {
+      return res.status(400).json({
+        status: 400,
+        message: "Not allow File Extension",
+      });
+    }
+
+    const item = await Item.findOne({
+      where: {
+        id,
+        type,
+      },
+    });
+
+    if (!item) {
+      return res.sendStatus(404);
+    }
+
+    const key = `${
+      process.env.NODE_ENV === "production" ? fileType : `${fileType}-dev`
+    }/item/${id}/${type}/${uuidv4()}${ext ? `.${ext}` : ""}`;
+
+    const resource = await ItemResource.create({
+      itemId: item.id,
+      key,
+      type: fileType as ItemFileType,
+    });
+
+    const crenditional = await S3Manager.getImageUploadCrenditional(
+      key,
+      resource.id,
+    );
+
+    return res.json({
+      crenditional,
+      resourceId: resource.id,
+    });
+  }),
+);
+
+/**
+ * @openapi
+ *
+ * /admin/item/{itemType}/{id}/resource/{fileType}:
+ *   put:
+ *     tags:
+ *       - admin-item
+ *       - files
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - $ref: "#/components/parameters/ItemType"
+ *       - $ref: "#/components/parameters/ItemId"
+ *       - $ref: "#/components/parameters/resourceId"
+ *     description: request this endpoint when after Success S3 Upload.
+ *     responses:
+ *       200:
+ *         $ref: "#/components/responses/204"
+ *       400:
+ *         $ref: "#/components/responses/GenericError"
+ *       401:
+ *         $ref: "#/components/responses/401"
+ *       404:
+ *         $ref: "#/components/responses/404"
+ *       500:
+ *         $ref: "#/components/responses/GenericError"
+ */
+router.put(
+  "/:type/:id/resource/:resourceId",
+  itemTypeValidateMiddelware,
+  authenticate(false),
+  asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const resourceId = req.body.resourceId;
+
+    const resource = await ItemResource.findOne({
+      where: {
+        id: resourceId,
+        itemId: id,
+      },
+    });
+
+    if (!resource) {
+      return res.sendStatus(404);
+    }
+
+    resource.status = FileStatus.done;
+
+    await resource.save();
+
+    return res.sendStatus(204);
+  }),
+);
+
+/**
+ * @openapi
+ *
+ * /admin/item/{itemType}/{id}/resource/{fileType}:
+ *   delete:
+ *     tags:
+ *       - admin-item
+ *       - files
+ *     security:
+ *       - bearerAuth: []
+ *     description: request this endpoint when after Fail S3 Upload or Delete.
+ *     parameters:
+ *       - $ref: "#/components/parameters/ItemType"
+ *       - $ref: "#/components/parameters/ItemId"
+ *       - $ref: "#/components/parameters/resourceId"
+ *     responses:
+ *       200:
+ *         $ref: "#/components/responses/204"
+ *       400:
+ *         $ref: "#/components/responses/GenericError"
+ *       401:
+ *         $ref: "#/components/responses/401"
+ *       404:
+ *         $ref: "#/components/responses/404"
+ *       500:
+ *         $ref: "#/components/responses/GenericError"
+ */
+router.delete(
+  "/:type/:id/resource/:resourceId",
+  itemTypeValidateMiddelware,
+  authenticate(false),
+  asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const resourceId = req.body.resourceId;
+
+    const resource = await ItemResource.findOne({
+      where: {
+        id: resourceId,
+        itemId: id,
+        status: {
+          [Op.not]: FileStatus.remove,
+        },
+      },
+    });
+
+    if (!resource) {
+      return res.sendStatus(404);
+    }
+
+    if (resource.status === FileStatus.done) {
+      await S3Manager.deleteFile(resource.key);
+    }
+
+    await resource.destroy();
 
     return res.sendStatus(204);
   }),

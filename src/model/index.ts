@@ -13,10 +13,13 @@ export * from "./category";
 export * from "./categroyTree";
 export * from "./ItemCategoryRelation";
 export * from "./ItemRelation";
+export * from "./itemResource";
 export * from "./craftShop";
 export * from "./itemCraftShopRelation";
 export * from "./defaultErrorResponse";
 export * from "./pagenationQuery";
+export * from "./fileStatus";
+export * from "./fileExt";
 
 import User from "./user";
 import UserCrenditionalRelation from "./userCrenditionalRelation";
@@ -30,6 +33,7 @@ import ItemCategoryRelation from "./ItemCategoryRelation";
 import ItemRelation from "./ItemRelation";
 import CraftShop from "./craftShop";
 import ItemCraftShopRelation from "./itemCraftShopRelation";
+import ItemResource from "./itemResource";
 
 const models = [
   User,
@@ -44,6 +48,7 @@ const models = [
   ItemRelation,
   CraftShop,
   ItemCraftShopRelation,
+  ItemResource,
 ] as ModelCtor<Model<any, any>>[];
 
 export const sequelize = new Sequelize(getSequelizeConfigure(models));
