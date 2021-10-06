@@ -1,4 +1,4 @@
-import { FLOAT, UUID } from "sequelize";
+import { FLOAT, TEXT, UUID } from "sequelize";
 import {
   Column,
   Model,
@@ -34,6 +34,7 @@ export class CreateItemRealtionInput {
   productId!: string;
   partsId!: string;
   amount!: number;
+  memo?: string;
 }
 
 /**
@@ -135,6 +136,14 @@ export class ItemRelation extends Model<ItemRelation, CreateItemRealtionInput> {
     defaultValue: 0,
   })
   amount!: number;
+
+  @Column
+  @Column({
+    type: TEXT,
+    allowNull: true,
+    defaultValue: "",
+  })
+  memo?: string;
 
   @BelongsTo(() => Item, "productId")
   product?: Item;

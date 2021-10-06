@@ -165,6 +165,7 @@ router.post(
         unit: unitValidator(req.body.unit) || ItemUnitTypes.ea,
         defaultFee: Number(req.body.defaultFee) || undefined,
         extraFee: Number(req.body.extraFee) || undefined,
+        memo: req.body.memo,
       };
 
       const categoryId = Number(req.body.categoryId);
@@ -350,6 +351,7 @@ router.put(
         unit: unitValidator(req.body.unit),
         defaultFee: Number(req.body.defaultFee) || undefined,
         extraFee: Number(req.body.extraFee) || undefined,
+        memo: req.body.memo,
       };
 
       const item = await Item.findOne({
@@ -828,6 +830,7 @@ router.post(
       productId: id,
       partsId: req.body.partsId,
       amount: Number(req.body.amount),
+      memo: req.body.memo,
     };
 
     const product = await Item.findOne({
@@ -935,6 +938,7 @@ router.put(
 
     const values = {
       amount: Number(req.body.amount),
+      memo: req.body.memo,
     };
 
     const relation = await ItemRelation.findOne({

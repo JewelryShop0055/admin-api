@@ -7,7 +7,7 @@ import {
   HasMany,
   BelongsToMany,
 } from "sequelize-typescript";
-import { UUIDV4, UUID } from "sequelize";
+import { UUIDV4, UUID, TEXT } from "sequelize";
 import {
   ItemTypeEnum,
   ItemType,
@@ -68,6 +68,7 @@ export class CreateItemInput {
   unit!: ItemUnitType;
   defaultFee?: number;
   extraFee?: number;
+  memo?: string;
 }
 
 /**
@@ -204,6 +205,14 @@ export class Item extends Model<Item, CreateItemInput> {
     defaultValue: false,
   })
   disable!: boolean;
+
+  @Column
+  @Column({
+    type: TEXT,
+    allowNull: true,
+    defaultValue: "",
+  })
+  memo?: string;
 
   @HasMany(() => ItemCategoryRelation, {
     onDelete: "CASCADE",
