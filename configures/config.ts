@@ -10,6 +10,9 @@ interface ConfigObjects {
       region: string;
       bucket: string;
     };
+    serviceName: string;
+    serviceUrl: string;
+    systemEMailAddress: string;
     [key: string]: any;
   };
   db: {
@@ -44,6 +47,9 @@ export const config: ConfigObjects = {
     resource: {
       ...yaml?.app?.resource,
     },
+    serviceName: yaml?.app?.serviceName || "{서비스 이름}",
+    serviceUrl: yaml?.app?.serviceUrl || "http://localhost:3000",
+    systemEMailAddress: yaml?.app?.systemEMailAddress || "noreply@example.com",
     ...yaml?.app,
   },
   db: {

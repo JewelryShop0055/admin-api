@@ -3,6 +3,9 @@ app:
   resource:
     region: "ap-northeast-2"
     bucket: "bucket"
+  serviceName: service
+  serviceUrl: http://localhost:3000
+  systemEMailAddress: noreply@example.com
 db:
   allowSync: false
 

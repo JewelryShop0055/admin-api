@@ -1,12 +1,14 @@
 import { Router, Request, Response } from "express";
 import { asyncHandler, authenticate } from "../../middleware";
-import {
+import { SesManager } from "../../util/ses";
+import sequelize, {
   UpdateUserInput,
   User,
   UserCrenditional,
   UserCrenditionalRealtion,
   CrenditionalTypes,
 } from "../../model";
+import { tempPasswordGenerator } from "../../util";
 
 const router = Router({
   mergeParams: true,
@@ -201,4 +203,103 @@ router.put(
   }),
 );
 
+/**
+ * @openapi
+ *
+ * /admin/account/forgot-password:
+ *   post:
+ *     tags:
+ *       - "admin-account"
+ *     summary: request reset password. new password sent email
+ *     requestBody:
+ *         content:
+ *            application/x-www-form-urlencoded:
+ *               schema:
+ *                  type: object
+ *                  properties:
+ *                    email:
+ *                      type: string
+ *                      required: true
+ *            application/json:
+ *               schema:
+ *                  type: object
+ *                  properties:
+ *                    email:
+ *                      type: string
+ *                      required: true
+ *     responses:
+ *       204:
+ *         $ref: "#/components/responses/204"
+ *       400:
+ *         $ref: "#/components/responses/GenericError"
+ *       401:
+ *         $ref: "#/components/responses/401"
+ *       500:
+ *         $ref: "#/components/responses/GenericError"
+ */
+router.post(
+  "/forgot-password",
+  asyncHandler(async (req, res) => {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        status: 400,
+        message: "require email",
+      });
+    }
+
+    const user = await User.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      return res.sendStatus(204);
+    }
+
+    const userPasswordCrenditional = await UserCrenditional.findOne({
+      where: {
+        type: CrenditionalTypes.password,
+      },
+      include: [
+        {
+          model: UserCrenditionalRealtion,
+          include: [
+            {
+              model: User,
+              where: {
+                id: user.id,
+              },
+            },
+          ],
+        },
+      ],
+    });
+
+    if (!userPasswordCrenditional) {
+      throw new Error("Unknown Error");
+    }
+
+    const newPassowrd = tempPasswordGenerator();
+    const transaction = await sequelize.transaction();
+
+    try {
+      userPasswordCrenditional.password = newPassowrd;
+
+      await userPasswordCrenditional.save({ transaction });
+
+      const manager = new SesManager();
+      await manager.sendChangePassword(user, newPassowrd);
+
+      await transaction.commit();
+    } catch (e) {
+      await transaction.rollback();
+      throw e;
+    }
+
+    return res.sendStatus(204);
+  }),
+);
 export default router;
