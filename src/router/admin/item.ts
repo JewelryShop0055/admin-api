@@ -171,6 +171,8 @@ router.post(
         defaultFee: Number(req.body.defaultFee) || undefined,
         extraFee: Number(req.body.extraFee) || undefined,
         memo: req.body.memo,
+        displayable: req.body.displayable,
+        soldOut: req.body.soldOut,
       };
 
       const categoryId = Number(req.body.categoryId);
@@ -357,6 +359,8 @@ router.put(
         defaultFee: Number(req.body.defaultFee) || undefined,
         extraFee: Number(req.body.extraFee) || undefined,
         memo: req.body.memo,
+        displayable: req.body.displayable,
+        soldOut: req.body.soldOut,
       };
 
       const item = await Item.findOne({

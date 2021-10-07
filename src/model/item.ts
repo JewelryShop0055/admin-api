@@ -69,6 +69,8 @@ export class CreateItemInput {
   defaultFee?: number;
   extraFee?: number;
   memo?: string;
+  displayable?: boolean;
+  soldOut?: boolean;
 }
 
 /**
@@ -102,6 +104,18 @@ export class CreateItemInput {
  *         extraFee:
  *           description: 기타 공임비(세공비 등).
  *           type: integer
+ *           required: true
+ *         displayble:
+ *           description: B2C 페이지 표시 여부.
+ *           type: boolean
+ *           required: true
+ *         soldOut:
+ *           description: 품절
+ *           type: boolean
+ *           required: true
+ *         memo:
+ *           description: 메모
+ *           type: string
  *           required: true
  *         categories:
  *           type: array
@@ -187,7 +201,6 @@ export class Item extends Model<Item, CreateItemInput> {
   /**
    * 기본 공임비
    */
-  @Column
   @NotNull
   @Column({
     allowNull: false,
@@ -198,7 +211,6 @@ export class Item extends Model<Item, CreateItemInput> {
   /**
    * 세공 공임비
    */
-  @Column
   @NotNull
   @Column({
     allowNull: false,
@@ -207,7 +219,6 @@ export class Item extends Model<Item, CreateItemInput> {
   extraFee!: number;
 
   @jsonIgnore()
-  @Column
   @NotNull
   @Column({
     allowNull: false,
@@ -215,7 +226,20 @@ export class Item extends Model<Item, CreateItemInput> {
   })
   disable!: boolean;
 
-  @Column
+  @NotNull
+  @Column({
+    allowNull: false,
+    defaultValue: false,
+  })
+  displayable!: boolean;
+
+  @NotNull
+  @Column({
+    allowNull: false,
+    defaultValue: false,
+  })
+  soldOut!: boolean;
+
   @Column({
     type: TEXT,
     allowNull: true,
