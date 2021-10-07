@@ -51,6 +51,18 @@ import { ItemRelation } from "./ItemRelation";
  *           description: 기타 공임비(세공비 등).
  *           type: integer
  *           required: false
+ *         isRev:
+ *           description: 파생 모델 여부
+ *           type: boolean
+ *           required: false
+ *         categoryId:
+ *           description: 카테고리 ID
+ *           type: integer
+ *           required: false
+ *         craftShopId:
+ *           description: 공방 ID
+ *           type: string
+ *           required: false
  *   requestBodies:
  *     CreateItemInput:
  *       content:
@@ -71,6 +83,11 @@ export class CreateItemInput {
   memo?: string;
   displayable?: boolean;
   soldOut?: boolean;
+  revNo?: number;
+}
+
+export class CreateItemWithOption {
+  isRev?: boolean;
 }
 
 /**

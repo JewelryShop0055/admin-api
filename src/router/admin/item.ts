@@ -1,32 +1,34 @@
 import express, { Request } from "express";
+import { Op } from "sequelize";
+import { v4 as uuidv4 } from "uuid";
+
 import {
   asyncHandler,
   authenticate,
   itemTypeValidateMiddelware,
 } from "../../middleware";
 import sequelize, {
+  Category,
+  CategoryTree,
   CreateItemCategoryInput,
   CreateItemCraftShopRelationInput,
   CreateItemInput,
-  Category,
-  CategoryTree,
+  CreateItemWithOption,
+  FileExt,
+  FileStatus,
   Item,
   ItemCategoryRelation,
   ItemCraftShopRelation,
+  ItemFileType,
+  ItemRelation,
+  ItemResource,
   ItemType,
   ItemTypes,
   ItemUnitTypes,
   PagenationQuery,
-  ItemResource,
-  ItemFileType,
-  FileStatus,
-  FileExt,
-  ItemRelation,
 } from "../../model";
 import { pagenationValidator, unitValidator } from "../../util";
-import { v4 as uuidv4 } from "uuid";
 import { S3Manager } from "../../util/s3Manager";
-import { Op } from "sequelize";
 
 /**
  * @openapi
@@ -157,6 +159,7 @@ router.post(
         any,
         any,
         CreateItemInput &
+          CreateItemWithOption &
           Partial<CreateItemCategoryInput> &
           Partial<CreateItemCraftShopRelationInput>
       >,
@@ -174,6 +177,12 @@ router.post(
         displayable: req.body.displayable,
         soldOut: req.body.soldOut,
       };
+
+      const isRev = req.body.isRev;
+
+      if (!isRev) {
+        values.revNo = 0;
+      }
 
       const categoryId = Number(req.body.categoryId);
 
