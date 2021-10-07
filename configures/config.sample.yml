@@ -8,5 +8,25 @@ app:
   systemEMailAddress: noreply@example.com
 db:
   allowSync: false
+user:
+  operator:
+    - username: shopoperator
+      password: sh0pOperatorTmpPwd
+      email: dummy@dummy.com
+      name: 운영자
+      phone: "01000000000"
 
 NODE_ENV: development
+
+# BUILD TEST
+test:
+  client:
+    admin:
+      clientId: shopClient
+      clientSecret: shopClient1234
+      redirectUri: http://localhost:3000/redirect
+  user:
+    admin:
+      username: shopoperator
+      password: sh0pOperatorTmpPwd
+      scope: operator

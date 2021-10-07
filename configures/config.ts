@@ -2,6 +2,14 @@ import fs from "fs";
 import YAML from "yaml";
 import path from "path";
 
+interface UserInfo {
+  username: string;
+  password: string;
+  email: string;
+  name: string;
+  phone: string;
+}
+
 interface ConfigObjects {
   app: {
     port: number;
@@ -18,6 +26,9 @@ interface ConfigObjects {
   db: {
     allowSync: boolean;
     [key: string]: any;
+  };
+  user?: {
+    operator?: Array<UserInfo>;
   };
   [key: string]: any;
 }

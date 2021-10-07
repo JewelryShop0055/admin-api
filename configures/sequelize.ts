@@ -8,6 +8,7 @@ import sequelize, {
   UserCrenditionalRealtion,
   UserCrenditional,
 } from "../src/model";
+import { config } from "./config";
 
 export function getSequelizeConfigure(
   models: ModelCtor<Model<any, any>>[],
@@ -37,61 +38,72 @@ export function getSequelizeConfigure(
  * 클라이언트의 경우 "client secret" DB에서 유추하기 어려운 것으로 반드시 변경
  */
 export async function initialize() {
-  const operator = await User.findOne({
-    where: {
-      scope: ScopeTypes.operator,
-    },
-    benchmark: process.env.NODE_ENV !== "production",
-  });
 
-  if (!operator) {
-    const transaction = await sequelize.transaction();
 
-    try {
-      const crenditional = await UserCrenditional.create(
-        {
-          password: "sh0pOperatorTmpPwd",
-          username: "shopoperator",
-          type: CrenditionalTypes.password,
-        },
-        {
-          transaction,
+  await Promise.all(
+    config.user?.operator?.map(async (nUser) => {
+      const transaction = await sequelize.transaction();
+      try {
+        const operator = await UserCrenditional.findOne({
+          where: {
+            username: nUser.username,
+          },
           benchmark: process.env.NODE_ENV !== "production",
-        },
-      );
-
-      const user = await User.create(
-        {
-          email: "dummy@dummy.com",
-          name: "운영자",
-          phone: "01000000000",
-          scope: ScopeTypes.operator,
-        },
-        {
           transaction,
-          benchmark: process.env.NODE_ENV !== "production",
-        },
-      );
+        });
 
-      const crenditionalRelation = await UserCrenditionalRealtion.create(
-        {
-          userId: user.id,
-          crenditionalId: crenditional.id,
-        },
-        {
-          transaction,
-          benchmark: process.env.NODE_ENV !== "production",
-        },
-      );
+        if (operator) {
+          console.info(`Already exist ${nUser.username}`);
+          await transaction.commit();
 
-      await transaction.commit();
-    } catch (e) {
-      await transaction.rollback();
-      console.error(e);
+          return;
+        }
 
-      throw e;
-    }
-  }
+        const crenditional = await UserCrenditional.create(
+          {
+            password: nUser.password,
+            username: nUser.username,
+            type: CrenditionalTypes.password,
+          },
+          {
+            transaction,
+            benchmark: process.env.NODE_ENV !== "production",
+          },
+        );
+
+        const user = await User.create(
+          {
+            email: nUser.email,
+            name: nUser.name,
+            phone: nUser.phone,
+            scope: ScopeTypes.operator,
+          },
+          {
+            transaction,
+            benchmark: process.env.NODE_ENV !== "production",
+          },
+        );
+
+        const crenditionalRelation = await UserCrenditionalRealtion.create(
+          {
+            userId: user.id,
+            crenditionalId: crenditional.id,
+          },
+          {
+            transaction,
+            benchmark: process.env.NODE_ENV !== "production",
+          },
+        );
+
+        await transaction.commit();
+      } catch (e) {
+        await transaction.rollback();
+        console.error(e);
+
+        throw e;
+      }
+    }) || [],
+  );
 
   const adminClient = await Client.findOne({
     where: {
