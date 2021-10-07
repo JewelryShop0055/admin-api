@@ -21,9 +21,9 @@ import sequelize, {
   ItemFileType,
   FileStatus,
   FileExt,
+  ItemRelation,
 } from "../../model";
 import { pagenationValidator, unitValidator } from "../../util";
-import ItemRelation from "../../model/ItemRelation";
 import { v4 as uuidv4 } from "uuid";
 import { S3Manager } from "../../util/s3Manager";
 import { Op } from "sequelize";
@@ -102,12 +102,17 @@ router.get(
       Number(req.query.limit),
     );
 
+    const where = {
+      partNo: req.query.partNo,
+    };
+
     const type: ItemType = req.params.type;
 
     const items = await Item.findAll({
       where: {
         type,
         disable: false,
+        ...where,
       },
       offset: limit * page,
       limit: limit,
