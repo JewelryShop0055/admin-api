@@ -22,6 +22,7 @@ import {
   ScopeTypes,
   CrenditionalType,
 } from "../model";
+import { config } from "../../configures/config";
 
 async function generateAccessToken(
   client: Client,
@@ -32,6 +33,7 @@ async function generateAccessToken(
     {
       tokenType: "accessToken",
       scope: scope || client.scope || user.scope,
+      username: user.name,
     },
     process.env.privatekey || "secret",
     {
@@ -51,8 +53,9 @@ async function generateRefreshToken(
     {
       tokenType: "refreshToken",
       scope: scope || client.scope || user.scope,
+      username: user.name,
     },
-    process.env.privatekey || "secret",
+    config.app.jwtSecret,
     {
       expiresIn: `${client.refreshTokenLifetime || 3600} s`,
       issuer: client.id,

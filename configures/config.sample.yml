@@ -6,6 +6,7 @@ app:
   serviceName: service
   serviceUrl: http://localhost:3000
   systemEMailAddress: noreply@example.com
+  jwtSecret: secret
 db:
   allowSync: false
 user:
