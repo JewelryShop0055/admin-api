@@ -1,5 +1,7 @@
 import { Model, ModelCtor, SequelizeOptions } from "sequelize-typescript";
 import configure from "./sequelize.json";
+import fs from "fs";
+import path from "path";
 import sequelize, {
   CrenditionalTypes,
   Client,
@@ -38,7 +40,9 @@ export function getSequelizeConfigure(
  * 클라이언트의 경우 "client secret" DB에서 유추하기 어려운 것으로 반드시 변경
  */
 export async function initialize() {
+  const triggers = fs.readFileSync(path.join(__dirname, "query.sql"), "utf-8");
 
+  sequelize.query(triggers);
 
   await Promise.all(
     config.user?.operator?.map(async (nUser) => {

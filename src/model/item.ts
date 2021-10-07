@@ -120,7 +120,7 @@ export class CreateItemInput {
     {
       unique: true,
       name: "part_unique",
-      fields: ["partNo"],
+      fields: ["partNo", "revNo"],
     },
   ],
   hooks: {
@@ -160,6 +160,15 @@ export class Item extends Model<Item, CreateItemInput> {
     unique: "part_unique",
   })
   partNo!: string;
+
+  @Column
+  @NotNull
+  @Column({
+    allowNull: false,
+    unique: "part_unique",
+    defaultValue: 0,
+  })
+  revNo!: number;
 
   @NotNull
   @Column({
