@@ -1,6 +1,7 @@
 import fs from "fs";
 import YAML from "yaml";
 import path from "path";
+import { ScopeType } from "../src/model/scope";
 
 interface UserInfo {
   username: string;
@@ -8,6 +9,17 @@ interface UserInfo {
   email: string;
   name: string;
   phone: string;
+}
+
+interface ClientInfo {
+  name: string;
+  clientId: string;
+  clientSecret: string;
+  scope: ScopeType;
+  grants: Array<string>;
+  redirectUris: Array<string>;
+  accessTokenLifetime: number;
+  refreshTokenLifetime: number;
 }
 
 interface ConfigObjects {
@@ -31,6 +43,7 @@ interface ConfigObjects {
   user?: {
     operator?: Array<UserInfo>;
   };
+  client?: Array<ClientInfo>;
   [key: string]: any;
 }
 

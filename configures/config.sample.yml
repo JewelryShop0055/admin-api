@@ -17,6 +17,16 @@ user:
       name: 운영자
       phone: "01000000000"
 
+client:
+  - name: "shop manager client"
+    clientId: "shopClient"
+    clientSecret: "shopClient1234"
+    scope: operator
+    grants: ["password", "refresh_token"]
+    redirectUris: ["http://localhost:3000/redirect"]
+    accessTokenLifetime: 3600
+    refreshTokenLifetime: 7200
+
 NODE_ENV: development
 
 # BUILD TEST

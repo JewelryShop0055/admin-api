@@ -109,32 +109,38 @@ export async function initialize() {
     }) || [],
   );
 
-  const adminClient = await Client.findOne({
-    where: {
-      scope: ScopeTypes.operator,
-    },
-    benchmark: process.env.NODE_ENV !== "production",
-  });
+  await Promise.all(
+    config.client?.map(async (nClient) => {
+      const checkClient = await Client.findOne({
+        where: {
+          clientId: nClient.clientId,
+        },
+        benchmark: process.env.NODE_ENV !== "production",
+      });
 
-  if (!adminClient) {
-    try {
-      await Client.create(
-        {
-          name: "shop manager client",
-          clientId: "shopClient",
-          clientSecret: "shopClient1234",
-          scope: ScopeTypes.operator,
-          grants: ["password", "refresh_token"],
-          redirectUris: ["http://localhost:3000/redirect"],
-          accessTokenLifetime: 3600,
-          refreshTokenLifetime: 7200,
-        },
-        {
-          benchmark: process.env.NODE_ENV !== "production",
-        },
-      );
-    } catch (e) {
-      throw e;
-    }
-  }
+      if (!checkClient) {
+        return;
+      }
+
+      try {
+        await Client.create(
+          {
+            name: nClient.name,
+            clientId: nClient.clientId,
+            clientSecret: nClient.clientSecret,
+            scope: nClient.scope,
+            grants: nClient.grants,
+            redirectUris: nClient.redirectUris,
+            accessTokenLifetime: nClient.accessTokenLifetime || 3600,
+            refreshTokenLifetime: nClient.refreshTokenLifetime || 7200,
+          },
+          {
+            benchmark: process.env.NODE_ENV !== "production",
+          },
+        );
+      } catch (e) {
+        throw e;
+      }
+    }) || [],
+  );
 }
