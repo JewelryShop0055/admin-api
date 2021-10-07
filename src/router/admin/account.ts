@@ -1,14 +1,16 @@
-import { Router, Request, Response } from "express";
+import { Request, Response, Router } from "express";
+
 import { asyncHandler, authenticate } from "../../middleware";
-import { SesManager } from "../../util/ses";
 import sequelize, {
+  CrenditionalTypes,
   UpdateUserInput,
   User,
   UserCrenditional,
   UserCrenditionalRealtion,
-  CrenditionalTypes,
+  UserToken,
 } from "../../model";
 import { tempPasswordGenerator } from "../../util";
+import { SesManager } from "../../util/ses";
 
 const router = Router({
   mergeParams: true,
@@ -302,4 +304,45 @@ router.post(
     return res.sendStatus(204);
   }),
 );
+
+/**
+ * @openapi
+ *
+ * /admin/account/signout:
+ *   delete:
+ *     tags:
+ *       - "admin-account"
+ *     security:
+ *       - bearerAuth: []
+ *     summary: logout
+ *     responses:
+ *       204:
+ *         $ref: "#/components/responses/204"
+ *       400:
+ *         $ref: "#/components/responses/GenericError"
+ *       401:
+ *         $ref: "#/components/responses/401"
+ *       500:
+ *         $ref: "#/components/responses/GenericError"
+ */
+router.delete(
+  "/signout",
+  authenticate(false),
+  asyncHandler(async (req, res) => {
+    const accessToken = res.locals.oauth.token.accessToken;
+
+    const token = await UserToken.findOne({
+      where: {
+        accessToken,
+      },
+    });
+
+    if (token) {
+      await token.destroy();
+    }
+
+    return res.sendStatus(204);
+  }),
+);
+
 export default router;
