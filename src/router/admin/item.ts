@@ -1280,7 +1280,11 @@ router.delete(
     }
 
     if (resource.status === FileStatus.done) {
-      await S3Manager.deleteFile(resource.key);
+      await Promise.all(
+        Object.keys(resource.path).map(async (pathType: string) => {
+          await S3Manager.deleteFile(resource.path[pathType]);
+        }),
+      );
     }
 
     await resource.destroy();
