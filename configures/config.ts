@@ -29,6 +29,7 @@ interface ConfigObjects {
     resource: {
       region: string;
       bucket: string;
+      address: string;
     };
     serviceName: string;
     serviceUrl: string;

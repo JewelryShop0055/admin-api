@@ -1156,7 +1156,7 @@ router.post(
 
     const key = `${
       process.env.NODE_ENV === "production" ? fileType : `${fileType}-dev`
-    }/item/${id}/${type}/${uuidv4()}${ext ? `.${ext}` : ""}`;
+    }/item/${type}/${id}/${uuidv4()}${ext ? `.${ext}` : ""}`;
 
     const resource = await ItemResource.create({
       itemId: item.id,

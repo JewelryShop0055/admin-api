@@ -10,6 +10,8 @@ import {
 import { FileStatusEnum, FileStatus, FileStatusType } from "./fileStatus";
 import Item from "./item";
 import { DataTypes, UUID, UUIDV4 } from "sequelize";
+import { jsonIgnore } from "json-ignore";
+import { config } from "../../configures/config";
 
 /**
  * @openapi
@@ -58,10 +60,36 @@ export interface CreateItemResourceInput {
  *           description: Item id
  *           required: true
  *           type: string
- *         key:
- *           description: file path on S3
+ *         path:
+ *           description: resource url path
  *           required: true
- *           type: string
+ *           type: object
+ *           properties:
+ *             raw:
+ *               description: original file path. (do not use this image.)
+ *               type: string
+ *               required: ture
+ *               example: https://resource.example.com/img/item/product/406c46f1-cd0b-4e63-817d-ad783b52d62e/eb5c4557-c200-4a56-9fd2-48f6900dc7fc.jpg
+ *             original:
+ *               description: original size webp image file path.
+ *               type: string
+ *               required: false
+ *               example: https://resource.example.com/resized/img/item/product/406c46f1-cd0b-4e63-817d-ad783b52d62e/eb5c4557-c200-4a56-9fd2-48f6900dc7fc.webp
+ *             "100":
+ *               description: 100x100 size webp image file path.
+ *               type: string
+ *               required: false
+ *               example: https://resource.example.com/resized/img/item/product/406c46f1-cd0b-4e63-817d-ad783b52d62e/eb5c4557-c200-4a56-9fd2-48f6900dc7fc_100x100.webp
+ *             "500":
+ *               description: 500x500 size webp image file path.
+ *               type: string
+ *               required: false
+ *               example: https://resource.example.com/resized/img/item/product/406c46f1-cd0b-4e63-817d-ad783b52d62e/eb5c4557-c200-4a56-9fd2-48f6900dc7fc_500x500.webp
+ *             "1000":
+ *               description: 1000x1000 size webp image file path.
+ *               type: string
+ *               required: false
+ *               example: https://resource.example.com/resized/img/item/product/406c46f1-cd0b-4e63-817d-ad783b52d62e/eb5c4557-c200-4a56-9fd2-48f6900dc7fc_1000x1000.webp
  *         type:
  *           $ref: "#/components/parameters/ItemFileType"
  *         createdAt:
@@ -97,11 +125,44 @@ export class ItemResource extends Model<ItemResource, CreateItemResourceInput> {
   })
   type!: ItemFileType;
 
+  @jsonIgnore()
   @NotNull
   @Column({
     allowNull: false,
   })
   key!: string;
+
+  get path() {
+    const ext = this.key.split(".")[1];
+    if (
+      this.type === ItemFileTypes.img ||
+      this.type === ItemFileTypes.thumbnail
+    ) {
+      return {
+        raw: this.key,
+        original: `${config.app.resource.address}/resized/${this.key.replace(
+          ext,
+          ".webp",
+        )}`,
+        100: `${config.app.resource.address}/resized/${this.key.replace(
+          ext,
+          "_100x100.webp",
+        )}`,
+        500: `${config.app.resource.address}/resized/${this.key.replace(
+          ext,
+          "_500x500.webp",
+        )}`,
+        1000: `${config.app.resource.address}/resized/${this.key.replace(
+          ext,
+          "_1000x1000.webp",
+        )}`,
+      };
+    } else {
+      return {
+        raw: this.key,
+      };
+    }
+  }
 
   @NotNull
   @Column({

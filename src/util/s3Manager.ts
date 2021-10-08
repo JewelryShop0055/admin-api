@@ -24,7 +24,6 @@ export class S3Manager {
       },
       Conditions: [
         ["content-length-range", 0, 15 * 1024 * 1024],
-        ["starts-with", "$Content-Type", "image/"],
         ["eq", "$x-amz-meta-resourceId", resourceId],
       ],
     });
