@@ -6,7 +6,7 @@ import {
   Column,
   HasMany,
 } from "sequelize-typescript";
-import { ARRAY, UUID, TEXT, UUIDV4 } from "sequelize";
+import { UUID, TEXT, UUIDV4, JSON } from "sequelize";
 import UserToken from "./userTokens";
 import { ScopeTypes, ScopeType } from "./scope";
 
@@ -77,14 +77,14 @@ export class Client extends Model<Client, CreateClientInput> {
   @NotNull
   @Column({
     allowNull: false,
-    type: ARRAY(TEXT),
+    type: JSON,
   })
   redirectUris!: string[];
 
   @NotNull
   @Column({
     allowNull: false,
-    type: ARRAY(TEXT),
+    type: JSON,
   })
   grants!: string[];
 

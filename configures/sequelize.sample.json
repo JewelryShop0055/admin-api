@@ -1,10 +1,10 @@
 {
-  "dialect": "postgres",
+  "dialect": "mariadb",
   "database": "jwerly",
-  "username": "postgres",
-  "password": "postgres",
+  "username": "root",
+  "password": "password",
   "host": "localhost",
-  "port": 5432,
+  "port": 3306,
   "sync": {
     "force": false,
     "alter": {
@@ -15,18 +15,18 @@
     "read": [
       {
         "database": "jwerly",
-        "username": "postgres",
-        "password": "postgres",
+        "username": "root",
+        "password": "password",
         "host": "localhost",
-        "port": 5432
+        "port": 3306
       }
     ],
     "write": {
       "database": "jwerly",
-      "username": "postgres",
-      "password": "postgres",
+      "username": "root",
+      "password": "password",
       "host": "localhost",
-      "port": 5432
+      "port": 3306
     }
   },
   "timezone": "+09:00"

@@ -118,7 +118,7 @@ export async function initialize() {
         benchmark: process.env.NODE_ENV !== "production",
       });
 
-      if (!checkClient) {
+      if (checkClient) {
         return;
       }
 
