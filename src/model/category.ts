@@ -1,15 +1,18 @@
-import CategoryTree from "./categroyTree";
-import { ItemType, ItemTypeEnum } from "./itemType";
+import { FindOptions, Op, WhereOptions } from "sequelize";
 import {
+  AutoIncrement,
   Column,
+  HasMany,
+  HasOne,
   Model,
+  NotNull,
   PrimaryKey,
   Table,
-  NotNull,
-  AutoIncrement,
-  HasOne,
-  HasMany,
 } from "sequelize-typescript";
+
+import { filterToObject } from "../util";
+import CategoryTree from "./categroyTree";
+import { ItemType, ItemTypeEnum } from "./itemType";
 
 /**
  * @openapi
@@ -133,6 +136,37 @@ export class Category extends Model<Category, CreateCategoryInput> {
     as: "childTree",
   })
   childTree?: CategoryTree[];
+
+  static async search(
+    keyword: string[],
+    options?: FindOptions<Category>,
+  ): Promise<Category[]> {
+    const whereOptions: WhereOptions<Category>[] = keyword.reduce<
+      WhereOptions<Category>[]
+    >((p, k) => {
+      p.push(
+        ...[
+          {
+            name: {
+              [Op.like]: `%${k}%`,
+            },
+          },
+        ],
+      );
+
+      return p;
+    }, []);
+
+    return Category.findAll(
+      filterToObject<FindOptions<Category>>({
+        ...options,
+        where: {
+          ...options?.where,
+          [Op.or]: whereOptions.push(...options?.where?.[Op.or]),
+        },
+      }),
+    );
+  }
 }
 
 export default Category;

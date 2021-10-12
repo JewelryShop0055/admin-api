@@ -7,7 +7,7 @@ import {
   HasMany,
   BelongsToMany,
 } from "sequelize-typescript";
-import { UUIDV4, UUID, TEXT } from "sequelize";
+import { UUIDV4, UUID, TEXT, WhereOptions, Op } from "sequelize";
 import {
   ItemTypeEnum,
   ItemType,
@@ -23,6 +23,8 @@ import ItemCraftShopRelation from "./itemCraftShopRelation";
 import CraftShop from "./craftShop";
 import { jsonIgnore } from "json-ignore";
 import { ItemRelation } from "./ItemRelation";
+import { FindOptions } from "sequelize";
+import { filterToObject } from "../util";
 
 /**
  * @openapi
@@ -155,7 +157,7 @@ export class CreateItemWithOption {
     },
     {
       type: "FULLTEXT",
-      fields: ["name", "partNo"],
+      fields: ["name", "partNo", "memo"],
     },
   ],
   hooks: {
@@ -313,6 +315,47 @@ export class Item extends Model<Item, CreateItemInput> {
     as: "products",
   })
   products?: Item[];
+
+  static async search(
+    keyword: string[],
+    options?: FindOptions<Item>,
+  ): Promise<Item[]> {
+    const whereOptions: WhereOptions<Item>[] = keyword.reduce<
+      WhereOptions<Item>[]
+    >((p, k) => {
+      p.push(
+        ...[
+          {
+            name: {
+              [Op.like]: `%${k}%`,
+            },
+          },
+          {
+            partNo: {
+              [Op.like]: `%${k}%`,
+            },
+          },
+          {
+            memo: {
+              [Op.like]: `%${k}%`,
+            },
+          },
+        ],
+      );
+
+      return p;
+    }, []);
+
+    return Item.findAll(
+      filterToObject<FindOptions<Item>>({
+        ...options,
+        where: {
+          ...options?.where,
+          [Op.or]: options?.where?.[Op.or]?.push(whereOptions) || whereOptions,
+        },
+      }),
+    );
+  }
 }
 
 export default Item;

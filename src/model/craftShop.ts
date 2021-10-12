@@ -7,9 +7,10 @@ import {
   HasMany,
   BelongsToMany,
 } from "sequelize-typescript";
-import { UUID, UUIDV4 } from "sequelize";
+import { FindOptions, UUID, UUIDV4, WhereOptions, Op } from "sequelize";
 import ItemCraftShopRelation from "./itemCraftShopRelation";
 import Item from "./item";
+import { filterToObject } from "../util";
 
 /**
  * @openapi
@@ -155,6 +156,52 @@ export class CraftShop extends Model<CraftShop, CreateCraftShoptInput> {
 
   @BelongsToMany(() => Item, () => ItemCraftShopRelation)
   items?: Item[];
+
+  static async search(
+    keyword: string[],
+    options?: FindOptions<CraftShop>,
+  ): Promise<CraftShop[]> {
+    const whereOptions: WhereOptions<CraftShop>[] = keyword.reduce<
+      WhereOptions<CraftShop>[]
+    >((p, k) => {
+      p.push(
+        ...[
+          {
+            name: {
+              [Op.like]: `%${k}%`,
+            },
+          },
+          {
+            address: {
+              [Op.like]: `%${k}%`,
+            },
+          },
+          {
+            detailAddress: {
+              [Op.like]: `%${k}%`,
+            },
+          },
+          {
+            phone: {
+              [Op.like]: `%${k}%`,
+            },
+          },
+        ],
+      );
+
+      return p;
+    }, []);
+
+    return CraftShop.findAll(
+      filterToObject<FindOptions<CraftShop>>({
+        ...options,
+        where: {
+          ...options?.where,
+          [Op.or]: whereOptions.push(...options?.where?.[Op.or]),
+        },
+      }),
+    );
+  }
 }
 
 export default CraftShop;
