@@ -38,6 +38,7 @@ export class SesManager {
               newPassword,
               serviceUrl: config.app.serviceUrl,
               serviceName: config.app.serviceName,
+              copyrightYear: new Date().getFullYear(),
             }),
             Charset: "UTF-8",
           },
