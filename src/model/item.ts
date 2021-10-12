@@ -153,6 +153,10 @@ export class CreateItemWithOption {
       name: "part_unique",
       fields: ["partNo", "revNo"],
     },
+    {
+      type: "FULLTEXT",
+      fields: ["name", "partNo"],
+    },
   ],
   hooks: {
     beforeValidate: (item: Item) => {

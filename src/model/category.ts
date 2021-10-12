@@ -84,6 +84,12 @@ export class CreateCategoryInput {
       }
     },
   },
+  indexes: [
+    {
+      type: "FULLTEXT",
+      fields: ["name"],
+    },
+  ],
 })
 export class Category extends Model<Category, CreateCategoryInput> {
   @AutoIncrement

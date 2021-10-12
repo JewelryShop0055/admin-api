@@ -104,7 +104,12 @@ export class CreateCraftShoptInput {
  */
 @Table({
   charset: "utf8",
-  indexes: [],
+  indexes: [
+    {
+      type: "FULLTEXT",
+      fields: ["name", "address", "detailAddress", "phone"],
+    },
+  ],
 })
 export class CraftShop extends Model<CraftShop, CreateCraftShoptInput> {
   @PrimaryKey
