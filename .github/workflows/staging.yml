@@ -67,7 +67,6 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: repo
-        path: $GITHUB_ACTION_PATH
 
   deploy:
     runs-on: ubuntu-latest
