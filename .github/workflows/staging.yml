@@ -35,7 +35,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: linted
-        path: ${{ github.action.path }}
+        path: .
 
   build:
     runs-on: ubuntu-latest
@@ -67,7 +67,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: built
-        path: ${{ github.action.path }}
+        path: .
 
   deploy:
     runs-on: ubuntu-latest
