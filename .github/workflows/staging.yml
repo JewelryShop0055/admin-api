@@ -47,8 +47,8 @@ jobs:
 
     - name: Config Set up
       run: |
-       echo $STAGING_CONFIG >> $GITHUB_ACTION_PATH/configures/config.yml
-       echo $STAGING_SEQUELIZE >>  $GITHUB_ACTION_PATH/configures/sequelize.json
+       echo $STAGING_CONFIG >> ./configures/config.yml
+       echo $STAGING_SEQUELIZE >>  ./configures/sequelize.json
 
     - name: run build
       run: yarn run build
