@@ -37,12 +37,8 @@ jobs:
       run: |
        echo $STAGING_CONFIG >> configures/config.yml
        echo $STAGING_SEQUELIZE >> configures/sequelize.json
-      with:
-        name: lint
     - name: run build
       run: yarn run build
-      with:
-        name: lint
   
   deploy:
     runs-on: ubuntu-latest
@@ -62,8 +58,6 @@ jobs:
         REMOTE_HOST: ${{ secrets.STAGING_REMOTE_HOST }}
         REMOTE_USER: ${{ secrets.STAGING_REMOTE_USER }}
         TARGET: ${{ secrets.STAGING_REMOTE_PATH }}
-      with:
-        name: build
 
     - name: restart server
       uses: appleboy/ssh-action@master
