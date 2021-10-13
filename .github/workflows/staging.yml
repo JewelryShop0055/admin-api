@@ -47,7 +47,6 @@ jobs:
 
     - name: Config Set up
       run: |
-       echo $STAGING_CONFIG >> ./configures/config.yml
        echo $STAGING_SEQUELIZE >>  ./configures/sequelize.json
 
     - name: run build
@@ -96,7 +95,12 @@ jobs:
         script: |
           cd ${{ secrets.STAGING_REMOTE_PATH }};
           git pull;
-          yarn
+          yarn;
+          if [ ! -f /dist/configures/config.yml ]
+          then
+              echo ln -s ./configures/config.yml $PWD/dist/configures/config.yml
+          fi;
+
 
     - name: restart server
       uses: appleboy/ssh-action@master
