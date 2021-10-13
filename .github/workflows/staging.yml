@@ -35,7 +35,7 @@ jobs:
     steps:
     - name: Config Set up
       run: |
-      ls -al ${{ GITHUB_ACTION_PATH }}
+       ls -al ${{ GITHUB_ACTION_PATH }}
        echo $STAGING_CONFIG >> ${{ GITHUB_ACTION_PATH }}/configures/config.yml
        echo $STAGING_SEQUELIZE >> ${{ GITHUB_ACTION_PATH }}/configures/sequelize.json
     - name: run build
