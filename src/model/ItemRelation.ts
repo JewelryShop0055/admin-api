@@ -102,7 +102,6 @@ export class CreateItemRealtionInput {
         );
       }
     },
-    beforeUpdate: async (relation: ItemRelation, options) => {},
   },
 })
 export class ItemRelation extends Model<ItemRelation, CreateItemRealtionInput> {
