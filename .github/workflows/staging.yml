@@ -27,15 +27,8 @@ jobs:
 
     - name: run lint
       run: |
-       ls -al $PWD
        yarn
        yarn run lint
-  
-    - name: Upload math result for lint
-      uses: actions/upload-artifact@v1
-      with:
-        name: linted
-        path: .
 
   build:
     runs-on: ubuntu-latest
@@ -44,10 +37,7 @@ jobs:
       STAGING_CONFIG: ${{ secrets.STAGING_CONFIG }}
       STAGING_SEQUELIZE: ${{ secrets.STAGING_SEQUELIZE }}
     steps:
-    - name: Download math result for job 1
-      uses: actions/download-artifact@v1
-      with:
-        name: linted
+    - uses: actions/checkout@v2
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
@@ -67,7 +57,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: built
-        path: .
+        path: ./dist
 
   deploy:
     runs-on: ubuntu-latest
@@ -77,6 +67,11 @@ jobs:
       uses: actions/download-artifact@v1
       with:
         name: built
+
+    - name: check file
+      run: |
+        ls -al
+        pwd
         
     - name: Install SSH Key
       uses: shimataro/ssh-key-action@v2
@@ -91,7 +86,19 @@ jobs:
         REMOTE_PORT: ${{ secrets.STAGING_REMOTE_PORT }}
         REMOTE_HOST: ${{ secrets.STAGING_REMOTE_HOST }}
         REMOTE_USER: ${{ secrets.STAGING_REMOTE_USER }}
-        TARGET: ${{ secrets.STAGING_REMOTE_PATH }}
+        TARGET: ${{ secrets.STAGING_REMOTE_PATH }}/dist
+
+    - name: pull soruce && install dependecny
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.STAGING_REMOTE_HOST }}
+        username: ${{ secrets.STAGING_REMOTE_USER }}
+        port: ${{ secrets.STAGING_REMOTE_PORT }}
+        key: ${{ secrets.STAGING_SSH_KEY }}
+        script: |
+          cd ${{ secrets.STAGING_REMOTE_PATH }};
+          git pull;
+          yarn
 
     - name: restart server
       uses: appleboy/ssh-action@master
