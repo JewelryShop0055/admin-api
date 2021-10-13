@@ -34,7 +34,8 @@ jobs:
     - name: Upload math result for lint
       uses: actions/upload-artifact@v1
       with:
-        name: repo
+        name: linted
+        path: ${{ github.action.path }}
 
   build:
     runs-on: ubuntu-latest
@@ -46,7 +47,7 @@ jobs:
     - name: Download math result for job 1
       uses: actions/download-artifact@v1
       with:
-        name: repo
+        name: linted
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
@@ -65,7 +66,8 @@ jobs:
     - name: Upload math result for lint
       uses: actions/upload-artifact@v1
       with:
-        name: repo
+        name: built
+        path: ${{ github.action.path }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -74,7 +76,7 @@ jobs:
     - name: Download math result for job 1
       uses: actions/download-artifact@v1
       with:
-        name: repo
+        name: built
         
     - name: Install SSH Key
       uses: shimataro/ssh-key-action@v2
