@@ -94,6 +94,7 @@ jobs:
         key: ${{ secrets.STAGING_SSH_KEY }}
         script: |
           cd ${{ secrets.STAGING_REMOTE_PATH }};
+          git reset;
           git pull;
           yarn;
           if [ ! -f /dist/configures/config.yml ]
