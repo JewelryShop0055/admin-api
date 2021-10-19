@@ -1,4 +1,4 @@
-import { UUID } from "sequelize";
+import { UUID, UUIDV4 } from "sequelize";
 import {
   Column,
   Model,
@@ -76,6 +76,7 @@ export class CategoryTree extends Model<CategoryTree, CreateCategoryTreeInput> {
   @Column({
     type: UUID,
     allowNull: false,
+    defaultValue: UUIDV4,
   })
   id!: string;
 
