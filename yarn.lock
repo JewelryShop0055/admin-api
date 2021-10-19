@@ -425,6 +425,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node-cron@npm:^3":
+  version: 3.0.0
+  resolution: "@types/node-cron@npm:3.0.0"
+  checksum: 24cf0cdb5aa93092c71e92474d69082ea392f28b2814876a5b6ef60c1a904da635e0d70158b622113dd2b013c909fe41951b5d8f699258b7950afb121256e3df
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:*":
   version: 16.9.1
   resolution: "@types/node@npm:16.9.1"
@@ -2199,6 +2206,7 @@ __metadata:
     "@types/express-oauth-server": ^2
     "@types/express-serve-static-core": ^4.17.24
     "@types/jsonwebtoken": ^8
+    "@types/node-cron": ^3
     "@types/oauth2-server": ^3
     "@types/passport": ^0
     "@types/passport-http-bearer": ^1
@@ -2226,6 +2234,7 @@ __metadata:
     json-ignore: ^0.4.0
     jsonwebtoken: ^8.5.1
     mariadb: ^2.5.4
+    node-cron: ^3.0.0
     oauth2-server: ^3.1.1
     passport: ^0.4.1
     passport-http-bearer: ^1.0.1
@@ -2549,6 +2558,15 @@ __metadata:
   version: 0.6.2
   resolution: "negotiator@npm:0.6.2"
   checksum: dfddaff6c06792f1c4c3809e29a427b8daef8cd437c83b08dd51d7ee11bbd1c29d9512d66b801144d6c98e910ffd8723f2432e0cbf8b18d41d2a09599c975ab3
+  languageName: node
+  linkType: hard
+
+"node-cron@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "node-cron@npm:3.0.0"
+  dependencies:
+    moment-timezone: ^0.5.31
+  checksum: acae07d835f74636ec2bf598ffadf6b89aa2eae036671bffad336371b28fb1eefb11870912c965bb351cd958d4b62f9fa9b28cf922b5f681459ea4878837ffcf
   languageName: node
   linkType: hard
 

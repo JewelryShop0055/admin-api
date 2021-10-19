@@ -46,6 +46,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/express-oauth-server", "npm:2.0.4"],
             ["@types/express-serve-static-core", "npm:4.17.24"],
             ["@types/jsonwebtoken", "npm:8.5.5"],
+            ["@types/node-cron", "npm:3.0.0"],
             ["@types/oauth2-server", "npm:3.0.13"],
             ["@types/passport", "npm:0.4.7"],
             ["@types/passport-http-bearer", "npm:1.0.37"],
@@ -73,6 +74,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["json-ignore", "npm:0.4.0"],
             ["jsonwebtoken", "npm:8.5.1"],
             ["mariadb", "npm:2.5.4"],
+            ["node-cron", "npm:3.0.0"],
             ["oauth2-server", "npm:3.1.1"],
             ["passport", "npm:0.4.1"],
             ["passport-http-bearer", "npm:1.0.1"],
@@ -605,6 +607,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-node-npm-16.9.1-bde6d3b0c9-41afcf183a.zip/node_modules/@types/node/",
           "packageDependencies": [
             ["@types/node", "npm:16.9.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/node-cron", [
+        ["npm:3.0.0", {
+          "packageLocation": "./.yarn/cache/@types-node-cron-npm-3.0.0-2284b0440f-24cf0cdb5a.zip/node_modules/@types/node-cron/",
+          "packageDependencies": [
+            ["@types/node-cron", "npm:3.0.0"]
           ],
           "linkType": "HARD",
         }]
@@ -2694,6 +2705,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/express-oauth-server", "npm:2.0.4"],
             ["@types/express-serve-static-core", "npm:4.17.24"],
             ["@types/jsonwebtoken", "npm:8.5.5"],
+            ["@types/node-cron", "npm:3.0.0"],
             ["@types/oauth2-server", "npm:3.0.13"],
             ["@types/passport", "npm:0.4.7"],
             ["@types/passport-http-bearer", "npm:1.0.37"],
@@ -2721,6 +2733,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["json-ignore", "npm:0.4.0"],
             ["jsonwebtoken", "npm:8.5.1"],
             ["mariadb", "npm:2.5.4"],
+            ["node-cron", "npm:3.0.0"],
             ["oauth2-server", "npm:3.1.1"],
             ["passport", "npm:0.4.1"],
             ["passport-http-bearer", "npm:1.0.1"],
@@ -3102,6 +3115,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/negotiator-npm-0.6.2-ba538e167a-dfddaff6c0.zip/node_modules/negotiator/",
           "packageDependencies": [
             ["negotiator", "npm:0.6.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["node-cron", [
+        ["npm:3.0.0", {
+          "packageLocation": "./.yarn/cache/node-cron-npm-3.0.0-d2906273d7-acae07d835.zip/node_modules/node-cron/",
+          "packageDependencies": [
+            ["node-cron", "npm:3.0.0"],
+            ["moment-timezone", "npm:0.5.33"]
           ],
           "linkType": "HARD",
         }]

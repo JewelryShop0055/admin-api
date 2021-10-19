@@ -3,6 +3,7 @@ import { AddressInfo } from "net";
 import { config } from "./configures/config";
 import { app } from "./src";
 import { sync } from "./src/model";
+import { cronManager } from "./src/util";
 
 async function bootstrap() {
   await sync(config.db.allowSync);
@@ -16,6 +17,8 @@ async function bootstrap() {
       (process.send as any)("ready");
     }
   });
+
+  cronManager.start();
 }
 
 bootstrap();
