@@ -11,9 +11,9 @@ import {
 import { Category } from ".";
 
 export class CreateCategoryTreeInput {
-  parentId!: number;
+  parentId?: number;
   childId!: number;
-  topId!: number;
+  topId?: number;
   depth!: number;
 }
 
@@ -63,7 +63,8 @@ export class CreateCategoryTreeInput {
     beforeValidate: (tree: CategoryTree, _options) => {
       if (
         (tree.depth !== 0 && (tree.parentId === 0 || tree.topId == 0)) ||
-        (tree.depth === 0 && (tree.parentId !== 0 || tree.topId !== 0))
+        (tree.depth === 0 &&
+          (tree.parentId !== undefined || tree.topId !== undefined))
       ) {
         throw new Error("Invalidate Category Depth");
       }
@@ -81,11 +82,7 @@ export class CategoryTree extends Model<CategoryTree, CreateCategoryTreeInput> {
   id!: string;
 
   @ForeignKey(() => Category)
-  @NotNull
-  @Column({
-    allowNull: false,
-    defaultValue: 0,
-  })
+  @Column
   parentId!: number;
 
   @ForeignKey(() => Category)
@@ -96,11 +93,7 @@ export class CategoryTree extends Model<CategoryTree, CreateCategoryTreeInput> {
   childId!: number;
 
   @ForeignKey(() => Category)
-  @NotNull
-  @Column({
-    allowNull: false,
-    defaultValue: 0,
-  })
+  @Column
   topId!: number;
 
   /**

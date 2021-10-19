@@ -140,12 +140,15 @@ router.post(
         transaction,
       });
 
-      const tree = await CategoryTree.create({
-        childId: category.id,
-        topId: 0,
-        parentId: 0,
-        depth: category.depth,
-      });
+      const tree = await CategoryTree.create(
+        {
+          childId: category.id,
+          depth: category.depth,
+        },
+        {
+          transaction,
+        },
+      );
 
       await transaction.commit();
 
@@ -426,7 +429,7 @@ router.delete(
  *       - bearerAuth: []
  *     parameters:
  *       - $ref: "#/components/parameters/ItemType"
- *       - $ref1: "#/components/parameters/CategoryId"
+ *       - $ref: "#/components/parameters/CategoryId"
  *     requestBody:
  *       $ref: "#/components/requestBodies/CreateCategoryInput"
  *     responses:
@@ -491,12 +494,17 @@ router.post(
         transaction,
       });
 
-      const tree = await CategoryTree.create({
-        childId: child.id,
-        topId: parent.parentTree!.topId,
-        parentId: parent.id,
-        depth: child.depth,
-      });
+      const tree = await CategoryTree.create(
+        {
+          childId: child.id,
+          topId: parent.parentTree?.topId || parent.id,
+          parentId: parent.id,
+          depth: child.depth,
+        },
+        {
+          transaction,
+        },
+      );
 
       await transaction.commit();
 
