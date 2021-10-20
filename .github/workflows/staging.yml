@@ -97,7 +97,7 @@ jobs:
           git checkout .;
           git pull;
           yarn;
-          if [ ! -f /dist/configures/config.yml ]
+          if [ ! -f ./dist/configures/config.yml ]
           then
               ln -s ./configures/config.yml $PWD/dist/configures/config.yml
           fi;
