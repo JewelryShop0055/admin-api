@@ -63,8 +63,7 @@ export class CreateCategoryTreeInput {
     beforeValidate: (tree: CategoryTree, _options) => {
       if (
         (tree.depth !== 0 && (tree.parentId === 0 || tree.topId == 0)) ||
-        (tree.depth === 0 &&
-          (tree.parentId !== undefined || tree.topId !== undefined))
+        (tree.depth === 0 && (tree.parentId !== null || tree.topId !== null))
       ) {
         throw new Error("Invalidate Category Depth");
       }
