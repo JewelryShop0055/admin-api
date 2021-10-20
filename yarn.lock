@@ -214,7 +214,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/body-parser@npm:*, @types/body-parser@npm:^1":
+"@types/body-parser@npm:*":
   version: 1.19.1
   resolution: "@types/body-parser@npm:1.19.1"
   dependencies:
@@ -942,7 +942,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"body-parser@npm:1.19.0, body-parser@npm:^1.19.0":
+"body-parser@npm:1.19.0":
   version: 1.19.0
   resolution: "body-parser@npm:1.19.0"
   dependencies:
@@ -2196,7 +2196,6 @@ __metadata:
   resolution: "jwerly-api@workspace:."
   dependencies:
     "@types/aws-serverless-express": ^3
-    "@types/body-parser": ^1
     "@types/compression": ^1
     "@types/copyfiles": ^2
     "@types/cors": ^2
@@ -2220,7 +2219,6 @@ __metadata:
     aws-lambda: ^1.0.6
     aws-sdk: ^2.996.0
     aws-serverless-express: ^3.4.0
-    body-parser: ^1.19.0
     compression: ^1.7.4
     copyfiles: ^2.4.1
     cors: ^2.8.5
