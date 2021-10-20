@@ -4,8 +4,8 @@ const imageExt = {
   jpeg: "image/jpeg",
   bmp: "image/bmp",
   png: "image/png",
-  heic: "image/heic",
-  heif: "image/heif",
+  // heic: "image/heic",
+  // heif: "image/heif",
 };
 
 /**
@@ -21,8 +21,8 @@ const imageExt = {
  *          - jpeg
  *          - bmp
  *          - png
- *          - heic
- *          - heif
+ * #         - heic
+ * #         - heif
  */
 export const FileExt = {
   img: imageExt,
