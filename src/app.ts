@@ -7,10 +7,11 @@ import { passport } from "./oauth";
 import router from "./router";
 import * as middleware from "./middleware";
 import swaggereJsdoc, { Components, SecurityScheme } from "swagger-jsdoc";
+import { config, swaggerHelmetSetting } from "../configures/config";
 
 const app: express.Application = express();
 app.use(cors());
-app.use(helmet());
+app.use(helmet(config.swagger?.enable ? swaggerHelmetSetting : undefined));
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -74,22 +75,30 @@ const options: swaggereJsdoc.Options = {
     security: {
       bearerAuth: [],
     },
+    servers: config.swagger?.urls,
+    basePath: process.env.BASE_URL,
   },
   apis: [`${__dirname}/router/**/*.js`, `${__dirname}/model/**/*.js`],
 };
 
 const specs = swaggereJsdoc(options);
 
-app.use(
-  "/docs",
-  SwaggerUi.serve,
-  SwaggerUi.setup(specs, {
-    explorer: true,
-    swaggerOptions: {
-      swaggerUrl: process.env.BASE_URL,
-    },
-  }),
-);
+if (config.swagger?.enable) {
+  app.get("/docs/swagger.json", (req, res) => {
+    return res.json(specs);
+  });
+
+  app.use(
+    "/docs",
+    SwaggerUi.serve,
+    SwaggerUi.setup(specs, {
+      explorer: true,
+      swaggerOptions: {
+        swaggerUrl: process.env.BASE_URL,
+      },
+    }),
+  );
+}
 
 app.use(router);
 

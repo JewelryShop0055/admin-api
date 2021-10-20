@@ -22,6 +22,11 @@ interface ClientInfo {
   refreshTokenLifetime: number;
 }
 
+interface SwaggerServer {
+  url: string;
+  name: string;
+}
+
 interface ConfigObjects {
   app: {
     port: number;
@@ -45,6 +50,10 @@ interface ConfigObjects {
     operator?: Array<UserInfo>;
   };
   client?: Array<ClientInfo>;
+  swagger?: {
+    enable?: boolean;
+    urls?: SwaggerServer[];
+  };
   [key: string]: any;
 }
 
@@ -84,4 +93,21 @@ export const config: ConfigObjects = {
     ...yaml?.db,
   },
   ...yaml,
+};
+
+export const swaggerHelmetSetting = {
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: [
+        `'self'`,
+        ...(config.swagger?.urls?.map<string>((v: SwaggerServer) => {
+          console.info(v.url.replace(/https?:\/\//, "").replace(/\//, ""));
+          return v.url.replace(/https?:\/\//, "");
+        }) || []),
+      ],
+      imgSrc: ["'self'", "data:", "validator.swagger.io"],
+      scriptSrc: ["'self'", `'unsafe-eval'`, `https: 'unsafe-inline'`],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+    },
+  },
 };

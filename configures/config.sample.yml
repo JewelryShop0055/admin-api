@@ -28,6 +28,17 @@ client:
     accessTokenLifetime: 3600
     refreshTokenLifetime: 7200
 
+
+swagger:
+  enable: true
+  urls:
+    - url: https://api.staging.example.com
+      name: staging
+    - url: http://localhost:3001
+      name: local
+    - url: https://api.example.com
+      name: product
+
 NODE_ENV: development
 
 # BUILD TEST
