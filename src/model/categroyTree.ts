@@ -82,7 +82,10 @@ export class CategoryTree extends Model<CategoryTree, CreateCategoryTreeInput> {
   id!: string;
 
   @ForeignKey(() => Category)
-  @Column
+  @Column({
+    allowNull: true,
+    defaultValue: null,
+  })
   parentId!: number;
 
   @ForeignKey(() => Category)
@@ -93,7 +96,9 @@ export class CategoryTree extends Model<CategoryTree, CreateCategoryTreeInput> {
   childId!: number;
 
   @ForeignKey(() => Category)
-  @Column
+  @Column({
+    defaultValue: null,
+  })
   topId!: number;
 
   /**
