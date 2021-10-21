@@ -22,9 +22,9 @@ const options: swaggereJsdoc.Options = {
   swaggerDefinition: {
     openapi: "3.0.3",
     info: {
-      title: "Jwerly API",
+      title: "Jewerly API",
       version: "1.0.0",
-      description: "Jwerly API with express",
+      description: "Jewerly API with express",
     },
     components: {
       schemas: {

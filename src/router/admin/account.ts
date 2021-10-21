@@ -36,10 +36,10 @@ const router = Router({
  *     summary: Current Login User infomation
  *     responses:
  *       200:
- *          content:
- *            application/json:
- *                schema:
- *                  $ref: "#/components/schemas/User"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/User"
  *       401:
  *         $ref: "#/components/responses/401"
  */

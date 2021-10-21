@@ -91,7 +91,7 @@ export interface CreateItemResourceInput {
  *               required: false
  *               example: https://resource.example.com/resized/img/item/product/406c46f1-cd0b-4e63-817d-ad783b52d62e/eb5c4557-c200-4a56-9fd2-48f6900dc7fc_1000x1000.webp
  *         type:
- *           $ref: "#/components/parameters/ItemFileType"
+ *           $ref: "#/components/schemas/ItemFileType"
  *         createdAt:
  *           $ref: "#/components/schemas/createdAt"
  *         updatedAt:

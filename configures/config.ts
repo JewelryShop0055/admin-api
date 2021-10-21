@@ -100,10 +100,9 @@ export const swaggerHelmetSetting = {
     directives: {
       defaultSrc: [
         `'self'`,
-        ...(config.swagger?.urls?.map<string>((v: SwaggerServer) => {
-          console.info(v.url.replace(/https?:\/\//, "").replace(/\//, ""));
-          return v.url.replace(/https?:\/\//, "");
-        }) || []),
+        ...(config.swagger?.urls?.map<string>((v: SwaggerServer) =>
+          v.url.replace(/https?:\/\//, ""),
+        ) || []),
       ],
       imgSrc: ["'self'", "data:", "validator.swagger.io"],
       scriptSrc: ["'self'", `'unsafe-eval'`, `https: 'unsafe-inline'`],

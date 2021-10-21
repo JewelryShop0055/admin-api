@@ -1,6 +1,6 @@
 {
   "dialect": "mariadb",
-  "database": "jwerly",
+  "database": "jewerly",
   "username": "root",
   "password": "password",
   "host": "localhost",
@@ -14,7 +14,7 @@
   "replication": {
     "read": [
       {
-        "database": "jwerly",
+        "database": "jewerly",
         "username": "root",
         "password": "password",
         "host": "localhost",
@@ -22,7 +22,7 @@
       }
     ],
     "write": {
-      "database": "jwerly",
+      "database": "jewerly",
       "username": "root",
       "password": "password",
       "host": "localhost",

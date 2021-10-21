@@ -1,5 +1,5 @@
 {
-  "name": "jwerly-api",
+  "name": "jewerly-api",
   "packageManager": "yarn@3.0.2",
   "scripts": {
     "lint": "prettier -c \"./**/*.ts\";eslint **/*.ts",
@@ -32,6 +32,7 @@
     "@types/yaml": "^1",
     "@typescript-eslint/eslint-plugin": "^4.31.0",
     "@typescript-eslint/parser": "^4.31.0",
+    "axios": "^0.23.0",
     "copyfiles": "^2.4.1",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",

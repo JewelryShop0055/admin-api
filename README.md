@@ -1,1 +1,1 @@
-# jwerly-api
+# jewerly-api

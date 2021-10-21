@@ -17,11 +17,17 @@ router.use("/v1", v1);
  *     description: Check Api server Lives
  *     responses:
  *       200:
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   example: OK
  *         description: Health OK
- *         example: OK
  */
 router.get("/health", (req, res) => {
-  res.send({
+  return res.send({
     status: "OK",
   });
 });
