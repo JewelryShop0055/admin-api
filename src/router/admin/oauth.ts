@@ -1,5 +1,7 @@
 import express from "express";
 import oAuth2Server from "../../oauth/server";
+import { SlackBot } from "../../util";
+import { asyncHandler } from "../../middleware/asyncHandler";
 
 const router = express.Router({
   mergeParams: true,
@@ -85,7 +87,21 @@ const router = express.Router({
  *                      type: string
  *                      example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjEifQ.eyJ0b2tlblR5cGUiOiJyZWZyZXNoVG9rZW4iLCJzY29wZSI6Im9wZXJhdG9yIiwiaWF0IjoxNjMxNjMxNjM4LCJleHAiOjE2MzE2Mzg4MzgsImlzcyI6IjNmYWMxZmU4LWE5Y2ItNDMxZS1iMDZlLTliN2FlN2YwNjQ5ZSJ9.qoBqcfBnHYI4t6tBZYE387xERF5aZbsu4MCUBD8j5Sg"
  */
-router.post("/token", oAuth2Server.token());
+router.post(
+  "/token",
+  asyncHandler(async (req, res, next) => {
+    if (req.body.grant_type === "password") {
+      const ip = req.header("X-FORWARDED-FOR") || req.ip.split(":").pop();
+
+      await SlackBot.send(
+        `[/admin/auth/token] "${req.body.username}"님의 로그인 시도가 있습니다. (ip: ${ip})`,
+      );
+    }
+
+    return next();
+  }),
+  oAuth2Server.token(),
+);
 
 /**
  * Sample from "https://github.com/oauthjs/express-oauth-server/blob/master/examples/postgresql/index.js"

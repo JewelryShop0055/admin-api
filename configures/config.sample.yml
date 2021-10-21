@@ -8,6 +8,10 @@ app:
   serviceUrl: http://localhost:3000
   systemEMailAddress: noreply@example.com
   jwtSecret: secret
+  slackBot: 
+    enable: false
+    token: "something token"
+    channel: targetChannel without "#"
 db:
   allowSync: false
 user:

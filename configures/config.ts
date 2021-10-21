@@ -40,6 +40,11 @@ interface ConfigObjects {
     serviceUrl: string;
     systemEMailAddress: string;
     jwtSecret: string;
+    slackBot?: {
+      enable?: boolean;
+      token?: string;
+      channel?: string;
+    };
     [key: string]: any;
   };
   db: {
@@ -85,7 +90,12 @@ export const config: ConfigObjects = {
     serviceName: yaml?.app?.serviceName || "{서비스 이름}",
     serviceUrl: yaml?.app?.serviceUrl || "http://localhost:3000",
     systemEMailAddress: yaml?.app?.systemEMailAddress || "noreply@example.com",
-    jwtSecret: yaml.app.jwtSecret || "something secret",
+    jwtSecret: yaml?.app?.jwtSecret || "something secret",
+    slackBot: {
+      channel: yaml?.app?.slackBot?.channel,
+      enable: yaml?.app?.slackBot?.enable,
+      token: yaml?.app?.slackBot?.token,
+    },
     ...yaml?.app,
   },
   db: {
