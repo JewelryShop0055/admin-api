@@ -34,7 +34,7 @@ import { filterToObject } from "../util";
  *           required: true
  *           type: string
  *           example: 경기 성남시 분당구 판교역로 235 (에이치스퀘어 엔동)
- *         detailAddresss:
+ *         detailAddress:
  *           description: Craftshop detail address, like 동, 호
  *           required: true
  *           type: string
@@ -88,7 +88,7 @@ export class CreateCraftShoptInput {
  *           required: true
  *           type: string
  *           example: 경기 성남시 분당구 판교역로 235 (에이치스퀘어 엔동)
- *         detailAddresss:
+ *         detailAddress:
  *           description: Craftshop detail address, like 동, 호
  *           required: true
  *           type: string

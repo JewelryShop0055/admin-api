@@ -1089,7 +1089,7 @@ router.delete(
  *                   type: object
  *                   properties:
  *                     url:
- *                       type: sting
+ *                       type: string
  *                       description: Request this URL as a POST
  *                       example: https://s3.ap-northeast-2.amazonaws.com/resource.raviluz.com
  *                     fields:
