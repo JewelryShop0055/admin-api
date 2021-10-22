@@ -37,24 +37,20 @@ export class S3Manager {
     const s3 = S3Manager.getResourceBucket();
     const ext = key.split(".")[1];
     const replaceKeys = [
-      ".webp",
-      "_100x100.webp",
-      "_500x500.webp",
-      "_1000x1000.webp",
+      { prefix: "", replace: `.${ext}` },
+      { prefix: "resized/", replace: ".webp" },
+      { prefix: "resized/", replace: "_100x100.webp" },
+      { prefix: "resized/", replace: "_500x500.webp" },
+      { prefix: "resized/", replace: "_1000x1000.webp" },
     ];
 
     await s3
       .deleteObjects({
         Bucket: config.app.resource.bucket,
         Delete: {
-          Objects: [
-            {
-              Key: key,
-            },
-            ...replaceKeys.map((v) => {
-              return { Key: key.replace(`.${ext}`, v) };
-            }),
-          ],
+          Objects: replaceKeys.map((v) => {
+            return { Key: `${v.prefix}${key.replace(`.${ext}`, v.replace)}` };
+          }),
         },
       })
       .promise();
