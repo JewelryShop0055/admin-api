@@ -9,7 +9,7 @@ import sequelize, {
   UserCrenditionalRealtion,
   UserToken,
 } from "../../model";
-import { tempPasswordGenerator, SesManager, SlackBot } from "../../util";
+import { tempPasswordGenerator, SesManager, SlackBot, getIp } from "../../util";
 
 const router = Router({
   mergeParams: true,
@@ -88,7 +88,6 @@ router.put(
         phone: req.body.phone?.replace("-", ""),
         email: req.body.email,
       };
-      const ip = req.header("X-FORWARDED-FOR") || req.ip.split(":").pop();
 
       if (Object.keys(updatevalue).filter((v) => updatevalue[v]).length <= 0) {
         return res.status(400).json({
@@ -111,9 +110,10 @@ router.put(
       await user.save();
 
       await SlackBot.send(
-        `[/admin/account] "${
-          user?.name || "unknown"
-        }"님의 사용자 정보가 수정되있습니다. (ip: ${ip})`,
+        `"${user?.name || "unknown"}"님의 사용자 정보가 수정되있습니다.`,
+        req.method,
+        "/admin/account",
+        getIp(req),
       );
 
       return res.json(user);
@@ -161,13 +161,13 @@ router.put(
   asyncHandler(async (req, res) => {
     const { oldPassword, newPassword } = req.body as { [key: string]: string };
     const user: User | undefined = res.locals.oauth.token.user;
-    const ip = req.header("X-FORWARDED-FOR") || req.ip.split(":").pop();
 
     if (!oldPassword || !newPassword) {
       await SlackBot.send(
-        `[/admin/account/password] "${
-          user?.name || "unknown"
-        }"님의 비밀번호 변경 시도가 있습니다. (ip: ${ip})`,
+        `"${user?.name || "unknown"}"님의 비밀번호 변경 시도가 있습니다.`,
+        req.method,
+        "/admin/account/password",
+        getIp(req),
       );
 
       return res.status(400).json({
@@ -215,9 +215,10 @@ router.put(
     await userCrenditional.save();
 
     await SlackBot.send(
-      `[/admin/account/password] "${
-        user?.name || "unknown"
-      }"님의 비밀번호 변경되있습니다. (ip: ${ip})`,
+      `"${user?.name || "unknown"}"님의 비밀번호 변경되있습니다.`,
+      req.method,
+      "/admin/account/password",
+      getIp(req),
     );
 
     return res.sendStatus(204);
@@ -261,7 +262,6 @@ router.put(
 router.post(
   "/forgot-password",
   asyncHandler(async (req, res) => {
-    const ip = req.header("X-FORWARDED-FOR") || req.ip.split(":").pop();
     const { email } = req.body;
 
     if (!email) {
@@ -279,7 +279,10 @@ router.post(
 
     if (!user) {
       await SlackBot.send(
-        `[/admin/account/password] "${email}"님의 비밀번호 찾기 요청이 실패했니다. (ip: ${ip})`,
+        `"${email}"님의 비밀번호 찾기 요청이 실패했니다.`,
+        req.method,
+        "/admin/account/password",
+        getIp(req),
       );
 
       return res.sendStatus(204);
@@ -322,7 +325,10 @@ router.post(
       await transaction.commit();
 
       await SlackBot.send(
-        `[/admin/account/password] "${user.name}(${email})"님의 비밀번호 찾기 요청을 실행되었습니다. (ip: ${ip})`,
+        `"${user.name}(${email})"님의 비밀번호 찾기 요청을 실행되었습니다.`,
+        req.method,
+        "/admin/account/password",
+        getIp(req),
       );
     } catch (e) {
       await transaction.rollback();

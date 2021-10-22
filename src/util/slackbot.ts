@@ -1,14 +1,24 @@
-import { config } from "../../configures/config";
 import axios from "axios";
+import { DateTime } from "luxon";
+import { config } from "../../configures/config";
 
-const send = async (message: string) => {
+const send = async (
+  message: string,
+  method: string,
+  path: string,
+  ip: string,
+) => {
   if (config.app.slackBot?.enable) {
     try {
       const response = await axios.post(
         "https://slack.com/api/chat.postMessage",
         {
           channel: `#${config.app.slackBot.channel}`,
-          text: `[${new Date().toISOString()}] ${message}`,
+          text: `[${DateTime.now()
+            .setZone("UTC+9")
+            .toFormat("yyyy-LL-dd / HH:MM:ss", {
+              locale: "ko-KR",
+            })}] ${message} (ip: ${ip}, from: [${method}] ${path})`,
         },
         {
           headers: {

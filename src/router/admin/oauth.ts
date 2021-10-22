@@ -2,6 +2,7 @@ import express from "express";
 import oAuth2Server from "../../oauth/server";
 import { SlackBot } from "../../util";
 import { asyncHandler } from "../../middleware/asyncHandler";
+import { getIp } from "../../util/ip";
 
 const router = express.Router({
   mergeParams: true,
@@ -91,10 +92,11 @@ router.post(
   "/token",
   asyncHandler(async (req, res, next) => {
     if (req.body.grant_type === "password") {
-      const ip = req.header("X-FORWARDED-FOR") || req.ip.split(":").pop();
-
       await SlackBot.send(
-        `[/admin/auth/token] "${req.body.username}"님의 로그인 시도가 있습니다. (ip: ${ip})`,
+        `"${req.body.username}"님의 로그인 시도가 있습니다.`,
+        req.method,
+        "/admin/auth/token",
+        getIp(req),
       );
     }
 

@@ -45,6 +45,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/express-oauth-server", "npm:2.0.4"],
             ["@types/express-serve-static-core", "npm:4.17.24"],
             ["@types/jsonwebtoken", "npm:8.5.5"],
+            ["@types/luxon", "npm:2.0.5"],
             ["@types/node-cron", "npm:3.0.0"],
             ["@types/oauth2-server", "npm:3.0.13"],
             ["@types/passport", "npm:0.4.7"],
@@ -72,6 +73,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["helmet", "npm:4.6.0"],
             ["json-ignore", "npm:0.4.0"],
             ["jsonwebtoken", "npm:8.5.1"],
+            ["luxon", "npm:2.0.2"],
             ["mariadb", "npm:2.5.4"],
             ["node-cron", "npm:3.0.0"],
             ["oauth2-server", "npm:3.1.1"],
@@ -572,6 +574,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@types/koa-compose", "npm:3.2.5"],
             ["@types/koa", "npm:2.13.4"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/luxon", [
+        ["npm:2.0.5", {
+          "packageLocation": "./.yarn/cache/@types-luxon-npm-2.0.5-66a801b509-2d0229ade7.zip/node_modules/@types/luxon/",
+          "packageDependencies": [
+            ["@types/luxon", "npm:2.0.5"]
           ],
           "linkType": "HARD",
         }]
@@ -2630,6 +2641,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/express-oauth-server", "npm:2.0.4"],
             ["@types/express-serve-static-core", "npm:4.17.24"],
             ["@types/jsonwebtoken", "npm:8.5.5"],
+            ["@types/luxon", "npm:2.0.5"],
             ["@types/node-cron", "npm:3.0.0"],
             ["@types/oauth2-server", "npm:3.0.13"],
             ["@types/passport", "npm:0.4.7"],
@@ -2657,6 +2669,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["helmet", "npm:4.6.0"],
             ["json-ignore", "npm:0.4.0"],
             ["jsonwebtoken", "npm:8.5.1"],
+            ["luxon", "npm:2.0.2"],
             ["mariadb", "npm:2.5.4"],
             ["node-cron", "npm:3.0.0"],
             ["oauth2-server", "npm:3.1.1"],
@@ -2957,6 +2970,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["lru-cache", "npm:6.0.0"],
             ["yallist", "npm:4.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["luxon", [
+        ["npm:2.0.2", {
+          "packageLocation": "./.yarn/cache/luxon-npm-2.0.2-1234b63c1d-eb2e366cf4.zip/node_modules/luxon/",
+          "packageDependencies": [
+            ["luxon", "npm:2.0.2"]
           ],
           "linkType": "HARD",
         }]

@@ -6,3 +6,4 @@ export * from "./filterUndfined";
 export * from "./cronManager";
 export * from "./slackbot";
 export * from "./ses";
+export * from "./ip";

@@ -1,6 +1,8 @@
 {
   "name": "jewerly-api",
   "packageManager": "yarn@3.0.2",
+  "typings": "dist/index.d.ts",
+  "main": "dist/index.js",
   "scripts": {
     "lint": "prettier -c \"./**/*.ts\";eslint **/*.ts",
     "format": "prettier --write \"./**/*.ts\" --ignore-path \"./node_modules/**/*.ts\";eslint --fix",
@@ -21,6 +23,7 @@
     "@types/express-oauth-server": "^2",
     "@types/express-serve-static-core": "^4.17.24",
     "@types/jsonwebtoken": "^8",
+    "@types/luxon": "^2",
     "@types/node-cron": "^3",
     "@types/oauth2-server": "^3",
     "@types/passport": "^0",
@@ -55,6 +58,7 @@
     "helmet": "^4.6.0",
     "json-ignore": "^0.4.0",
     "jsonwebtoken": "^8.5.1",
+    "luxon": "^2.0.2",
     "mariadb": "^2.5.4",
     "node-cron": "^3.0.0",
     "oauth2-server": "^3.1.1",

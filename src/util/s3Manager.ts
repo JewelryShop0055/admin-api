@@ -1,6 +1,5 @@
 import { S3 } from "aws-sdk";
 import { config } from "../../configures/config";
-import util from "util";
 
 export class S3Manager {
   private static s3: S3;

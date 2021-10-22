@@ -411,6 +411,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/luxon@npm:^2":
+  version: 2.0.5
+  resolution: "@types/luxon@npm:2.0.5"
+  checksum: 2d0229ade7e5af3f8633ee491f7417ca5497885b531f2d86db2e1f65686bb43c7e884505ee003af0ebef48c4db30247e2859ba0c830863d36827f3b8ec7299ac
+  languageName: node
+  linkType: hard
+
 "@types/mime@npm:^1":
   version: 1.3.2
   resolution: "@types/mime@npm:1.3.2"
@@ -2128,6 +2135,7 @@ __metadata:
     "@types/express-oauth-server": ^2
     "@types/express-serve-static-core": ^4.17.24
     "@types/jsonwebtoken": ^8
+    "@types/luxon": ^2
     "@types/node-cron": ^3
     "@types/oauth2-server": ^3
     "@types/passport": ^0
@@ -2155,6 +2163,7 @@ __metadata:
     helmet: ^4.6.0
     json-ignore: ^0.4.0
     jsonwebtoken: ^8.5.1
+    luxon: ^2.0.2
     mariadb: ^2.5.4
     node-cron: ^3.0.0
     oauth2-server: ^3.1.1
@@ -2415,6 +2424,13 @@ __metadata:
   dependencies:
     yallist: ^4.0.0
   checksum: f97f499f898f23e4585742138a22f22526254fdba6d75d41a1c2526b3b6cc5747ef59c5612ba7375f42aca4f8461950e925ba08c991ead0651b4918b7c978297
+  languageName: node
+  linkType: hard
+
+"luxon@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "luxon@npm:2.0.2"
+  checksum: eb2e366cf41a129704ae3213e0aea3e1504390af2a84322a5bbb6a22c92d96c7cb70e58b941a109c5e1bfbed51784d08130278feeee6cdf169940af90a68ded5
   languageName: node
   linkType: hard
 
