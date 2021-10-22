@@ -35,10 +35,27 @@ export class S3Manager {
 
   static async deleteFile(key: string) {
     const s3 = S3Manager.getResourceBucket();
+    const ext = key.split(".")[1];
+    const replaceKeys = [
+      ".webp",
+      "_100x100.webp",
+      "_500x500.webp",
+      "_1000x1000.webp",
+    ];
+
     await s3
-      .deleteObject({
+      .deleteObjects({
         Bucket: config.app.resource.bucket,
-        Key: key,
+        Delete: {
+          Objects: [
+            {
+              Key: key,
+            },
+            ...replaceKeys.map((v) => {
+              return { Key: key.replace(`.${ext}`, v) };
+            }),
+          ],
+        },
       })
       .promise();
     return true;
