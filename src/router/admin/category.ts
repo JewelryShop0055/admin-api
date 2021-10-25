@@ -134,6 +134,17 @@ router.post(
       depth: 0,
     };
 
+    const exist = await Category.findOne({
+      where: value,
+    });
+
+    if (exist) {
+      return res.status(400).json({
+        status: 400,
+        message: "Already Exist",
+      });
+    }
+
     const transaction = await sequelize.transaction();
     try {
       const category = await Category.create(value, {
@@ -158,6 +169,74 @@ router.post(
       throw e;
     }
   }),
+);
+
+/**
+ * @openapi
+ *
+ * /admin/category/{itemType}/existcheck:
+ *   get:
+ *     tags:
+ *       - admin-category
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - $ref: "#/components/parameters/ItemType"
+ *       - name: name
+ *         in: query
+ *         description: 중복 확인을 하고 싶은 분류의 이름
+ *         example: 목걸이
+ *         required: true
+ *         allowEmptyValue: false
+ *     responses:
+ *       200:
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 exist:
+ *                   required: true
+ *                   type: boolean
+ *       400:
+ *         $ref: "#/components/responses/GenericError"
+ *       401:
+ *         $ref: "#/components/responses/401"
+ *       500:
+ *         $ref: "#/components/responses/GenericError"
+ *
+ */
+router.get(
+  "/:type/existcheck",
+  itemTypeValidateMiddelware,
+  authenticate(false),
+  asyncHandler(
+    async (
+      req: Request<any, any, undefined, PagenationQuery & { name?: string }>,
+      res,
+    ) => {
+      const { type } = req.params as ItemTypeCommonParam;
+      const name = req.query.name;
+
+      if (!name) {
+        return res.status(400).json({
+          status: 400,
+          message: "required name on Query",
+        });
+      }
+
+      const categoies = await Category.findOne({
+        where: {
+          type,
+          name,
+        },
+      });
+
+      return res.json({
+        exist: categoies !== null,
+      });
+    },
+  ),
 );
 
 /**
@@ -487,6 +566,27 @@ router.post(
       name,
       depth: parent.depth + 1,
     };
+
+    const exist = await Category.findOne({
+      where: value,
+      include: [
+        {
+          model: CategoryTree,
+          where: {
+            topId: parent.parentTree?.topId || parent.id,
+            parentId: parent.id,
+            depth: value.depth,
+          },
+        },
+      ],
+    });
+
+    if (exist) {
+      return res.status(400).json({
+        status: 400,
+        message: "Already Exist",
+      });
+    }
 
     const transaction = await sequelize.transaction();
     try {
