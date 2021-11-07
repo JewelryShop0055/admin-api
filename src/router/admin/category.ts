@@ -1,17 +1,20 @@
 import express, { Request } from "express";
+import { Sequelize } from "sequelize-typescript";
+
+import {
+  asyncHandler,
+  authenticate,
+  ItemTypeCommonParam,
+  itemTypeValidateMiddelware,
+} from "../../middleware";
 import sequelize, {
   Category,
   CategoryTree,
   CreateCategoryInput,
+  ItemCategoryRelation,
   PagenationQuery,
 } from "../../model";
 import { pagenationValidator } from "../../util";
-import {
-  asyncHandler,
-  authenticate,
-  itemTypeValidateMiddelware,
-  ItemTypeCommonParam,
-} from "../../middleware";
 
 interface GetCategryParam extends ItemTypeCommonParam {
   id: string;
@@ -81,11 +84,29 @@ router.get(
       );
 
       const categoies = await Category.findAll({
+        attributes: [
+          ...Object.keys(Category.rawAttributes),
+          [
+            Sequelize.fn("Count", Sequelize.col(`itemRelations.categoryId`)),
+            `itemCount`,
+          ],
+        ],
         where: {
           type,
         },
+        include: [
+          {
+            model: ItemCategoryRelation,
+            subQuery: true,
+            // as: ItemCategoryRelation.name,
+            attributes: [],
+          },
+        ],
+        group: [`itemRelations.categoryId`],
         limit,
+        order: ["id"],
         offset: limit * page,
+        subQuery: false,
       });
 
       return res.json(categoies);

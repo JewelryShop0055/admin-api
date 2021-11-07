@@ -1,6 +1,7 @@
-import { FindOptions, Op, WhereOptions } from "sequelize";
+import { FindOptions, INTEGER, Op, VIRTUAL, WhereOptions } from "sequelize";
 import {
   AutoIncrement,
+  BelongsToMany,
   Column,
   HasMany,
   HasOne,
@@ -13,6 +14,8 @@ import {
 import { filterToObject } from "../util";
 import CategoryTree from "./categroyTree";
 import { ItemType, ItemTypeEnum } from "./itemType";
+import ItemCategoryRelation from "./ItemCategoryRelation";
+import Item from "./item";
 
 /**
  * @openapi
@@ -65,6 +68,11 @@ export class CreateCategoryInput {
  *           required: true
  *           type: "integer"
  *           min: 0
+ *         itemCount:
+ *           description: "Has Item Count. only return on \"/admin/category/{itemType}\""
+ *           required: false
+ *           type: "integer"
+ *           min: 0
  *         createdAt:
  *           $ref: "#/components/schemas/createdAt"
  *         updatedAt:
@@ -72,6 +80,7 @@ export class CreateCategoryInput {
  */
 @Table({
   charset: "utf8",
+  paranoid: false,
   hooks: {
     beforeDestroy: async (category: Category, options) => {
       const childTrees = await CategoryTree.findAll({
@@ -123,6 +132,9 @@ export class Category extends Model<Category, CreateCategoryInput> {
   })
   depth!: number;
 
+  @Column(VIRTUAL)
+  itemCount?: number;
+
   @HasOne(() => CategoryTree, {
     foreignKey: "childId",
     onDelete: "CASCADE",
@@ -136,6 +148,9 @@ export class Category extends Model<Category, CreateCategoryInput> {
     as: "childTree",
   })
   childTree?: CategoryTree[];
+
+  @HasMany(() => ItemCategoryRelation)
+  itemRelations?: ItemCategoryRelation[];
 
   static async search(
     keyword: string[],
