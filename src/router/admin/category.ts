@@ -102,7 +102,7 @@ router.get(
             attributes: [],
           },
         ],
-        group: [`itemRelations.categoryId`],
+        group: [`Category.id`],
         limit,
         order: ["id"],
         offset: limit * page,
