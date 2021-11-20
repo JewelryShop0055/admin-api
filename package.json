@@ -1,6 +1,6 @@
 {
   "name": "jewerly-api",
-  "packageManager": "yarn@3.0.2",
+  "packageManager": "yarn@3.1.0",
   "typings": "dist/index.d.ts",
   "main": "dist/index.js",
   "scripts": {
@@ -24,6 +24,7 @@
     "@types/express-serve-static-core": "^4.17.24",
     "@types/jsonwebtoken": "^8",
     "@types/luxon": "^2",
+    "@types/node": "^16.11.6",
     "@types/node-cron": "^3",
     "@types/oauth2-server": "^3",
     "@types/passport": "^0",
@@ -32,6 +33,7 @@
     "@types/rimraf": "^3",
     "@types/swagger-jsdoc": "^6",
     "@types/swagger-ui-express": "^4.1.3",
+    "@types/uuid": "^8.3.3",
     "@types/yaml": "^1",
     "@typescript-eslint/eslint-plugin": "^4.31.0",
     "@typescript-eslint/parser": "^4.31.0",
