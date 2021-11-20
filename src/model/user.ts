@@ -1,18 +1,23 @@
-import { UserCrenditionalRealtion } from "./userCrenditionalRelation";
-import { UserCrenditional } from "./userCreditional";
-import UserToken from "./userTokens";
-import { ScopeTypes, ScopeEnum, ScopeType } from "./scope";
-import {
-  Model,
-  Table,
-  Column,
-  PrimaryKey,
-  NotNull,
-  AutoIncrement,
-  HasMany,
-  BelongsToMany,
-} from "sequelize-typescript";
 import { jsonIgnore } from "json-ignore";
+import {
+  AutoIncrement,
+  BelongsToMany,
+  Column,
+  HasMany,
+  Model,
+  NotNull,
+  PrimaryKey,
+  Table,
+} from "sequelize-typescript";
+
+import {
+  ScopeEnum,
+  ScopeType,
+  ScopeTypes,
+  UserCrenditional,
+  UserCrenditionalRealtion,
+  UserToken,
+} from ".";
 
 /**
  * @openapi

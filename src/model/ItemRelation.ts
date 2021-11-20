@@ -1,15 +1,15 @@
 import { FLOAT, TEXT, UUID } from "sequelize";
 import {
+  BelongsTo,
   Column,
+  ForeignKey,
   Model,
+  NotNull,
   PrimaryKey,
   Table,
-  NotNull,
-  ForeignKey,
-  BelongsTo,
 } from "sequelize-typescript";
-import Item from "./item";
-import { ItemTypes } from "./itemType";
+
+import { Item, ItemTypes } from ".";
 
 /**
  * @openapi

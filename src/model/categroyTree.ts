@@ -51,7 +51,6 @@ export class CreateCategoryTreeInput {
  *           description: "depth of Catrgory Tree, this value is equel Category.depth"
  *           required: true
  *           type: "integer"
- *           min: 0
  *         createdAt:
  *           $ref: "#/components/schemas/createdAt"
  *         updatedAt:

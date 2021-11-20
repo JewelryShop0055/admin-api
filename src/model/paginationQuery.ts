@@ -2,20 +2,23 @@
  * @openapi
  * components:
  *   parameters:
- *     PagenationLimit:
+ *     paginationLimit:
  *       name: limit
  *       in: query
  *       description: numberic value. min value 1
  *       example: 10
  *       allowEmptyValue: false
- *     PagenationPage:
+ *     paginationPage:
  *       name: page
  *       in: query
- *       description: numberic value.  min value 0
- *       example: 0
+ *       description: numberic value.  min value 1
+ *       example: 1
  *       allowEmptyValue: false
  */
-export class PagenationQuery {
+export class paginationQuery<Order = DefaultOrder> {
   page?: string;
   limit?: string;
+  order?: Order;
 }
+
+export type DefaultOrder = "id_asc" | "id_desc" | "name_asc" | "name_desc";

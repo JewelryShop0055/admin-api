@@ -1,4 +1,5 @@
-import express, { Request } from "express";
+import express, { Request, Response } from "express";
+import { ParamsDictionary } from "express-serve-static-core";
 import { Sequelize } from "sequelize-typescript";
 
 import {
@@ -11,10 +12,13 @@ import sequelize, {
   Category,
   CategoryTree,
   CreateCategoryInput,
+  DefaultErrorResponse,
   ItemCategoryRelation,
-  PagenationQuery,
+  ItemType,
+  paginationItems,
+  paginationQuery,
 } from "../../model";
-import { pagenationValidator } from "../../util";
+import { paginationValidator } from "../../util";
 
 interface GetCategryParam extends ItemTypeCommonParam {
   id: string;
@@ -53,16 +57,24 @@ const router = express.Router({
  *       - bearerAuth: []
  *     parameters:
  *       - $ref: "#/components/parameters/ItemType"
- *       - $ref: "#/components/parameters/PagenationPage"
- *       - $ref: "#/components/parameters/PagenationLimit"
+ *       - $ref: "#/components/parameters/paginationPage"
+ *       - $ref: "#/components/parameters/paginationLimit"
  *     responses:
  *       200:
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: "#/components/schemas/Category"
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   required: true
+ *                   type: array
+ *                   items:
+ *                     $ref: "#/components/schemas/Category"
+ *                 maxPage:
+ *                   $ref: "#/components/schemas/maxPage"
+ *                 currentPage:
+ *                   $ref: "#/components/schemas/currentPage"
  *       400:
  *         $ref: "#/components/responses/GenericError"
  *       401:
@@ -76,14 +88,22 @@ router.get(
   itemTypeValidateMiddelware,
   authenticate(false),
   asyncHandler(
-    async (req: Request<any, any, undefined, PagenationQuery>, res) => {
-      const { type } = req.params as ItemTypeCommonParam;
-      const { page, limit } = pagenationValidator(
+    async (
+      req: Request<
+        ParamsDictionary | ItemTypeCommonParam,
+        paginationItems<Category>,
+        undefined,
+        paginationQuery
+      >,
+      res: Response<paginationItems<Category>>,
+    ) => {
+      const { type } = req.params;
+      const { currentPage, limit, offset } = paginationValidator(
         Number(req.query.page),
         Number(req.query.limit),
       );
 
-      const categoies = await Category.findAll({
+      const data = await Category.findAll({
         attributes: [
           ...Object.keys(Category.rawAttributes),
           [
@@ -98,18 +118,30 @@ router.get(
           {
             model: ItemCategoryRelation,
             subQuery: true,
-            // as: ItemCategoryRelation.name,
             attributes: [],
           },
         ],
         group: [`Category.id`],
         limit,
         order: ["id"],
-        offset: limit * page,
+        offset,
         subQuery: false,
       });
 
-      return res.json(categoies);
+      const totalItemCount = await Category.count({
+        where: {
+          type,
+        },
+      });
+
+      return res.json(
+        new paginationItems({
+          data,
+          currentPage,
+          totalItemCount,
+          limit,
+        }),
+      );
     },
   ),
 );
@@ -145,51 +177,60 @@ router.post(
   "/:type",
   itemTypeValidateMiddelware,
   authenticate(false),
-  asyncHandler(async (req, res) => {
-    const { type } = req.params as ItemTypeCommonParam;
-    const { name } = req.body as Pick<CreateCategoryInput, "name">;
+  asyncHandler(
+    async (
+      req: Request<
+        ParamsDictionary | ItemTypeCommonParam,
+        Category | DefaultErrorResponse,
+        Pick<CreateCategoryInput, "name">
+      >,
+      res: Response<Category | DefaultErrorResponse>,
+    ) => {
+      const { type } = req.params;
+      const { name } = req.body;
 
-    const value: CreateCategoryInput = {
-      type,
-      name,
-      depth: 0,
-    };
+      const value: CreateCategoryInput = {
+        type: type as ItemType,
+        name,
+        depth: 0,
+      };
 
-    const exist = await Category.findOne({
-      where: value,
-    });
-
-    if (exist) {
-      return res.status(400).json({
-        status: 400,
-        message: "Already Exist",
-      });
-    }
-
-    const transaction = await sequelize.transaction();
-    try {
-      const category = await Category.create(value, {
-        transaction,
+      const exist = await Category.findOne({
+        where: value,
       });
 
-      const tree = await CategoryTree.create(
-        {
-          childId: category.id,
-          depth: category.depth,
-        },
-        {
+      if (exist) {
+        return res.status(400).json({
+          status: 400,
+          message: "Already Exist",
+        });
+      }
+
+      const transaction = await sequelize.transaction();
+      try {
+        const category = await Category.create(value, {
           transaction,
-        },
-      );
+        });
 
-      await transaction.commit();
+        const tree = await CategoryTree.create(
+          {
+            childId: category.id,
+            depth: category.depth,
+          },
+          {
+            transaction,
+          },
+        );
 
-      return res.json(category);
-    } catch (e) {
-      await transaction.rollback();
-      throw e;
-    }
-  }),
+        await transaction.commit();
+
+        return res.json(category);
+      } catch (e) {
+        await transaction.rollback();
+        throw e;
+      }
+    },
+  ),
 );
 
 /**
@@ -233,10 +274,15 @@ router.get(
   authenticate(false),
   asyncHandler(
     async (
-      req: Request<any, any, undefined, PagenationQuery & { name?: string }>,
+      req: Request<
+        ParamsDictionary | ItemTypeCommonParam,
+        any,
+        undefined,
+        { name?: string }
+      >,
       res,
     ) => {
-      const { type } = req.params as ItemTypeCommonParam;
+      const { type } = req.params;
       const name = req.query.name;
 
       if (!name) {
@@ -291,29 +337,34 @@ router.get(
   "/:type/:id",
   itemTypeValidateMiddelware,
   authenticate(false),
-  asyncHandler(async (req: Request, res) => {
-    const { type, id } = req.params as GetCategryParam;
+  asyncHandler(
+    async (
+      req: Request<GetCategryParam | ParamsDictionary>,
+      res: Response<Category | DefaultErrorResponse>,
+    ) => {
+      const { type, id } = req.params;
 
-    if (isNaN(Number(id))) {
-      return res.status(400).json({
-        status: 400,
-        message: "Invalidate id format. id is numberic",
+      if (isNaN(Number(id))) {
+        return res.status(400).json({
+          status: 400,
+          message: "Invalidate id format. id is numberic",
+        });
+      }
+
+      const category = await Category.findOne({
+        where: {
+          type,
+          id: Number(id),
+        },
       });
-    }
 
-    const category = await Category.findOne({
-      where: {
-        type,
-        id: Number(id),
-      },
-    });
+      if (!category) {
+        return res.sendStatus(404);
+      }
 
-    if (!category) {
-      return res.sendStatus(404);
-    }
-
-    return res.json(category);
-  }),
+      return res.json(category);
+    },
+  ),
 );
 
 /**
@@ -328,16 +379,24 @@ router.get(
  *     parameters:
  *       - $ref: "#/components/parameters/ItemType"
  *       - $ref: "#/components/parameters/CategoryId"
- *       - $ref: "#/components/parameters/PagenationPage"
- *       - $ref: "#/components/parameters/PagenationLimit"
+ *       - $ref: "#/components/parameters/paginationPage"
+ *       - $ref: "#/components/parameters/paginationLimit"
  *     responses:
  *       200:
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: "#/components/schemas/Category"
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   required: true
+ *                   type: array
+ *                   items:
+ *                     $ref: "#/components/schemas/Category"
+ *                 maxPage:
+ *                   $ref: "#/components/schemas/maxPage"
+ *                 currentPage:
+ *                   $ref: "#/components/schemas/currentPage"
  *       400:
  *         $ref: "#/components/responses/GenericError"
  *       401:
@@ -351,34 +410,74 @@ router.get(
   "/:type/:id/list",
   itemTypeValidateMiddelware,
   authenticate(false),
-  asyncHandler(async (req: Request, res) => {
-    const { type, id } = req.params as GetCategryParam;
 
-    if (isNaN(Number(id))) {
-      return res.status(400).json({
-        status: 400,
-        message: "Invalidate id format. id is numberic",
-      });
-    }
+  asyncHandler(
+    async (
+      req: Request<
+        ParamsDictionary | GetCategryParam,
+        paginationItems<Category>,
+        undefined,
+        paginationQuery
+      >,
+      res: Response<paginationItems<Category> | DefaultErrorResponse>,
+    ) => {
+      const { type, id } = req.params;
+      const { currentPage, limit, offset } = paginationValidator(
+        Number(req.query.page),
+        Number(req.query.limit),
+      );
 
-    const categories = await Category.findAll({
-      where: {
-        type,
-      },
-      include: [
-        {
-          model: CategoryTree,
-          as: "parent",
-          attributes: [],
-          where: {
-            parentId: Number(id),
-          },
+      if (isNaN(Number(id))) {
+        return res.status(400).json({
+          status: 400,
+          message: "Invalidate id format. id is numberic",
+        });
+      }
+
+      const data = await Category.findAll({
+        where: {
+          type,
         },
-      ],
-    });
+        include: [
+          {
+            model: CategoryTree,
+            as: "parent",
+            attributes: [],
+            where: {
+              parentId: Number(id),
+            },
+          },
+        ],
+        limit,
+        offset,
+      });
 
-    return res.json(categories);
-  }),
+      const totalItemCount = await Category.count({
+        where: {
+          type,
+        },
+        include: [
+          {
+            model: CategoryTree,
+            as: "parent",
+            attributes: [],
+            where: {
+              parentId: Number(id),
+            },
+          },
+        ],
+      });
+
+      return res.json(
+        new paginationItems({
+          data,
+          currentPage,
+          totalItemCount,
+          limit,
+        }),
+      );
+    },
+  ),
 );
 
 /**
@@ -431,36 +530,45 @@ router.put(
   "/:type/:id",
   itemTypeValidateMiddelware,
   authenticate(false),
-  asyncHandler(async (req, res) => {
-    const { type, id } = req.params as GetCategryParam;
-    const { name } = req.body as Pick<CreateCategoryInput, "name">;
+  asyncHandler(
+    async (
+      req: Request<
+        ParamsDictionary | GetCategryParam,
+        Category,
+        Pick<CreateCategoryInput, "name">
+      >,
+      res: Response<Category | DefaultErrorResponse>,
+    ) => {
+      const { type, id } = req.params;
+      const { name } = req.body;
 
-    if (isNaN(Number(id))) {
-      return res.status(400).json({
-        status: 400,
-        message: "Invalidate id format. id is numberic",
+      if (isNaN(Number(id))) {
+        return res.status(400).json({
+          status: 400,
+          message: "Invalidate id format. id is numberic",
+        });
+      }
+
+      const category = await Category.findOne({
+        where: {
+          type,
+          id: Number(id),
+        },
       });
-    }
 
-    const category = await Category.findOne({
-      where: {
-        type,
-        id: Number(id),
-      },
-    });
+      if (!category) {
+        return res.sendStatus(404);
+      }
 
-    if (!category) {
-      return res.sendStatus(404);
-    }
+      category.set({
+        name,
+      });
 
-    category.set({
-      name,
-    });
+      await category.save();
 
-    await category.save();
-
-    return res.json(category);
-  }),
+      return res.json(category);
+    },
+  ),
 );
 
 /**
@@ -491,31 +599,36 @@ router.delete(
   "/:type/:id",
   itemTypeValidateMiddelware,
   authenticate(false),
-  asyncHandler(async (req, res) => {
-    const { type, id } = req.params as GetCategryParam;
+  asyncHandler(
+    async (
+      req: Request<ParamsDictionary | GetCategryParam>,
+      res: Response<DefaultErrorResponse>,
+    ) => {
+      const { type, id } = req.params;
 
-    if (isNaN(Number(id))) {
-      return res.status(400).json({
-        status: 400,
-        message: "Invalidate id format. id is numberic",
+      if (isNaN(Number(id))) {
+        return res.status(400).json({
+          status: 400,
+          message: "Invalidate id format. id is numberic",
+        });
+      }
+
+      const category = await Category.findOne({
+        where: {
+          type,
+          id: Number(id),
+        },
       });
-    }
 
-    const category = await Category.findOne({
-      where: {
-        type,
-        id: Number(id),
-      },
-    });
+      if (!category) {
+        return res.sendStatus(404);
+      }
 
-    if (!category) {
-      return res.sendStatus(404);
-    }
+      await category.destroy();
 
-    await category.destroy();
-
-    return res.sendStatus(204);
-  }),
+      return res.sendStatus(204);
+    },
+  ),
 );
 
 /**
@@ -551,90 +664,99 @@ router.post(
   "/:type/:id",
   itemTypeValidateMiddelware,
   authenticate(false),
-  asyncHandler(async (req, res) => {
-    const { type, id } = req.params as GetCategryParam;
-    const { name } = req.body as Pick<CreateCategoryInput, "name">;
+  asyncHandler(
+    async (
+      req: Request<
+        GetCategryParam | ParamsDictionary,
+        Category,
+        Pick<CreateCategoryInput, "name">
+      >,
+      res,
+    ) => {
+      const { type, id } = req.params;
+      const { name } = req.body;
 
-    if (isNaN(Number(id))) {
-      return res.status(400).json({
-        status: 400,
-        message: "Invalidate id format. id is numberic",
-      });
-    }
+      if (isNaN(Number(id))) {
+        return res.status(400).json({
+          status: 400,
+          message: "Invalidate id format. id is numberic",
+        });
+      }
 
-    const parent = await Category.findOne({
-      where: {
-        type,
-        id: Number(id),
-      },
-      include: [
-        {
-          model: CategoryTree,
-          where: {
-            childId: Number(id),
-          },
-          as: "parentTree",
+      const parent = await Category.findOne({
+        where: {
+          type,
+          id: Number(id),
         },
-      ],
-    });
+        include: [
+          {
+            model: CategoryTree,
+            where: {
+              childId: Number(id),
+            },
+            as: "parentTree",
+          },
+        ],
+      });
 
-    if (!parent) {
-      return res.sendStatus(400);
-    }
+      if (!parent) {
+        return res.sendStatus(400);
+      }
 
-    const value: CreateCategoryInput = {
-      type,
-      name,
-      depth: parent.depth + 1,
-    };
+      const value: CreateCategoryInput = {
+        type: type as ItemType,
+        name,
+        depth: parent.depth + 1,
+      };
 
-    const exist = await Category.findOne({
-      where: value,
-      include: [
-        {
-          model: CategoryTree,
-          where: {
+      const exist = await Category.findOne({
+        where: value,
+        include: [
+          {
+            model: CategoryTree,
+            where: {
+              topId: parent.parentTree?.topId || parent.id,
+              parentId: parent.id,
+              depth: value.depth,
+            },
+          },
+        ],
+      });
+
+      if (exist) {
+        return res.status(400).json({
+          status: 400,
+          message: "Already Exist",
+        });
+      }
+
+      const transaction = await sequelize.transaction();
+      try {
+        const child = await Category.create(value, {
+          transaction,
+        });
+
+        const tree = await CategoryTree.create(
+          {
+            childId: child.id,
             topId: parent.parentTree?.topId || parent.id,
             parentId: parent.id,
-            depth: value.depth,
+            depth: child.depth,
           },
-        },
-      ],
-    });
+          {
+            transaction,
+          },
+        );
 
-    if (exist) {
-      return res.status(400).json({
-        status: 400,
-        message: "Already Exist",
-      });
-    }
+        await transaction.commit();
 
-    const transaction = await sequelize.transaction();
-    try {
-      const child = await Category.create(value, {
-        transaction,
-      });
-
-      const tree = await CategoryTree.create(
-        {
-          childId: child.id,
-          topId: parent.parentTree?.topId || parent.id,
-          parentId: parent.id,
-          depth: child.depth,
-        },
-        {
-          transaction,
-        },
-      );
-
-      await transaction.commit();
-
-      return res.json(child);
-    } catch (e) {
-      await transaction.rollback();
-      throw e;
-    }
-  }),
+        return res.json(child);
+      } catch (e) {
+        await transaction.rollback();
+        throw e;
+      }
+    },
+  ),
 );
 
 export default router;

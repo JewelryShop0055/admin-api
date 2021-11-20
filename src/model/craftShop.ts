@@ -1,16 +1,23 @@
 import {
+  CountOptions,
+  FindOptions,
+  Op,
+  UUID,
+  UUIDV4,
+  WhereOptions,
+} from "sequelize";
+import {
+  BelongsToMany,
   Column,
+  HasMany,
+  Model,
   NotNull,
   PrimaryKey,
   Table,
-  Model,
-  HasMany,
-  BelongsToMany,
 } from "sequelize-typescript";
-import { FindOptions, UUID, UUIDV4, WhereOptions, Op } from "sequelize";
-import ItemCraftShopRelation from "./itemCraftShopRelation";
-import Item from "./item";
-import { filterToObject } from "../util";
+
+import { Item, ItemCraftShopRelation, paginationItems, SearchMethod } from ".";
+import { filterToObject, paginationValidator } from "../util";
 
 /**
  * @openapi
@@ -157,10 +164,18 @@ export class CraftShop extends Model<CraftShop, CreateCraftShoptInput> {
   @BelongsToMany(() => Item, () => ItemCraftShopRelation)
   items?: Item[];
 
-  static async search(
-    keyword: string[],
-    options?: FindOptions<CraftShop>,
-  ): Promise<CraftShop[]> {
+  static search: SearchMethod<CraftShop> = async ({
+    keywords: keyword,
+    findOptions: options,
+    page,
+    limit: _limit,
+  }) => {
+    const { currentPage, limit, offset } = paginationValidator(
+      page,
+      _limit,
+      30,
+    );
+
     const whereOptions: WhereOptions<CraftShop>[] = keyword.reduce<
       WhereOptions<CraftShop>[]
     >((p, k) => {
@@ -192,16 +207,34 @@ export class CraftShop extends Model<CraftShop, CreateCraftShoptInput> {
       return p;
     }, []);
 
-    return CraftShop.findAll(
+    const data = await CraftShop.findAll(
       filterToObject<FindOptions<CraftShop>>({
         ...options,
         where: {
           ...options?.where,
           [Op.or]: whereOptions.push(...options?.where?.[Op.or]),
         },
+        offset,
+        limit,
       }),
     );
-  }
+
+    const totalItemCount = await CraftShop.count(
+      filterToObject<CountOptions<CraftShop>>({
+        where: {
+          ...options?.where,
+          [Op.or]: options?.where?.[Op.or]?.push(whereOptions) || whereOptions,
+        },
+      }),
+    );
+
+    return new paginationItems<CraftShop>({
+      data,
+      currentPage,
+      totalItemCount,
+      limit,
+    });
+  };
 }
 
 export default CraftShop;

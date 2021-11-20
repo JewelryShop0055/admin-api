@@ -1,16 +1,16 @@
+import { jsonIgnore } from "json-ignore";
+import { DataTypes, UUID, UUIDV4 } from "sequelize";
 import {
+  BelongsTo,
   Column,
+  ForeignKey,
   Model,
+  NotNull,
   PrimaryKey,
   Table,
-  NotNull,
-  ForeignKey,
-  BelongsTo,
 } from "sequelize-typescript";
-import { FileStatusEnum, FileStatus, FileStatusType } from "./fileStatus";
-import Item from "./item";
-import { DataTypes, UUID, UUIDV4 } from "sequelize";
-import { jsonIgnore } from "json-ignore";
+
+import { FileStatus, FileStatusEnum, FileStatusType, Item } from ".";
 import { config } from "../../configures/config";
 
 /**

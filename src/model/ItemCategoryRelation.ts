@@ -1,15 +1,15 @@
 import { UUID } from "sequelize";
 import {
+  BelongsTo,
   Column,
+  ForeignKey,
   Model,
+  NotNull,
   PrimaryKey,
   Table,
-  NotNull,
-  ForeignKey,
-  BelongsTo,
 } from "sequelize-typescript";
-import { Category } from ".";
-import Item from "./item";
+
+import { Category, Item } from ".";
 
 export class CreateItemCategoryInput {
   itemId!: string;

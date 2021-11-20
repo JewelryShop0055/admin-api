@@ -1,16 +1,16 @@
-import {
-  Model,
-  Table,
-  Column,
-  PrimaryKey,
-  ForeignKey,
-  NotNull,
-  BelongsTo,
-} from "sequelize-typescript";
-import { UUID, UUIDV4 } from "sequelize";
-import { User } from "./user";
-import { UserCrenditional } from "./userCreditional";
 import { jsonIgnore } from "json-ignore";
+import { UUID, UUIDV4 } from "sequelize";
+import {
+  BelongsTo,
+  Column,
+  ForeignKey,
+  Model,
+  NotNull,
+  PrimaryKey,
+  Table,
+} from "sequelize-typescript";
+
+import { User, UserCrenditional } from ".";
 
 export interface CreateUserCrenditionalRealtionInput {
   userId: number;

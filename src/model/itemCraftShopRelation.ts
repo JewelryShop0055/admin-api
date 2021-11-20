@@ -1,16 +1,16 @@
+import { UUID, UUIDV4 } from "sequelize";
 import {
+  BelongsTo,
   Column,
+  ForeignKey,
+  Model,
   NotNull,
   PrimaryKey,
   Table,
-  Model,
-  ForeignKey,
   Unique,
-  BelongsTo,
 } from "sequelize-typescript";
-import { UUID, UUIDV4 } from "sequelize";
-import CraftShop from "./craftShop";
-import Item from "./item";
+
+import { CraftShop, Item } from ".";
 
 export class CreateItemCraftShopRelationInput {
   itemId!: string;

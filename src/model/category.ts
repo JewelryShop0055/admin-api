@@ -1,7 +1,12 @@
-import { FindOptions, INTEGER, Op, VIRTUAL, WhereOptions } from "sequelize";
+import {
+  CountOptions,
+  FindOptions,
+  Op,
+  VIRTUAL,
+  WhereOptions,
+} from "sequelize";
 import {
   AutoIncrement,
-  BelongsToMany,
   Column,
   HasMany,
   HasOne,
@@ -11,11 +16,11 @@ import {
   Table,
 } from "sequelize-typescript";
 
-import { filterToObject } from "../util";
+import { filterToObject, paginationValidator } from "../util";
 import CategoryTree from "./categroyTree";
 import { ItemType, ItemTypeEnum } from "./itemType";
 import ItemCategoryRelation from "./ItemCategoryRelation";
-import Item from "./item";
+import { paginationItems, SearchMethod } from ".";
 
 /**
  * @openapi
@@ -67,12 +72,10 @@ export class CreateCategoryInput {
  *           description: "depth of Catrgory"
  *           required: true
  *           type: "integer"
- *           min: 0
  *         itemCount:
  *           description: "Has Item Count. only return on \"/admin/category/{itemType}\""
  *           required: false
  *           type: "integer"
- *           min: 0
  *         createdAt:
  *           $ref: "#/components/schemas/createdAt"
  *         updatedAt:
@@ -152,10 +155,18 @@ export class Category extends Model<Category, CreateCategoryInput> {
   @HasMany(() => ItemCategoryRelation)
   itemRelations?: ItemCategoryRelation[];
 
-  static async search(
-    keyword: string[],
-    options?: FindOptions<Category>,
-  ): Promise<Category[]> {
+  static search: SearchMethod<Category> = async ({
+    keywords: keyword,
+    findOptions: options,
+    page,
+    limit: _limit,
+  }) => {
+    const { currentPage, limit, offset } = paginationValidator(
+      page,
+      _limit,
+      30,
+    );
+
     const whereOptions: WhereOptions<Category>[] = keyword.reduce<
       WhereOptions<Category>[]
     >((p, k) => {
@@ -172,16 +183,34 @@ export class Category extends Model<Category, CreateCategoryInput> {
       return p;
     }, []);
 
-    return Category.findAll(
+    const data = await Category.findAll(
       filterToObject<FindOptions<Category>>({
         ...options,
         where: {
           ...options?.where,
           [Op.or]: whereOptions.push(...options?.where?.[Op.or]),
         },
+        offset,
+        limit,
       }),
     );
-  }
+
+    const totalItemCount = await Category.count(
+      filterToObject<CountOptions<Category>>({
+        where: {
+          ...options?.where,
+          [Op.or]: options?.where?.[Op.or]?.push(whereOptions) || whereOptions,
+        },
+      }),
+    );
+
+    return new paginationItems<Category>({
+      data,
+      currentPage,
+      totalItemCount,
+      limit,
+    });
+  };
 }
 
 export default Category;

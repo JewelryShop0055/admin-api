@@ -40,6 +40,18 @@ const options: swaggereJsdoc.Options = {
           type: "string",
           format: "date-time",
         },
+        maxPage: {
+          description: "Total Page No",
+          required: true,
+          type: "integer",
+          example: 100,
+        },
+        currentPage: {
+          description: "Current Page No",
+          required: true,
+          type: "integer",
+          example: 1,
+        },
       },
       securitySchemes: {
         bearerAuth: {

@@ -1,8 +1,14 @@
-import express, { Request } from "express";
-import { authenticate, asyncHandler } from "../../middleware";
-import { CraftShop } from "../../model";
-import { CreateCraftShoptInput } from "../../model/craftShop";
-import { pagenationValidator } from "../../util/pagenation";
+import express, { Request, Response } from "express";
+import { ParamsDictionary } from "express-serve-static-core";
+
+import { asyncHandler, authenticate } from "../../middleware";
+import {
+  CraftShop,
+  CreateCraftShoptInput,
+  paginationItems,
+  paginationQuery,
+} from "../../model";
+import { paginationValidator } from "../../util/pagination";
 
 /**
  * @openapi
@@ -36,16 +42,24 @@ const router = express.Router({
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - $ref: "#/components/parameters/PagenationPage"
- *       - $ref: "#/components/parameters/PagenationLimit"
+ *       - $ref: "#/components/parameters/paginationPage"
+ *       - $ref: "#/components/parameters/paginationLimit"
  *     responses:
  *       200:
  *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: "#/components/schemas/CraftShop"
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                data:
+ *                  required: true
+ *                  type: array
+ *                  items:
+ *                    $ref: "#/components/schemas/CraftShop"
+ *                maxPage:
+ *                  $ref: "#/components/schemas/maxPage"
+ *                currentPage:
+ *                  $ref: "#/components/schemas/currentPage"
  *       400:
  *         $ref: "#/components/responses/GenericError"
  *       401:
@@ -57,19 +71,38 @@ const router = express.Router({
 router.get(
   "",
   authenticate(false),
-  asyncHandler(async (req, res) => {
-    const { page, limit } = pagenationValidator(
-      Number(req.query.page),
-      Number(req.query.limit),
-    );
+  asyncHandler(
+    async (
+      req: Request<
+        ParamsDictionary,
+        paginationItems<CraftShop>,
+        undefined,
+        paginationQuery
+      >,
+      res: Response<paginationItems<CraftShop>>,
+    ) => {
+      const { currentPage, limit, offset } = paginationValidator(
+        Number(req.query.page),
+        Number(req.query.limit),
+      );
 
-    const craftshop = await CraftShop.findAll({
-      limit,
-      offset: limit * page,
-    });
+      const data = await CraftShop.findAll({
+        limit,
+        offset,
+      });
 
-    return res.json(craftshop);
-  }),
+      const totalItemCount = await CraftShop.count();
+
+      return res.json(
+        new paginationItems({
+          data,
+          currentPage,
+          totalItemCount,
+          limit,
+        }),
+      );
+    },
+  ),
 );
 
 /**
@@ -101,19 +134,24 @@ router.get(
 router.post(
   "",
   authenticate(false),
-  asyncHandler(async (req: Request<any, any, CreateCraftShoptInput>, res) => {
-    const value: CreateCraftShoptInput = {
-      name: req.body.name,
-      postCode: req.body.postCode,
-      address: req.body.address,
-      detailAddress: req.body.detailAddress,
-      phone: req.body.phone,
-    };
+  asyncHandler(
+    async (
+      req: Request<ParamsDictionary, CraftShop, CreateCraftShoptInput>,
+      res: Response<CraftShop>,
+    ) => {
+      const value: CreateCraftShoptInput = {
+        name: req.body.name,
+        postCode: req.body.postCode,
+        address: req.body.address,
+        detailAddress: req.body.detailAddress,
+        phone: req.body.phone,
+      };
 
-    const craftshop = await CraftShop.create(value);
+      const craftshop = await CraftShop.create(value);
 
-    return res.json(craftshop);
-  }),
+      return res.json(craftshop);
+    },
+  ),
 );
 
 /**
@@ -231,7 +269,10 @@ router.put(
   "/:id",
   authenticate(false),
   asyncHandler(
-    async (req: Request<any, any, Partial<CreateCraftShoptInput>>, res) => {
+    async (
+      req: Request<ParamsDictionary, any, Partial<CreateCraftShoptInput>>,
+      res: Response<CraftShop>,
+    ) => {
       const id = req.params.id;
 
       const value: Partial<CreateCraftShoptInput> = {

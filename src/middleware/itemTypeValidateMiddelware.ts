@@ -6,6 +6,10 @@ export interface ItemTypeCommonParam extends ParamsDictionary {
   type: ItemType;
 }
 
+export interface ItemTypeWithIdParam extends ItemTypeCommonParam {
+  id: string;
+}
+
 export const itemTypeValidateMiddelware = (
   req: Request<ItemTypeCommonParam>,
   res: Response,
@@ -17,7 +21,7 @@ export const itemTypeValidateMiddelware = (
   if (!filter) {
     return res.status(400).json({
       status: 400,
-      message: "invalidate ItemType on Param. ItemType: [`prodcut`, `parts`]",
+      message: "invalidate ItemType on Param. ItemType: [`product`, `parts`]",
     });
   }
 

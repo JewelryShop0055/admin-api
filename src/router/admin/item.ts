@@ -1,11 +1,14 @@
-import express, { Request } from "express";
+import express, { Request, Response } from "express";
+import { ParamsDictionary } from "express-serve-static-core";
 import { Op } from "sequelize";
 import { v4 as uuidv4 } from "uuid";
 
 import {
   asyncHandler,
   authenticate,
+  ItemTypeCommonParam,
   itemTypeValidateMiddelware,
+  ItemTypeWithIdParam,
 } from "../../middleware";
 import sequelize, {
   Category,
@@ -14,6 +17,7 @@ import sequelize, {
   CreateItemCraftShopRelationInput,
   CreateItemInput,
   CreateItemWithOption,
+  DefaultErrorResponse,
   FileExt,
   FileStatus,
   Item,
@@ -25,10 +29,23 @@ import sequelize, {
   ItemType,
   ItemTypes,
   ItemUnitTypes,
-  PagenationQuery,
+  paginationItems,
+  paginationQuery,
+  ResourceBody,
+  RequestUploadCrenditional,
+  UploadCrenditionalBody,
 } from "../../model";
-import { pagenationValidator, unitValidator } from "../../util";
-import { S3Manager } from "../../util/s3Manager";
+import { paginationValidator, S3Manager, unitValidator } from "../../util";
+
+type ShowDisable = "true" | "false";
+
+export interface DefaultItemQuery {
+  showDisable?: ShowDisable;
+}
+
+interface ItemListQuery extends paginationQuery, DefaultItemQuery {
+  partNo?: string;
+}
 
 /**
  * @openapi
@@ -77,16 +94,24 @@ const router = express.Router({
  *       - bearerAuth: []
  *     parameters:
  *       - $ref: "#/components/parameters/ItemType"
- *       - $ref: "#/components/parameters/PagenationPage"
- *       - $ref: "#/components/parameters/PagenationLimit"
+ *       - $ref: "#/components/parameters/paginationPage"
+ *       - $ref: "#/components/parameters/paginationLimit"
  *     responses:
  *       200:
  *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: "#/components/schemas/Item"
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                data:
+ *                  required: true
+ *                  type: array
+ *                  items:
+ *                    $ref: "#/components/schemas/Item"
+ *                maxPage:
+ *                  $ref: "#/components/schemas/maxPage"
+ *                currentPage:
+ *                  $ref: "#/components/schemas/currentPage"
  *       400:
  *         $ref: "#/components/responses/GenericError"
  *       401:
@@ -98,30 +123,50 @@ router.get(
   "/:type",
   itemTypeValidateMiddelware,
   authenticate(false),
-  asyncHandler(async (req: Request<any, any, PagenationQuery>, res) => {
-    const { page, limit } = pagenationValidator(
-      Number(req.query.page),
-      Number(req.query.limit),
-    );
+  asyncHandler(
+    async (
+      req: Request<
+        ParamsDictionary | ItemTypeCommonParam,
+        paginationItems<Item>,
+        undefined,
+        ItemListQuery
+      >,
+      res: Response<paginationItems<Item>>,
+    ) => {
+      const { currentPage, limit, offset } = paginationValidator(
+        Number(req.query.page),
+        Number(req.query.limit),
+      );
 
-    const where = {
-      partNo: req.query.partNo,
-    };
+      const { showDisable, partNo } = req.query;
+      const { type } = req.params;
 
-    const type: ItemType = req.params.type;
-
-    const items = await Item.findAll({
-      where: {
+      const where = {
         type,
-        disable: false,
-        ...where,
-      },
-      offset: limit * page,
-      limit: limit,
-    });
+        disable: showDisable ? showDisable === "true" : false,
+        partNo,
+      };
 
-    return res.json(items);
-  }),
+      const data = await Item.findAll({
+        where,
+        offset,
+        limit,
+      });
+
+      const totalItemCount = await Item.count({
+        where,
+      });
+
+      return res.json(
+        new paginationItems({
+          data,
+          currentPage,
+          totalItemCount,
+          limit,
+        }),
+      );
+    },
+  ),
 );
 
 /**
@@ -156,14 +201,14 @@ router.post(
   asyncHandler(
     async (
       req: Request<
-        any,
-        any,
+        ParamsDictionary | ItemTypeCommonParam,
+        Item | DefaultErrorResponse,
         CreateItemInput &
           CreateItemWithOption &
           Partial<CreateItemCategoryInput> &
           Partial<CreateItemCraftShopRelationInput>
       >,
-      res,
+      res: Response<Item | DefaultErrorResponse>,
     ) => {
       const type = req.params.type as ItemType;
       const values: CreateItemInput = {
@@ -277,22 +322,34 @@ router.get(
   "/:type/:id",
   itemTypeValidateMiddelware,
   authenticate(false),
-  asyncHandler(async (req, res) => {
-    const { id, type } = req.params;
+  asyncHandler(
+    async (
+      req: Request<
+        ItemTypeWithIdParam | ParamsDictionary,
+        Item,
+        undefined,
+        DefaultItemQuery
+      >,
+      res: Response<Item>,
+    ) => {
+      const { id, type } = req.params;
+      const { showDisable } = req.query;
 
-    const item = await Item.findOne({
-      where: {
-        id,
-        type,
-      },
-    });
+      const item = await Item.findOne({
+        where: {
+          id,
+          type,
+          disable: showDisable ? showDisable === "true" : false,
+        },
+      });
 
-    if (!item) {
-      return res.sendStatus(404);
-    }
+      if (!item) {
+        return res.sendStatus(404);
+      }
 
-    return res.json(item);
-  }),
+      return res.json(item);
+    },
+  ),
 );
 
 /**
@@ -359,9 +416,15 @@ router.put(
   itemTypeValidateMiddelware,
   authenticate(false),
   asyncHandler(
-    async (req: Request<any, any, Partial<CreateItemInput>>, res) => {
-      const type: ItemType = req.params.type;
-      const id = req.params.id;
+    async (
+      req: Request<
+        ParamsDictionary | ItemTypeWithIdParam,
+        Item,
+        Partial<CreateItemInput>
+      >,
+      res: Response<Item>,
+    ) => {
+      const { type, id } = req.params;
       const values: Partial<CreateItemInput> = {
         name: req.body.name,
         unit: unitValidator(req.body.unit),
@@ -376,6 +439,7 @@ router.put(
         where: {
           type,
           id,
+          disable: false,
         },
       });
 
@@ -438,9 +502,15 @@ router.put(
   itemTypeValidateMiddelware,
   authenticate(false),
   asyncHandler(
-    async (req: Request<any, any, Partial<CreateItemCategoryInput>>, res) => {
-      const type: ItemType = req.params.type;
-      const id = req.params.id;
+    async (
+      req: Request<
+        ParamsDictionary | ItemTypeWithIdParam,
+        undefined | DefaultErrorResponse,
+        Partial<CreateItemCategoryInput>
+      >,
+      res: Response<undefined | DefaultErrorResponse>,
+    ) => {
+      const { type, id } = req.params;
       const categoryId = Number(req.body.categoryId);
 
       if (isNaN(categoryId)) {
@@ -454,6 +524,7 @@ router.put(
         where: {
           type,
           id,
+          disable: false,
         },
       });
 
@@ -513,8 +584,12 @@ router.put(
   authenticate(false),
   asyncHandler(
     async (
-      req: Request<any, any, Partial<CreateItemCraftShopRelationInput>>,
-      res,
+      req: Request<
+        ParamsDictionary | ItemTypeWithIdParam,
+        undefined | DefaultErrorResponse,
+        Partial<CreateItemCraftShopRelationInput>
+      >,
+      res: Response<undefined | DefaultErrorResponse>,
     ) => {
       const type: ItemType = "product";
       const id = req.params.id;
@@ -532,6 +607,7 @@ router.put(
         where: {
           type,
           id,
+          disable: false,
         },
       });
 
@@ -589,27 +665,35 @@ router.delete(
   "/:type/:id",
   itemTypeValidateMiddelware,
   authenticate(false),
-  asyncHandler(async (req, res) => {
-    const { id, type } = req.params;
+  asyncHandler(
+    async (
+      req: Request<
+        ParamsDictionary | ItemTypeWithIdParam,
+        undefined | DefaultErrorResponse
+      >,
+      res: Response<undefined | DefaultErrorResponse>,
+    ) => {
+      const { id, type } = req.params;
 
-    const item = await Item.findOne({
-      where: {
-        id,
-        type,
-        disable: false,
-      },
-    });
+      const item = await Item.findOne({
+        where: {
+          id,
+          type,
+          disable: false,
+        },
+      });
 
-    if (!item) {
-      return res.sendStatus(404);
-    }
+      if (!item) {
+        return res.sendStatus(404);
+      }
 
-    await item.update({
-      disable: true,
-    });
+      await item.update({
+        disable: true,
+      });
 
-    return res.json(item);
-  }),
+      return res.sendStatus(204);
+    },
+  ),
 );
 
 /**
@@ -644,41 +728,46 @@ router.get(
   "/:type/:id/category",
   itemTypeValidateMiddelware,
   authenticate(false),
-  asyncHandler(async (req, res) => {
-    const { type, id } = req.params;
+  asyncHandler(
+    async (
+      req: Request<ParamsDictionary | ItemTypeWithIdParam, Category, undefined>,
+      res: Response<Category[]>,
+    ) => {
+      const { type, id } = req.params;
 
-    const categories = await Category.findAll({
-      include: [
-        {
-          model: CategoryTree,
-          as: "parentTree",
-          include: [
-            {
-              model: Category,
-              as: "parent",
-            },
-          ],
-        },
-        {
-          model: ItemCategoryRelation,
-          where: {
-            itemId: id,
-          },
-          include: [
-            {
-              model: Item,
-              where: {
-                type,
-                id,
+      const categories = await Category.findAll({
+        include: [
+          {
+            model: CategoryTree,
+            as: "parentTree",
+            include: [
+              {
+                model: Category,
+                as: "parent",
               },
+            ],
+          },
+          {
+            model: ItemCategoryRelation,
+            where: {
+              itemId: id,
             },
-          ],
-        },
-      ],
-    });
+            include: [
+              {
+                model: Item,
+                where: {
+                  type,
+                  id,
+                },
+              },
+            ],
+          },
+        ],
+      });
 
-    return res.json(categories);
-  }),
+      return res.json(categories);
+    },
+  ),
 );
 
 /**
@@ -758,8 +847,8 @@ router.delete(
  *       - bearerAuth: []
  *     parameters:
  *       - $ref: "#/components/parameters/ItemId"
- *       - $ref: "#/components/parameters/PagenationPage"
- *       - $ref: "#/components/parameters/PagenationLimit"
+ *       - $ref: "#/components/parameters/paginationPage"
+ *       - $ref: "#/components/parameters/paginationLimit"
  *     responses:
  *       200:
  *         content:
@@ -782,7 +871,7 @@ router.get(
   authenticate(false),
   asyncHandler(async (req, res) => {
     const productId = req.params.id;
-    const { page, limit } = pagenationValidator(
+    const { limit, offset } = paginationValidator(
       Number(req.query.page),
       Number(req.query.limit),
     );
@@ -792,12 +881,13 @@ router.get(
           model: ItemRelation,
           where: {
             productId,
+            disable: false,
           },
           as: "productRelation",
         },
       ],
       limit,
-      offset: page * limit,
+      offset,
     });
 
     return res.json(parts);
@@ -1130,50 +1220,59 @@ router.post(
   "/:type/:id/resource",
   itemTypeValidateMiddelware,
   authenticate(false),
-  asyncHandler(async (req, res) => {
-    const { type, id } = req.params;
-    const { ext, fileType } = req.body;
+  asyncHandler(
+    async (
+      req: Request<
+        ParamsDictionary | ItemTypeWithIdParam,
+        UploadCrenditionalBody | DefaultErrorResponse,
+        RequestUploadCrenditional
+      >,
+      res: Response<UploadCrenditionalBody | DefaultErrorResponse>,
+    ) => {
+      const { type, id } = req.params;
+      const { ext, fileType } = req.body;
 
-    const contentType = FileExt[fileType]?.[ext];
+      const contentType = FileExt[fileType]?.[ext];
 
-    if (!contentType) {
-      return res.status(400).json({
-        status: 400,
-        message: "Not allow File Extension",
+      if (!contentType) {
+        return res.status(400).json({
+          status: 400,
+          message: "Not allow File Extension",
+        });
+      }
+
+      const item = await Item.findOne({
+        where: {
+          id,
+          type,
+        },
       });
-    }
 
-    const item = await Item.findOne({
-      where: {
-        id,
-        type,
-      },
-    });
+      if (!item) {
+        return res.sendStatus(404);
+      }
 
-    if (!item) {
-      return res.sendStatus(404);
-    }
+      const key = `${
+        process.env.NODE_ENV === "production" ? fileType : `${fileType}-dev`
+      }/item/${type}/${id}/${uuidv4()}${ext ? `.${ext}` : ""}`;
 
-    const key = `${
-      process.env.NODE_ENV === "production" ? fileType : `${fileType}-dev`
-    }/item/${type}/${id}/${uuidv4()}${ext ? `.${ext}` : ""}`;
+      const resource = await ItemResource.create({
+        itemId: item.id,
+        key,
+        type: fileType as ItemFileType,
+      });
 
-    const resource = await ItemResource.create({
-      itemId: item.id,
-      key,
-      type: fileType as ItemFileType,
-    });
+      const crenditional = await S3Manager.getImageUploadCrenditional(
+        key,
+        resource.id,
+      );
 
-    const crenditional = await S3Manager.getImageUploadCrenditional(
-      key,
-      resource.id,
-    );
-
-    return res.json({
-      crenditional,
-      resourceId: resource.id,
-    });
-  }),
+      return res.json({
+        crenditional,
+        resourceId: resource.id,
+      });
+    },
+  ),
 );
 
 /**
@@ -1207,27 +1306,36 @@ router.put(
   "/:type/:id/resource/:resourceId",
   itemTypeValidateMiddelware,
   authenticate(false),
-  asyncHandler(async (req, res) => {
-    const { id } = req.params;
-    const resourceId = req.body.resourceId;
+  asyncHandler(
+    async (
+      req: Request<
+        ParamsDictionary | ItemTypeWithIdParam,
+        undefined,
+        ResourceBody
+      >,
+      res: Response<undefined>,
+    ) => {
+      const { id } = req.params;
+      const resourceId = req.body.resourceId;
 
-    const resource = await ItemResource.findOne({
-      where: {
-        id: resourceId,
-        itemId: id,
-      },
-    });
+      const resource = await ItemResource.findOne({
+        where: {
+          id: resourceId,
+          itemId: id,
+        },
+      });
 
-    if (!resource) {
-      return res.sendStatus(404);
-    }
+      if (!resource) {
+        return res.sendStatus(404);
+      }
 
-    resource.status = FileStatus.done;
+      resource.status = FileStatus.done;
 
-    await resource.save();
+      await resource.save();
 
-    return res.sendStatus(204);
-  }),
+      return res.sendStatus(204);
+    },
+  ),
 );
 
 /**
@@ -1261,36 +1369,45 @@ router.delete(
   "/:type/:id/resource/:resourceId",
   itemTypeValidateMiddelware,
   authenticate(false),
-  asyncHandler(async (req, res) => {
-    const { id } = req.params;
-    const resourceId = req.body.resourceId;
+  asyncHandler(
+    async (
+      req: Request<
+        ParamsDictionary | ItemTypeWithIdParam,
+        undefined,
+        ResourceBody
+      >,
+      res: Response<undefined>,
+    ) => {
+      const { id } = req.params;
+      const resourceId = req.body.resourceId;
 
-    const resource = await ItemResource.findOne({
-      where: {
-        id: resourceId,
-        itemId: id,
-        status: {
-          [Op.not]: FileStatus.remove,
+      const resource = await ItemResource.findOne({
+        where: {
+          id: resourceId,
+          itemId: id,
+          status: {
+            [Op.not]: FileStatus.remove,
+          },
         },
-      },
-    });
+      });
 
-    if (!resource) {
-      return res.sendStatus(404);
-    }
+      if (!resource) {
+        return res.sendStatus(404);
+      }
 
-    if (resource.status === FileStatus.done) {
-      await Promise.all(
-        Object.keys(resource.path).map(async (pathType: string) => {
-          await S3Manager.deleteFile(resource.path[pathType]);
-        }),
-      );
-    }
+      if (resource.status === FileStatus.done) {
+        await Promise.all(
+          Object.keys(resource.path).map(async (pathType: string) => {
+            await S3Manager.deleteFile(resource.path[pathType]);
+          }),
+        );
+      }
 
-    await resource.destroy();
+      await resource.destroy();
 
-    return res.sendStatus(204);
-  }),
+      return res.sendStatus(204);
+    },
+  ),
 );
 
 export default router;

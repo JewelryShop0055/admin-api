@@ -1,18 +1,18 @@
-import {
-  Model,
-  Table,
-  Column,
-  PrimaryKey,
-  NotNull,
-  BelongsToMany,
-  HasOne,
-} from "sequelize-typescript";
-import { UserCrenditionalRealtion } from "./userCrenditionalRelation";
-import { UUID, DataTypes, UUIDV4 } from "sequelize";
-import { User } from "./user";
 import crypto from "crypto";
-import util from "util";
 import { jsonIgnore } from "json-ignore";
+import { DataTypes, UUID, UUIDV4 } from "sequelize";
+import {
+  BelongsToMany,
+  Column,
+  HasOne,
+  Model,
+  NotNull,
+  PrimaryKey,
+  Table,
+} from "sequelize-typescript";
+import util from "util";
+
+import { User, UserCrenditionalRealtion } from ".";
 
 const randomBytes = util.promisify(crypto.randomBytes);
 const pbkdf2 = util.promisify(crypto.pbkdf2);

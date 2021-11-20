@@ -1,8 +1,10 @@
 import { Request, Response, Router } from "express";
+import { ParamsDictionary } from "express-serve-static-core";
 
 import { asyncHandler, authenticate } from "../../middleware";
 import sequelize, {
   CrenditionalTypes,
+  DefaultErrorResponse,
   UpdateUserInput,
   User,
   UserCrenditional,
@@ -14,6 +16,11 @@ import { tempPasswordGenerator, SesManager, SlackBot, getIp } from "../../util";
 const router = Router({
   mergeParams: true,
 });
+
+interface UpdatePasswordBody {
+  oldPassword: string;
+  newPassword: string;
+}
 
 /**
  * @openapi
@@ -42,9 +49,16 @@ const router = Router({
  *       401:
  *         $ref: "#/components/responses/401"
  */
-router.get("/me", authenticate(false), function (req, res) {
-  return res.json(res.locals.oauth.token.user);
-});
+router.get(
+  "/me",
+  authenticate(false),
+  function (
+    req: Request<ParamsDictionary, User, undefined>,
+    res: Response<User>,
+  ) {
+    return res.json(res.locals.oauth.token.user);
+  },
+);
 
 /**
  *
@@ -82,7 +96,14 @@ router.put(
   "/",
   authenticate(false),
   asyncHandler(
-    async (req: Request<any, any, UpdateUserInput>, res: Response) => {
+    async (
+      req: Request<
+        ParamsDictionary,
+        User | DefaultErrorResponse,
+        UpdateUserInput
+      >,
+      res: Response<User | DefaultErrorResponse>,
+    ) => {
       const updatevalue = {
         name: req.body.name,
         phone: req.body.phone?.replace("-", ""),
@@ -158,71 +179,80 @@ router.put(
 router.put(
   "/password",
   authenticate(false),
-  asyncHandler(async (req, res) => {
-    const { oldPassword, newPassword } = req.body as { [key: string]: string };
-    const user: User | undefined = res.locals.oauth.token.user;
+  asyncHandler(
+    async (
+      req: Request<
+        ParamsDictionary,
+        undefined | DefaultErrorResponse,
+        UpdatePasswordBody
+      >,
+      res: Response<undefined | DefaultErrorResponse>,
+    ) => {
+      const { oldPassword, newPassword } = req.body;
+      const user: User | undefined = res.locals.oauth.token.user;
 
-    if (!oldPassword || !newPassword) {
+      if (!oldPassword || !newPassword) {
+        await SlackBot.send(
+          `"${user?.name || "unknown"}"님의 비밀번호 변경 시도가 있습니다.`,
+          req.method,
+          "/admin/account/password",
+          getIp(req),
+        );
+
+        return res.status(400).json({
+          status: 400,
+          message: "Not Empty `oldPassowrd` or `newPassword`",
+        });
+      }
+
+      if (!user) {
+        throw new Error("Unknown user");
+      }
+
+      const userCrenditional = await UserCrenditional.findOne({
+        where: {
+          type: CrenditionalTypes.password,
+        },
+        include: [
+          {
+            model: UserCrenditionalRealtion,
+            include: [
+              {
+                model: User,
+                where: {
+                  id: user.id,
+                },
+              },
+            ],
+          },
+        ],
+      });
+
+      if (!userCrenditional) {
+        throw new Error("Unknown Crenditional");
+      }
+
+      if (!(await userCrenditional.verifyPassword(oldPassword))) {
+        return res.status(403).json({
+          status: 403,
+          message: "Not Matched old password",
+        });
+      }
+
+      userCrenditional.password = newPassword;
+
+      await userCrenditional.save();
+
       await SlackBot.send(
-        `"${user?.name || "unknown"}"님의 비밀번호 변경 시도가 있습니다.`,
+        `"${user?.name || "unknown"}"님의 비밀번호 변경되있습니다.`,
         req.method,
         "/admin/account/password",
         getIp(req),
       );
 
-      return res.status(400).json({
-        status: 400,
-        message: "Not Empty `oldPassowrd` or `newPassword`",
-      });
-    }
-
-    if (!user) {
-      throw new Error("Unknown user");
-    }
-
-    const userCrenditional = await UserCrenditional.findOne({
-      where: {
-        type: CrenditionalTypes.password,
-      },
-      include: [
-        {
-          model: UserCrenditionalRealtion,
-          include: [
-            {
-              model: User,
-              where: {
-                id: user.id,
-              },
-            },
-          ],
-        },
-      ],
-    });
-
-    if (!userCrenditional) {
-      throw new Error("Unknown Crenditional");
-    }
-
-    if (!(await userCrenditional.verifyPassword(oldPassword))) {
-      return res.status(403).json({
-        error: 403,
-        message: "Not Matched old password",
-      });
-    }
-
-    userCrenditional.password = newPassword;
-
-    await userCrenditional.save();
-
-    await SlackBot.send(
-      `"${user?.name || "unknown"}"님의 비밀번호 변경되있습니다.`,
-      req.method,
-      "/admin/account/password",
-      getIp(req),
-    );
-
-    return res.sendStatus(204);
-  }),
+      return res.sendStatus(204);
+    },
+  ),
 );
 
 /**

@@ -1,9 +1,19 @@
-import express from "express";
-import { FindOptions, WhereOptions } from "sequelize";
+import express, { Request, Response } from "express";
+import { WhereOptions, OrderItem } from "sequelize";
 import { asyncHandler, authenticate } from "../../middleware";
-import { Category, CraftShop, Item } from "../../model";
-import { pagenationValidator } from "../../util";
+import {
+  Category,
+  CraftShop,
+  Item,
+  ItemType,
+  paginationItems,
+  paginationQuery,
+  SearchOption,
+} from "../../model";
 import { Sequelize } from "sequelize-typescript";
+import { ParamsDictionary } from "express-serve-static-core";
+import { DefaultErrorResponse } from "../../model/defaultErrorResponse";
+import { DefaultItemQuery } from "./item";
 
 /**
  * @openapi
@@ -38,6 +48,9 @@ const router = express.Router({
   mergeParams: true,
 });
 
+type SearchQuery = paginationQuery &
+  DefaultItemQuery & { q?: string; type?: ItemType };
+
 /**
  *
  * @openapi
@@ -51,26 +64,34 @@ const router = express.Router({
  *     parameters:
  *       - $ref: "#/components/parameters/target"
  *       - $ref: "#/components/parameters/query"
- *       - $ref: "#/components/parameters/PagenationPage"
- *       - $ref: "#/components/parameters/PagenationLimit"
+ *       - $ref: "#/components/parameters/paginationPage"
+ *       - $ref: "#/components/parameters/paginationLimit"
  *     responses:
  *       200:
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 oneOf: [
- *                   {
- *                     $ref: "#/components/schemas/Item"
- *                   },
- *                   {
- *                     $ref: "#/components/schemas/Category"
- *                   },
- *                   {
- *                     $ref: "#/components/schemas/CraftShop"
- *                   }
- *                 ]
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   required: true
+ *                   type: array
+ *                   items:
+ *                     oneOf: [
+ *                       {
+ *                         $ref: "#/components/schemas/Item"
+ *                       },
+ *                       {
+ *                         $ref: "#/components/schemas/Category"
+ *                       },
+ *                       {
+ *                         $ref: "#/components/schemas/CraftShop"
+ *                       }
+ *                     ]
+ *                 maxPage:
+ *                   $ref: "#/components/schemas/maxPage"
+ *                 currentPage:
+ *                   $ref: "#/components/schemas/currentPage"
  *       400:
  *         $ref: "#/components/responses/GenericError"
  *       401:
@@ -81,55 +102,58 @@ const router = express.Router({
 router.get(
   "/:target",
   authenticate(false),
-  asyncHandler(async (req, res) => {
-    const target = req.params.target;
-    const { page, limit } = pagenationValidator(
-      Number(req.query.page),
-      Number(req.query.limit),
-      30,
-    );
+  asyncHandler(
+    async (
+      req: Request<
+        ParamsDictionary,
+        paginationItems<Item | Category | CraftShop> | DefaultErrorResponse,
+        undefined,
+        SearchQuery
+      >,
+      res: Response<
+        paginationItems<Item | Category | CraftShop> | DefaultErrorResponse
+      >,
+    ) => {
+      const target = req.params.target;
 
-    const { type, q, disable } = req.query;
+      const { type, q, showDisable, order, page, limit } = req.query;
 
-    if (!req.query.q) {
-      return res.status(400).json({
-        status: 400,
-        message: "not allow empty query",
-      });
-    }
+      if (!req.query.q) {
+        return res.status(400).json({
+          status: 400,
+          message: "not allow empty query",
+        });
+      }
 
-    const keywords = (q as string).split(/\s/);
-
-    const options: FindOptions = {
-      limit,
-      offset: limit * page,
-      order: [["name", "asc"]],
-    };
-
-    const result: Array<Item | Category | CraftShop> = [];
-
-    if (target === "item") {
-      (options.where as WhereOptions<Item>) = {
-        type,
-        disable: disable ? disable === "true" : false,
+      const options: SearchOption<any> = {
+        keywords: (q as string).split(/\s/),
+        findOptions: {
+          order: order ? [order.split("_") as OrderItem] : [["name", "asc"]],
+        },
+        limit: Number(limit),
+        page: Number(page),
       };
 
-      const d = await Item.search(keywords, options);
-      result.push(...d);
-    } else if (target === "category") {
-      options.where = {
-        type,
-      };
+      if (target === "item") {
+        (options.findOptions.where as WhereOptions<Item>) = {
+          type,
+          disable: showDisable ? showDisable === "true" : false,
+        };
 
-      result.push(...(await Category.search(keywords, options)));
-    } else if (target === "craftShop") {
-      result.push(...(await CraftShop.search(keywords, options)));
-    } else {
-      throw new Error(`Unknown search target: ${target}`);
-    }
+        return res.json(await Item.search(options));
+      } else if (target === "category") {
+        options.findOptions.where = {
+          type,
+        };
 
-    return res.json(result);
-  }),
+        return res.json(await Category.search(options));
+      } else if (target === "craftShop") {
+        return res.json(await CraftShop.search(options));
+      } else {
+        throw new Error(`Unknown search target: ${target}`);
+      }
+    },
+  ),
 );
 
 /**
@@ -145,7 +169,7 @@ router.get(
  *     parameters:
  *       - $ref: "#/components/parameters/target"
  *       - $ref: "#/components/parameters/query"
- *       - $ref: "#/components/parameters/PagenationLimit"
+ *       - $ref: "#/components/parameters/paginationLimit"
  *     responses:
  *       200:
  *         content:
@@ -164,48 +188,62 @@ router.get(
 router.get(
   "/:target/autocomplete",
   authenticate(false),
-  asyncHandler(async (req, res) => {
-    const target = req.params.target;
-    const { type, q, disable, limit } = req.query;
+  asyncHandler(
+    async (
+      req: Request<
+        ParamsDictionary,
+        string[] | DefaultErrorResponse,
+        undefined,
+        SearchQuery
+      >,
+      res: Response<string[] | DefaultErrorResponse>,
+    ) => {
+      const target = req.params.target;
+      const { type, q, showDisable, limit } = req.query;
 
-    if (!req.query.q) {
-      return res.status(400).json({
-        status: 400,
-        message: "not allow empty query",
-      });
-    }
+      if (!req.query.q) {
+        return res.status(400).json({
+          status: 400,
+          message: "not allow empty query",
+        });
+      }
 
-    const keywords = (q as string).split(/\s/);
-
-    const options: FindOptions = {
-      limit: limit ? (Number(limit) > 30 ? 10 : Number(limit)) : 10,
-      order: [["name", "asc"]],
-      attributes: [[Sequelize.fn("DISTINCT", Sequelize.col("name")), "name"]],
-    };
-
-    const result: Array<Item | Category | CraftShop> = [];
-
-    if (target === "item") {
-      (options.where as WhereOptions<Item>) = {
-        type,
-        disable: disable ? disable === "true" : false,
+      const options: SearchOption<any> = {
+        keywords: (q as string).split(/\s/),
+        findOptions: {
+          order: [["name", "asc"]],
+          attributes: [
+            [Sequelize.fn("DISTINCT", Sequelize.col("name")), "name"],
+          ],
+        },
+        limit: limit ? (Number(limit) > 30 ? 10 : Number(limit)) : 10,
+        page: Number(1),
       };
 
-      result.push(...(await Item.search(keywords, options)));
-    } else if (target === "category") {
-      options.where = {
-        type,
-      };
+      let result: Array<Item | Category | CraftShop>;
 
-      result.push(...(await Category.search(keywords, options)));
-    } else if (target === "craftShop") {
-      result.push(...(await CraftShop.search(keywords, options)));
-    } else {
-      throw new Error(`Unknown search target: ${target}`);
-    }
+      if (target === "item") {
+        (options.findOptions.where as WhereOptions<Item>) = {
+          type,
+          disable: showDisable ? showDisable === "true" : false,
+        };
 
-    return res.json(result.map((v) => v.name));
-  }),
+        result = (await Item.search(options)).data;
+      } else if (target === "category") {
+        options.findOptions.where = {
+          type,
+        };
+
+        result = (await Category.search(options)).data;
+      } else if (target === "craftShop") {
+        result = (await CraftShop.search(options)).data;
+      } else {
+        throw new Error(`Unknown search target: ${target}`);
+      }
+
+      return res.json(result.map((v) => v.name));
+    },
+  ),
 );
 
 export default router;

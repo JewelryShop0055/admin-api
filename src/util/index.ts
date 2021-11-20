@@ -1,4 +1,4 @@
-export * from "./pagenation";
+export * from "./pagination";
 export * from "./unitValidator";
 export * from "./s3Manager";
 export * from "./random";

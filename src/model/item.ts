@@ -1,30 +1,40 @@
+import { jsonIgnore } from "json-ignore";
 import {
+  CountOptions,
+  FindOptions,
+  Op,
+  TEXT,
+  UUID,
+  UUIDV4,
+  WhereOptions,
+} from "sequelize";
+import {
+  BelongsToMany,
   Column,
+  HasMany,
   Model,
+  NotNull,
   PrimaryKey,
   Table,
-  NotNull,
-  HasMany,
-  BelongsToMany,
 } from "sequelize-typescript";
-import { UUIDV4, UUID, TEXT, WhereOptions, Op } from "sequelize";
+import { v4 as uuidv4 } from "uuid";
+
 import {
-  ItemTypeEnum,
+  Category,
+  CraftShop,
+  ItemCategoryRelation,
+  ItemCraftShopRelation,
+  ItemRelation,
   ItemType,
+  ItemTypeEnum,
   ItemTypes,
   ItemUnitType,
   ItemUnitTypeEnum,
-} from "./itemType";
-import { v4 as uuidv4 } from "uuid";
-import ItemCategoryRelation from "./ItemCategoryRelation";
-import Category from "./category";
-import { ItemUnitTypes } from "./itemType";
-import ItemCraftShopRelation from "./itemCraftShopRelation";
-import CraftShop from "./craftShop";
-import { jsonIgnore } from "json-ignore";
-import { ItemRelation } from "./ItemRelation";
-import { FindOptions } from "sequelize";
-import { filterToObject } from "../util";
+  ItemUnitTypes,
+  paginationItems,
+  SearchMethod,
+} from ".";
+import { filterToObject, paginationValidator } from "../util";
 
 /**
  * @openapi
@@ -316,10 +326,18 @@ export class Item extends Model<Item, CreateItemInput> {
   })
   products?: Item[];
 
-  static async search(
-    keyword: string[],
-    options?: FindOptions<Item>,
-  ): Promise<Item[]> {
+  static search: SearchMethod<Item> = async ({
+    keywords: keyword,
+    findOptions: options,
+    page,
+    limit: _limit,
+  }) => {
+    const { currentPage, limit, offset } = paginationValidator(
+      page,
+      _limit,
+      30,
+    );
+
     const whereOptions: WhereOptions<Item>[] = keyword.reduce<
       WhereOptions<Item>[]
     >((p, k) => {
@@ -346,16 +364,34 @@ export class Item extends Model<Item, CreateItemInput> {
       return p;
     }, []);
 
-    return Item.findAll(
+    const data = await Item.findAll(
       filterToObject<FindOptions<Item>>({
         ...options,
         where: {
           ...options?.where,
           [Op.or]: options?.where?.[Op.or]?.push(whereOptions) || whereOptions,
         },
+        offset,
+        limit,
       }),
     );
-  }
+
+    const totalItemCount = await Item.count(
+      filterToObject<CountOptions<Item>>({
+        where: {
+          ...options?.where,
+          [Op.or]: options?.where?.[Op.or]?.push(whereOptions) || whereOptions,
+        },
+      }),
+    );
+
+    return new paginationItems<Item>({
+      data,
+      currentPage,
+      totalItemCount,
+      limit,
+    });
+  };
 }
 
 export default Item;

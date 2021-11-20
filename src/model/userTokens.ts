@@ -1,16 +1,15 @@
-import { UUID, TEXT, DATE, UUIDV4 } from "sequelize";
+import { DATE, TEXT, UUID, UUIDV4 } from "sequelize";
 import {
-  Model,
-  Table,
-  Column,
-  PrimaryKey,
-  ForeignKey,
-  NotNull,
   BelongsTo,
+  Column,
+  ForeignKey,
+  Model,
+  NotNull,
+  PrimaryKey,
+  Table,
 } from "sequelize-typescript";
-import { User } from "./user";
-import { Client } from "./client";
-import { ScopeEnum, ScopeType } from "./scope";
+
+import { Client, ScopeEnum, ScopeType, User } from ".";
 
 export interface CreateUserTokenInput {
   clientId: string;
