@@ -10,14 +10,10 @@ import {
   Table,
 } from "sequelize-typescript";
 
-import {
-  ScopeEnum,
-  ScopeType,
-  ScopeTypes,
-  UserCrenditional,
-  UserCrenditionalRealtion,
-  UserToken,
-} from ".";
+import { ScopeEnum, ScopeType, ScopeTypes } from "./scope";
+import { UserCrenditional } from "./userCreditional";
+import { UserCrenditionalRealtion } from "./userCrenditionalRelation";
+import { UserToken } from "./userTokens";
 
 /**
  * @openapi

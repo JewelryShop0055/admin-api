@@ -8,7 +8,7 @@ import {
   ForeignKey,
   BelongsTo,
 } from "sequelize-typescript";
-import { Category } from ".";
+import { Category } from "./category";
 
 export class CreateCategoryTreeInput {
   parentId?: number;

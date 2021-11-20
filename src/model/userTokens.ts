@@ -9,7 +9,9 @@ import {
   Table,
 } from "sequelize-typescript";
 
-import { Client, ScopeEnum, ScopeType, User } from ".";
+import { Client } from "./client";
+import { ScopeEnum, ScopeType } from "./scope";
+import { User } from "./user";
 
 export interface CreateUserTokenInput {
   clientId: string;

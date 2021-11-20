@@ -10,7 +10,8 @@ import {
   Table,
 } from "sequelize-typescript";
 
-import { FileStatus, FileStatusEnum, FileStatusType, Item } from ".";
+import { Item } from "./item";
+import { FileStatus, FileStatusEnum, FileStatusType } from "./fileStatus";
 import { config } from "../../configures/config";
 
 /**

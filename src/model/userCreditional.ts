@@ -12,7 +12,8 @@ import {
 } from "sequelize-typescript";
 import util from "util";
 
-import { User, UserCrenditionalRealtion } from ".";
+import { User } from "./user";
+import { UserCrenditionalRealtion } from "./userCrenditionalRelation";
 
 const randomBytes = util.promisify(crypto.randomBytes);
 const pbkdf2 = util.promisify(crypto.pbkdf2);
@@ -73,7 +74,7 @@ const hashPasswordHook = async (crendition: UserCrenditional, options) => {
   hooks: {
     beforeSave: hashPasswordHook,
   },
-}) //
+})
 export class UserCrenditional extends Model<
   UserCrenditional,
   CreateUserCrenditionalInput

@@ -9,7 +9,8 @@ import {
   Table,
 } from "sequelize-typescript";
 
-import { Category, Item } from ".";
+import { Category } from "./category";
+import { Item } from "./item";
 
 export class CreateItemCategoryInput {
   itemId!: string;

@@ -9,7 +9,8 @@ import {
   Table,
 } from "sequelize-typescript";
 
-import { Item, ItemTypes } from ".";
+import { Item } from "./item";
+import { ItemTypes } from "./itemType";
 
 /**
  * @openapi

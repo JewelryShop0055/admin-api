@@ -10,7 +10,8 @@ import {
   Table,
 } from "sequelize-typescript";
 
-import { User, UserCrenditional } from ".";
+import { User } from "./user";
+import { UserCrenditional } from "./userCreditional";
 
 export interface CreateUserCrenditionalRealtionInput {
   userId: number;

@@ -19,21 +19,21 @@ import {
 } from "sequelize-typescript";
 import { v4 as uuidv4 } from "uuid";
 
+import { Category } from "./category";
+import { CraftShop } from "./craftShop";
+import { ItemCategoryRelation } from "./ItemCategoryRelation";
+import { ItemCraftShopRelation } from "./itemCraftShopRelation";
+import { ItemRelation } from "./ItemRelation";
+import { paginationItems } from "./paginationItems";
+import { SearchMethod } from "./searchMethod";
 import {
-  Category,
-  CraftShop,
-  ItemCategoryRelation,
-  ItemCraftShopRelation,
-  ItemRelation,
   ItemType,
   ItemTypeEnum,
   ItemTypes,
   ItemUnitType,
   ItemUnitTypeEnum,
   ItemUnitTypes,
-  paginationItems,
-  SearchMethod,
-} from ".";
+} from "./itemType";
 import { filterToObject, paginationValidator } from "../util";
 
 /**

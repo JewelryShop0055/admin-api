@@ -10,7 +10,8 @@ import {
   Unique,
 } from "sequelize-typescript";
 
-import { CraftShop, Item } from ".";
+import { CraftShop } from "./craftShop";
+import { Item } from "./item";
 
 export class CreateItemCraftShopRelationInput {
   itemId!: string;

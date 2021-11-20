@@ -16,7 +16,10 @@ import {
   Table,
 } from "sequelize-typescript";
 
-import { Item, ItemCraftShopRelation, paginationItems, SearchMethod } from ".";
+import { Item } from "./item";
+import { ItemCraftShopRelation } from "./itemCraftShopRelation";
+import { paginationItems } from "./paginationItems";
+import { SearchMethod } from "./searchMethod";
 import { filterToObject, paginationValidator } from "../util";
 
 /**

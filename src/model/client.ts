@@ -7,7 +7,7 @@ import {
   HasMany,
 } from "sequelize-typescript";
 import { UUID, TEXT, UUIDV4, JSON } from "sequelize";
-import UserToken from "./userTokens";
+import { UserToken } from "./userTokens";
 import { ScopeTypes, ScopeType } from "./scope";
 
 export interface CreateClientInput {
