@@ -410,7 +410,6 @@ router.get(
   "/:type/:id/list",
   itemTypeValidateMiddelware,
   authenticate(false),
-
   asyncHandler(
     async (
       req: Request<
@@ -558,6 +557,23 @@ router.put(
 
       if (!category) {
         return res.sendStatus(404);
+      }
+
+      if (name) {
+        const exist = await Category.findOne({
+          where: {
+            name,
+            depth: category.depth,
+            type: category.type,
+          },
+        });
+
+        if (exist) {
+          return res.status(400).json({
+            status: 400,
+            message: "Already Exist Name",
+          });
+        }
       }
 
       category.set({
