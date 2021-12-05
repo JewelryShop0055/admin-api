@@ -18,7 +18,7 @@ import {
 
 import { Item } from "./item";
 import { ItemCraftShopRelation } from "./itemCraftShopRelation";
-import { paginationItems } from "./paginationItems";
+import { PaginationResponse } from "./paginationResponse";
 import { SearchMethod } from "./searchMethod";
 import { filterToObject, paginationValidator } from "../util";
 
@@ -231,7 +231,7 @@ export class CraftShop extends Model<CraftShop, CreateCraftShoptInput> {
       }),
     );
 
-    return new paginationItems<CraftShop>({
+    return new PaginationResponse<CraftShop>({
       data,
       currentPage,
       totalItemCount,

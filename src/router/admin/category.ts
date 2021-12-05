@@ -15,7 +15,7 @@ import sequelize, {
   DefaultErrorResponse,
   ItemCategoryRelation,
   ItemType,
-  paginationItems,
+  PaginationResponse,
   paginationQuery,
 } from "../../model";
 import { paginationValidator } from "../../util";
@@ -91,11 +91,11 @@ router.get(
     async (
       req: Request<
         ParamsDictionary | ItemTypeCommonParam,
-        paginationItems<Category>,
+        PaginationResponse<Category>,
         undefined,
         paginationQuery
       >,
-      res: Response<paginationItems<Category>>,
+      res: Response<PaginationResponse<Category>>,
     ) => {
       const { type } = req.params;
       const { currentPage, limit, offset } = paginationValidator(
@@ -135,7 +135,7 @@ router.get(
       });
 
       return res.json(
-        new paginationItems({
+        new PaginationResponse({
           data,
           currentPage,
           totalItemCount,
@@ -414,11 +414,11 @@ router.get(
     async (
       req: Request<
         ParamsDictionary | GetCategryParam,
-        paginationItems<Category>,
+        PaginationResponse<Category>,
         undefined,
         paginationQuery
       >,
-      res: Response<paginationItems<Category> | DefaultErrorResponse>,
+      res: Response<PaginationResponse<Category> | DefaultErrorResponse>,
     ) => {
       const { type, id } = req.params;
       const { currentPage, limit, offset } = paginationValidator(
@@ -468,7 +468,7 @@ router.get(
       });
 
       return res.json(
-        new paginationItems({
+        new PaginationResponse({
           data,
           currentPage,
           totalItemCount,

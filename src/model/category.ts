@@ -20,7 +20,7 @@ import { filterToObject, paginationValidator } from "../util";
 import CategoryTree from "./categroyTree";
 import { ItemType, ItemTypeEnum } from "./itemType";
 import ItemCategoryRelation from "./ItemCategoryRelation";
-import { paginationItems, SearchMethod } from ".";
+import { PaginationResponse, SearchMethod } from ".";
 
 /**
  * @openapi
@@ -204,7 +204,7 @@ export class Category extends Model<Category, CreateCategoryInput> {
       }),
     );
 
-    return new paginationItems<Category>({
+    return new PaginationResponse<Category>({
       data,
       currentPage,
       totalItemCount,

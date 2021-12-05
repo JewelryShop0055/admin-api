@@ -6,7 +6,7 @@ import {
   CraftShop,
   Item,
   ItemType,
-  paginationItems,
+  PaginationResponse,
   paginationQuery,
   SearchOption,
 } from "../../model";
@@ -106,12 +106,12 @@ router.get(
     async (
       req: Request<
         ParamsDictionary,
-        paginationItems<Item | Category | CraftShop> | DefaultErrorResponse,
+        PaginationResponse<Item | Category | CraftShop> | DefaultErrorResponse,
         undefined,
         SearchQuery
       >,
       res: Response<
-        paginationItems<Item | Category | CraftShop> | DefaultErrorResponse
+        PaginationResponse<Item | Category | CraftShop> | DefaultErrorResponse
       >,
     ) => {
       const target = req.params.target;

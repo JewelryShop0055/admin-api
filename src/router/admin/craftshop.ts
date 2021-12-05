@@ -5,7 +5,7 @@ import { asyncHandler, authenticate } from "../../middleware";
 import {
   CraftShop,
   CreateCraftShoptInput,
-  paginationItems,
+  PaginationResponse,
   paginationQuery,
 } from "../../model";
 import { paginationValidator } from "../../util/pagination";
@@ -75,11 +75,11 @@ router.get(
     async (
       req: Request<
         ParamsDictionary,
-        paginationItems<CraftShop>,
+        PaginationResponse<CraftShop>,
         undefined,
         paginationQuery
       >,
-      res: Response<paginationItems<CraftShop>>,
+      res: Response<PaginationResponse<CraftShop>>,
     ) => {
       const { currentPage, limit, offset } = paginationValidator(
         Number(req.query.page),
@@ -94,7 +94,7 @@ router.get(
       const totalItemCount = await CraftShop.count();
 
       return res.json(
-        new paginationItems({
+        new PaginationResponse({
           data,
           currentPage,
           totalItemCount,

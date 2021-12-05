@@ -24,7 +24,7 @@ import { CraftShop } from "./craftShop";
 import { ItemCategoryRelation } from "./ItemCategoryRelation";
 import { ItemCraftShopRelation } from "./itemCraftShopRelation";
 import { ItemRelation } from "./ItemRelation";
-import { paginationItems } from "./paginationItems";
+import { PaginationResponse } from "./paginationResponse";
 import { SearchMethod } from "./searchMethod";
 import {
   ItemType,
@@ -385,7 +385,7 @@ export class Item extends Model<Item, CreateItemInput> {
       }),
     );
 
-    return new paginationItems<Item>({
+    return new PaginationResponse<Item>({
       data,
       currentPage,
       totalItemCount,

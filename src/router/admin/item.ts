@@ -29,7 +29,7 @@ import sequelize, {
   ItemType,
   ItemTypes,
   ItemUnitTypes,
-  paginationItems,
+  PaginationResponse,
   paginationQuery,
   ResourceBody,
   RequestUploadCrenditional,
@@ -127,11 +127,11 @@ router.get(
     async (
       req: Request<
         ParamsDictionary | ItemTypeCommonParam,
-        paginationItems<Item>,
+        PaginationResponse<Item>,
         undefined,
         ItemListQuery
       >,
-      res: Response<paginationItems<Item>>,
+      res: Response<PaginationResponse<Item>>,
     ) => {
       const { currentPage, limit, offset } = paginationValidator(
         Number(req.query.page),
@@ -158,7 +158,7 @@ router.get(
       });
 
       return res.json(
-        new paginationItems({
+        new PaginationResponse({
           data,
           currentPage,
           totalItemCount,

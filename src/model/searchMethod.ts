@@ -1,7 +1,7 @@
 import { FindOptions } from "sequelize";
 import { Model } from "sequelize-typescript";
 
-import { paginationItems } from ".";
+import { PaginationResponse } from ".";
 
 export interface SearchOption<T extends Model> {
   keywords: string[];
@@ -12,4 +12,4 @@ export interface SearchOption<T extends Model> {
 
 export type SearchMethod<T extends Model> = (
   options: SearchOption<T>,
-) => Promise<paginationItems<T>>;
+) => Promise<PaginationResponse<T>>;

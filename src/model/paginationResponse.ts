@@ -1,11 +1,11 @@
-interface paginationItemOptions<T> {
+interface PaginationResponseOptions<T> {
   data: T[];
   totalItemCount: number;
   currentPage: number;
   limit: number;
 }
 
-export class paginationItems<T> {
+export class PaginationResponse<T> {
   readonly data: T[];
   readonly maxPage: number;
   readonly currentPage: number;
@@ -15,7 +15,7 @@ export class paginationItems<T> {
     totalItemCount,
     limit,
     currentPage,
-  }: paginationItemOptions<T>) {
+  }: PaginationResponseOptions<T>) {
     this.data = data;
     this.currentPage = currentPage;
     const maxPage = Math.ceil(totalItemCount / limit);

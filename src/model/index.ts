@@ -20,7 +20,7 @@ export * from "./defaultErrorResponse";
 export * from "./paginationQuery";
 export * from "./fileStatus";
 export * from "./fileExt";
-export * from "./paginationItems";
+export * from "./paginationResponse";
 export * from "./resource";
 export * from "./searchMethod";
 
