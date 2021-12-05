@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
 import { Sequelize } from "sequelize-typescript";
+import { OrderItem } from "sequelize";
 
 import {
   asyncHandler,
@@ -59,6 +60,12 @@ const router = express.Router({
  *       - $ref: "#/components/parameters/ItemType"
  *       - $ref: "#/components/parameters/paginationPage"
  *       - $ref: "#/components/parameters/paginationLimit"
+ *       - name: order
+ *         in: query
+ *         description: how to order result. use [filed]_[asc|desc]. ex) name_desc. exclude field: [itemCount]
+ *         example: id_asc
+ *         allowEmptyValue: false
+ *         required: false
  *     responses:
  *       200:
  *         content:
@@ -98,9 +105,10 @@ router.get(
       res: Response<PaginationResponse<Category>>,
     ) => {
       const { type } = req.params;
+      const { order, page, limit: qlimit } = req.query;
       const { currentPage, limit, offset } = paginationValidator(
-        Number(req.query.page),
-        Number(req.query.limit),
+        Number(page),
+        Number(qlimit),
       );
 
       const data = await Category.findAll({
@@ -123,7 +131,11 @@ router.get(
         ],
         group: [`Category.id`],
         limit,
-        order: ["id"],
+        order: [
+          (order && order.split("_").length == 2
+            ? (order.split("_") as OrderItem)
+            : order) || "id",
+        ],
         offset,
         subQuery: false,
       });
