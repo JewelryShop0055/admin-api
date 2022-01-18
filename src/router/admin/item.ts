@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { ParamsDictionary } from "express-serve-static-core";
+import { NextFunction, ParamsDictionary } from "express-serve-static-core";
 import { Op } from "sequelize";
 import { v4 as uuidv4 } from "uuid";
 
@@ -209,6 +209,7 @@ router.post(
           Partial<CreateItemCraftShopRelationInput>
       >,
       res: Response<Item | DefaultErrorResponse>,
+      next: NextFunction,
     ) => {
       const type = req.params.type as ItemType;
       const values: CreateItemInput = {
@@ -287,6 +288,7 @@ router.post(
         return res.json(item);
       } catch (e) {
         await transaction.rollback();
+        return next(e);
       }
     },
   ),
