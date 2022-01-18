@@ -1,4 +1,4 @@
-import { UUID } from "sequelize";
+import { UUID, UUIDV4 } from "sequelize";
 import {
   BelongsTo,
   Column,
@@ -28,6 +28,7 @@ export class ItemCategoryRelation extends Model<
   @NotNull
   @Column({
     type: UUID,
+    defaultValue: UUIDV4,
     allowNull: false,
   })
   id!: string;
