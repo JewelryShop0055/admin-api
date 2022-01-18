@@ -62,7 +62,8 @@ const router = express.Router({
  *       - $ref: "#/components/parameters/paginationLimit"
  *       - name: order
  *         in: query
- *         description: how to order result. use [filed]_[asc|desc]. ex) name_desc. exclude field: [itemCount]
+ *         description: "how to order result. use [filed]_[asc|desc]. ex) name_desc. exclude field: [itemCount]"
+ *
  *         example: id_asc
  *         allowEmptyValue: false
  *         required: false
