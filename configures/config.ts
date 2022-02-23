@@ -45,6 +45,13 @@ interface ConfigObjects {
       token?: string;
       channel?: string;
     };
+    http2?: {
+      enable: boolean;
+      key: string;
+      cert: string;
+      passphrase?: string;
+      port: number;
+    };
     [key: string]: any;
   };
   db: {
@@ -64,15 +71,15 @@ interface ConfigObjects {
 
 function readConfig() {
   try {
-    const yaml = fs.readFileSync(path.join(__dirname, "./config.yml"), "utf8");
-    try {
-      return YAML.parse(yaml);
-    } catch (e) {
-      console.error(e);
-    }
+    const yaml = fs.readFileSync(
+      path.join(process.cwd(), "./config.yml"),
+      "utf8",
+    );
+
+    return YAML.parse(yaml);
   } catch (e: unknown) {
     console.error((e as Error).message);
-    console.error(`RUN default Config`);
+    process.exit(-1);
   }
 }
 

@@ -1,5 +1,4 @@
 import { Model, ModelCtor, SequelizeOptions } from "sequelize-typescript";
-import configure from "./sequelize.json";
 import fs from "fs";
 import path from "path";
 import sequelize, {
@@ -15,18 +14,30 @@ import { config } from "./config";
 export function getSequelizeConfigure(
   models: ModelCtor<Model<any, any>>[],
 ): SequelizeOptions {
-  return {
-    models,
-    ...(configure as SequelizeOptions),
-    benchmark: process.env.NODE_ENV !== "production",
-  };
+  try {
+    const configure: SequelizeOptions = fs.readFileSync(
+      path.join(process.cwd(), "sequelize.json"),
+    );
+
+    return {
+      models,
+      ...configure,
+      benchmark: process.env.NODE_ENV !== "production",
+    };
+  } catch (e) {
+    console.error(e);
+    process.exit(-1);
+  }
 }
 
 /**
  * 첫 시스템 구성시 기본 계정 설정 함수
  */
 export async function initialize() {
-  const triggers = fs.readFileSync(path.join(__dirname, "query.sql"), "utf-8");
+  const triggers = fs.readFileSync(
+    path.join(process.cwd(), "query.sql"),
+    "utf-8",
+  );
 
   sequelize.query(triggers);
 

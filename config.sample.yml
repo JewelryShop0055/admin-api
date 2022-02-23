@@ -1,8 +1,14 @@
 app:
+  http2:
+    enable: false
+    key: key_path
+    cert: cert_path
+    passphrase: passphrase
+    port: 3002
   port: 3001
   resource:
     region: "ap-northeast-2"
-    bucket: "bucket"
+    imageResourcePath: "/app/resource"
     address: resource.example.com
   serviceName: service
   serviceUrl: http://localhost:3000
@@ -14,6 +20,7 @@ app:
     channel: targetChannel without "#"
 db:
   allowSync: false
+  
 user:
   operator:
     - username: shopoperator
