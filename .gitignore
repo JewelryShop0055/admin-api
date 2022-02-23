@@ -61,10 +61,12 @@ profile*
 dist
 
 # env
-configures/*.json
-configures/*.yml
+sequelize.json
+config.yml
 !*.sample.json
 !*.sample.yml
 .env
 .env.*
 !.env.sample
+*.crt
+*.key
