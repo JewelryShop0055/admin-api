@@ -1,7 +1,11 @@
 import express, { Request, Response } from "express";
 import { NextFunction, ParamsDictionary } from "express-serve-static-core";
+import fs from "fs";
+import os from "os";
+import path from "path";
 import { Op } from "sequelize";
 import { v4 as uuidv4 } from "uuid";
+import multer from "multer";
 
 import {
   asyncHandler,
@@ -18,7 +22,6 @@ import sequelize, {
   CreateItemInput,
   CreateItemWithOption,
   DefaultErrorResponse,
-  FileExt,
   FileStatus,
   Item,
   ItemCategoryRelation,
@@ -29,13 +32,14 @@ import sequelize, {
   ItemType,
   ItemTypes,
   ItemUnitTypes,
-  PaginationResponse,
   paginationQuery,
-  ResourceBody,
+  PaginationResponse,
   RequestUploadCrenditional,
+  ResourceBody,
   UploadCrenditionalBody,
 } from "../../model";
-import { paginationValidator, S3Manager, unitValidator } from "../../util";
+import { paginationValidator, unitValidator } from "../../util";
+import { config } from "../../../configures/config";
 
 type ShowDisable = "true" | "false";
 
@@ -80,6 +84,10 @@ interface ItemListQuery extends paginationQuery, DefaultItemQuery {
 
 const router = express.Router({
   mergeParams: true,
+});
+
+const upload = multer({
+  dest: path.join(os.tmpdir(), "app"),
 });
 
 /**
@@ -1219,9 +1227,10 @@ router.delete(
  *         $ref: "#/components/responses/GenericError"
  */
 router.post(
-  "/:type/:id/resource",
+  "/:type/:id/resource/:fileType",
   itemTypeValidateMiddelware,
   authenticate(false),
+  upload.single("photo"),
   asyncHandler(
     async (
       req: Request<
@@ -1230,13 +1239,40 @@ router.post(
         RequestUploadCrenditional
       >,
       res: Response<UploadCrenditionalBody | DefaultErrorResponse>,
+      next: NextFunction,
     ) => {
-      const { type, id } = req.params;
-      const { ext, fileType } = req.body;
+      /** todo s3 to multer */
+      const { type, id, fileType } = req.params;
 
-      const contentType = FileExt[fileType]?.[ext];
+      if (!req.file) {
+        return res.status(400).json({
+          status: 400,
+          message: "Empty File",
+        });
+      }
+
+      const contentType = (() => {
+        switch (req.file?.mimetype) {
+          case "image/webp":
+            return "webp";
+          case "image/jpeg":
+            return "jpg";
+          case "image/bmp":
+            return "bmp";
+          case "image/png":
+            return "png";
+          default:
+            return false;
+        }
+      })();
 
       if (!contentType) {
+        req.file
+          ? fs.unlink(req.file?.path, (err) => {
+              console.error(err);
+            })
+          : null;
+
         return res.status(400).json({
           status: 400,
           message: "Not allow File Extension",
@@ -1251,28 +1287,48 @@ router.post(
       });
 
       if (!item) {
+        fs.unlink(req.file.path, (err) => {
+          console.error(err);
+        });
+
         return res.sendStatus(404);
       }
 
-      const key = `${
+      const fileName = `${uuidv4()}.${contentType}`;
+      const keyPath = `${
         process.env.NODE_ENV === "production" ? fileType : `${fileType}-dev`
-      }/item/${type}/${id}/${uuidv4()}${ext ? `.${ext}` : ""}`;
+      }/item/${type}/${id}`;
 
-      const resource = await ItemResource.create({
-        itemId: item.id,
-        key,
-        type: fileType as ItemFileType,
-      });
-
-      const crenditional = await S3Manager.getImageUploadCrenditional(
-        key,
-        resource.id,
+      const resourcePath = path.join(
+        config.app.resource.imageResourcePath,
+        keyPath,
       );
 
-      return res.json({
-        crenditional,
-        resourceId: resource.id,
-      });
+      fs.mkdir(resourcePath, { recursive: true }, (err) => console.error(err));
+
+      const key = `${keyPath}/${fileName}`;
+
+      try {
+        fs.renameSync(req.file.path, path.join(resourcePath, fileName));
+
+        const resource = await ItemResource.create({
+          itemId: item.id,
+          key,
+          type: fileType as ItemFileType,
+        });
+
+        return res.sendStatus(204);
+      } catch (e) {
+        fs.unlink(req.file?.path, (err) => {
+          console.error(err);
+        });
+
+        fs.unlink(path.join(resourcePath, fileName), (err) => {
+          console.error(err);
+        });
+
+        return next(e);
+      }
     },
   ),
 );
@@ -1398,10 +1454,11 @@ router.delete(
       }
 
       if (resource.status === FileStatus.done) {
-        await Promise.all(
-          Object.keys(resource.path).map(async (pathType: string) => {
-            await S3Manager.deleteFile(resource.path[pathType]);
-          }),
+        fs.unlink(
+          path.join(process.env.IMAGE_RESOURCE_PATH!, resource.key),
+          (err) => {
+            console.error(err);
+          },
         );
       }
 

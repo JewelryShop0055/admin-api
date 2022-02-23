@@ -32,8 +32,8 @@ interface ConfigObjects {
     port: number;
     timezone: string;
     resource: {
+      imageResourcePath: string;
       region: string;
-      bucket: string;
       address: string;
     };
     serviceName: string;
@@ -86,6 +86,9 @@ export const config: ConfigObjects = {
     timezone: yaml?.app?.timezone || "Asia/Seoul",
     resource: {
       ...yaml?.app?.resource,
+      imageResourcePath:
+        yaml?.app?.resource.imageResourcePath ||
+        path.join(process.cwd(), "/resource"),
     },
     serviceName: yaml?.app?.serviceName || "{서비스 이름}",
     serviceUrl: yaml?.app?.serviceUrl || "http://localhost:3000",
