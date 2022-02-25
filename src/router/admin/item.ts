@@ -1294,10 +1294,8 @@ router.post(
         return res.sendStatus(404);
       }
 
-      const fileName = `${uuidv4()}.${contentType}`;
-      const keyPath = `${
-        process.env.NODE_ENV === "production" ? fileType : `${fileType}-dev`
-      }/item/${type}/${id}`;
+      const fildId = `${uuidv4()}`;
+      const keyPath = `/item/${type}/${id}/${fildId}`;
 
       const resourcePath = path.join(
         config.app.resource.imageResourcePath,
@@ -1306,10 +1304,13 @@ router.post(
 
       fs.mkdir(resourcePath, { recursive: true }, (err) => console.error(err));
 
-      const key = `${keyPath}/${fileName}`;
+      const key = path.join(keyPath, `i.${contentType}`);
 
       try {
-        fs.renameSync(req.file.path, path.join(resourcePath, fileName));
+        fs.renameSync(
+          req.file.path,
+          path.join(config.app.resource.imageResourcePath, key),
+        );
 
         const resource = await ItemResource.create({
           itemId: item.id,
@@ -1323,7 +1324,7 @@ router.post(
           console.error(err);
         });
 
-        fs.unlink(path.join(resourcePath, fileName), (err) => {
+        fs.unlink(path.join(resourcePath, key), (err) => {
           console.error(err);
         });
 
@@ -1454,12 +1455,23 @@ router.delete(
       }
 
       if (resource.status === FileStatus.done) {
-        fs.unlink(
-          path.join(process.env.IMAGE_RESOURCE_PATH!, resource.key),
-          (err) => {
-            console.error(err);
-          },
+        const resourceDir = path.join(
+          config.app.resource.imageResourcePath,
+          resource.key.split("/").slice(-1).join("/"),
         );
+
+        fs.readdir(resourceDir, (err, files) => {
+          if (err) {
+            console.error(err);
+            return;
+          }
+
+          files.forEach((file) => {
+            fs.unlink(path.join(resourceDir, file), (err) =>
+              console.error(err),
+            );
+          });
+        });
       }
 
       await resource.destroy();

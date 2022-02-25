@@ -141,19 +141,19 @@ export class ItemResource extends Model<ItemResource, CreateItemResourceInput> {
     ) {
       return {
         raw: this.key,
-        original: `${config.app.resource.address}/resized/${this.key.replace(
+        original: `${config.app.resource.address}/img/${this.key.replace(
           ext,
           ".webp",
         )}`,
-        100: `${config.app.resource.address}/resized/${this.key.replace(
+        100: `${config.app.resource.address}/img/${this.key.replace(
           ext,
           "_100x100.webp",
         )}`,
-        500: `${config.app.resource.address}/resized/${this.key.replace(
+        500: `${config.app.resource.address}/img/${this.key.replace(
           ext,
           "_500x500.webp",
         )}`,
-        1000: `${config.app.resource.address}/resized/${this.key.replace(
+        1000: `${config.app.resource.address}/img/${this.key.replace(
           ext,
           "_1000x1000.webp",
         )}`,
@@ -169,7 +169,7 @@ export class ItemResource extends Model<ItemResource, CreateItemResourceInput> {
   @Column({
     type: FileStatusEnum,
     allowNull: false,
-    defaultValue: FileStatus.pendding,
+    defaultValue: FileStatus.done,
   })
   status!: FileStatusType;
 
