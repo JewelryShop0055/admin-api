@@ -8,7 +8,7 @@ import sequelize, {
   ScopeTypes,
   UserCrenditionalRealtion,
   UserCrenditional,
-} from "../src/model";
+} from "../model";
 import { config } from "./config";
 
 export function getSequelizeConfigure(
