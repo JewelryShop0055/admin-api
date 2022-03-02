@@ -9,7 +9,7 @@
     "prebuild": "rimraf dist",
     "compile": "tsc",
     "build": "yarn run prebuild;yarn run compile;yarn run postbuild",
-    "postbuild": "copyfiles configures/*.yml configures/*.sql src/**/*.html dist",
+    "postbuild": "copyfiles src/**/*.html dist",
     "start": "NODE_ENV=production node dist/index.js"
   },
   "devDependencies": {
