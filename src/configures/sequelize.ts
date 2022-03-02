@@ -15,13 +15,14 @@ export function getSequelizeConfigure(
   models: ModelCtor<Model<any, any>>[],
 ): SequelizeOptions {
   try {
-    const configure: SequelizeOptions = fs.readFileSync(
+    const configure: string = fs.readFileSync(
       path.join(process.cwd(), "sequelize.json"),
+      "utf-8",
     );
 
     return {
       models,
-      ...configure,
+      ...(JSON.parse(configure) as SequelizeOptions),
       benchmark: process.env.NODE_ENV !== "production",
     };
   } catch (e) {
