@@ -3,7 +3,6 @@ import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
 import SwaggerUi from "swagger-ui-express";
-import { passport } from "./oauth";
 import router from "./router";
 import * as middleware from "./middleware";
 import swaggereJsdoc, { Components, SecurityScheme } from "swagger-jsdoc";
@@ -15,8 +14,6 @@ app.use(helmet(config.swagger?.enable ? swaggerHelmetSetting : undefined));
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(passport.initialize());
-app.use(passport.session());
 
 const options: swaggereJsdoc.Options = {
   swaggerDefinition: {
