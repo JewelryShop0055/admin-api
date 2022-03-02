@@ -50,7 +50,7 @@
   },
   "dependencies": {
     "@node-oauth/oauth2-server": "^4.1.1",
-    "aws-sdk": "^2.996.0",
+    "aws-sdk": "^2.1084.0",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
     "ejs": "^3.1.6",

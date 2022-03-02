@@ -57,7 +57,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/yaml", "npm:1.9.6"],
             ["@typescript-eslint/eslint-plugin", "virtual:5ac780be60b76ca203fe89408f0cab36a80dc51d6c762ac408b3a7e142d8b0429b41e1c660fae03c7dedeb393f230332b614efa8509d05272fbe35cfa5956b61#npm:4.31.0"],
             ["@typescript-eslint/parser", "virtual:5ac780be60b76ca203fe89408f0cab36a80dc51d6c762ac408b3a7e142d8b0429b41e1c660fae03c7dedeb393f230332b614efa8509d05272fbe35cfa5956b61#npm:4.31.0"],
-            ["aws-sdk", "npm:2.996.0"],
+            ["aws-sdk", "npm:2.1084.0"],
             ["axios", "npm:0.23.0"],
             ["compression", "npm:1.7.4"],
             ["copyfiles", "npm:2.4.1"],
@@ -1039,14 +1039,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["aws-sdk", [
-        ["npm:2.996.0", {
-          "packageLocation": "./.yarn/unplugged/aws-sdk-npm-2.996.0-6ebb72f52d/node_modules/aws-sdk/",
+        ["npm:2.1084.0", {
+          "packageLocation": "./.yarn/cache/aws-sdk-npm-2.1084.0-7edc161308-1854bd426e.zip/node_modules/aws-sdk/",
           "packageDependencies": [
-            ["aws-sdk", "npm:2.996.0"],
+            ["aws-sdk", "npm:2.1084.0"],
             ["buffer", "npm:4.9.2"],
             ["events", "npm:1.1.1"],
             ["ieee754", "npm:1.1.13"],
-            ["jmespath", "npm:0.15.0"],
+            ["jmespath", "npm:0.16.0"],
             ["querystring", "npm:0.2.0"],
             ["sax", "npm:1.2.1"],
             ["url", "npm:0.10.3"],
@@ -2612,7 +2612,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/yaml", "npm:1.9.6"],
             ["@typescript-eslint/eslint-plugin", "virtual:5ac780be60b76ca203fe89408f0cab36a80dc51d6c762ac408b3a7e142d8b0429b41e1c660fae03c7dedeb393f230332b614efa8509d05272fbe35cfa5956b61#npm:4.31.0"],
             ["@typescript-eslint/parser", "virtual:5ac780be60b76ca203fe89408f0cab36a80dc51d6c762ac408b3a7e142d8b0429b41e1c660fae03c7dedeb393f230332b614efa8509d05272fbe35cfa5956b61#npm:4.31.0"],
-            ["aws-sdk", "npm:2.996.0"],
+            ["aws-sdk", "npm:2.1084.0"],
             ["axios", "npm:0.23.0"],
             ["compression", "npm:1.7.4"],
             ["copyfiles", "npm:2.4.1"],
@@ -2648,10 +2648,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["jmespath", [
-        ["npm:0.15.0", {
-          "packageLocation": "./.yarn/cache/jmespath-npm-0.15.0-df80ed6dd1-353bb9e69c.zip/node_modules/jmespath/",
+        ["npm:0.16.0", {
+          "packageLocation": "./.yarn/cache/jmespath-npm-0.16.0-d47535c65a-2d602493a1.zip/node_modules/jmespath/",
           "packageDependencies": [
-            ["jmespath", "npm:0.15.0"]
+            ["jmespath", "npm:0.16.0"]
           ],
           "linkType": "HARD",
         }]
