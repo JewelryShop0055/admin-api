@@ -1,0 +1,26 @@
+diff --git a/index.d.ts b/index.d.ts
+index 57bdd9e40a2337bb165ce6ef3afca38122fd021c..4fa00c2ea6e1f0beb0ec270be2da68bd11578d9e 100755
+--- a/index.d.ts
++++ b/index.d.ts
+@@ -5,7 +5,7 @@
+ // TypeScript Version: 2.3
+ 
+ import * as express from 'express';
+-import * as OAuth2Server from 'oauth2-server';
++import * as OAuth2Server from '@node-oauth/oauth2-server';
+ 
+ declare namespace ExpressOAuthServer {
+     interface Options extends OAuth2Server.ServerOptions {
+diff --git a/package.json b/package.json
+index bee3f0576761a5e1bc6d7afd2307cb93fdb395d6..934ac015557437abe6c775fe6235db2151ba13b6 100755
+--- a/package.json
++++ b/package.json
+@@ -21,7 +21,7 @@
+     "scripts": {},
+     "dependencies": {
+         "@types/express": "*",
+-        "@types/oauth2-server": "*"
++        "@node-oauth/oauth2-server": "*"
+     },
+     "typesPublisherContentHash": "eb644de6d9c7f29d2d6b89262c55f1158cf81fdbb72ce6e6aede8b62c81982e5",
+     "typeScriptVersion": "3.6"

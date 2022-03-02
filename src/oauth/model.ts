@@ -11,7 +11,7 @@ import {
   Falsey,
   Token,
   RefreshToken,
-} from "oauth2-server";
+} from "@node-oauth/oauth2-server";
 import * as jwt from "jsonwebtoken";
 import { CrenditionalTypes } from "../model/userCreditional";
 import {

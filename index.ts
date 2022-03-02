@@ -1,6 +1,6 @@
 import * as http from "http";
 import { AddressInfo } from "net";
-import { config } from "./configures/config";
+import { config } from "./src/configures/config";
 import { app } from "./src";
 import { sync } from "./src/model";
 import { cronManager } from "./src/util";
