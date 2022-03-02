@@ -196,24 +196,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/aws-lambda@npm:*":
-  version: 8.10.83
-  resolution: "@types/aws-lambda@npm:8.10.83"
-  checksum: 5d13dd0e630db27a941dd53fa6a0d2a45c8e1d43ad945b6a629d73e410d3e4aaf99cd4eea85843b4b877b00f2a9e9eef8002b9fcd18b7f563cc657ca7bac658c
-  languageName: node
-  linkType: hard
-
-"@types/aws-serverless-express@npm:^3":
-  version: 3.3.5
-  resolution: "@types/aws-serverless-express@npm:3.3.5"
-  dependencies:
-    "@types/aws-lambda": "*"
-    "@types/express": "*"
-    "@types/node": "*"
-  checksum: fcc39ca17fc6d69215a95f9f77a3aa17e0e39b8604afa8a8b57b77fbc8622514fded19277d6757bdd12d13a9689b91a837271d771181b5b88be0a55da8f61e8f
-  languageName: node
-  linkType: hard
-
 "@types/body-parser@npm:*":
   version: 1.19.1
   resolution: "@types/body-parser@npm:1.19.1"
@@ -680,16 +662,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vendia/serverless-express@npm:^3.4.0":
-  version: 3.4.0
-  resolution: "@vendia/serverless-express@npm:3.4.0"
-  dependencies:
-    binary-case: ^1.0.0
-    type-is: ^1.6.16
-  checksum: 706a5b70f44fde29d539545266579ae749087aa170a77bf14ee90f944d858d7779bbf228bc2ce789e6ed07030661fba9c92c76288e85337b486d1ffe81c7a489
-  languageName: node
-  linkType: hard
-
 "accepts@npm:~1.3.5, accepts@npm:~1.3.7":
   version: 1.3.7
   resolution: "accepts@npm:1.3.7"
@@ -862,37 +834,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"aws-lambda@npm:^1.0.6":
-  version: 1.0.6
-  resolution: "aws-lambda@npm:1.0.6"
-  dependencies:
-    aws-sdk: "*"
-    commander: ^3.0.2
-    js-yaml: ^3.13.1
-    watchpack: ^2.0.0-beta.10
-  bin:
-    lambda: ./bin/lambda
-  checksum: ec9e1cf07269b632e641d83378fa293b78ec066b5cd5d5d60a062e4414aafa868f314b63c4b2a0efa7f85d0b2a555409bf70f2e9b62b63d3ee6ca28051b25138
-  languageName: node
-  linkType: hard
-
-"aws-sdk@npm:*":
-  version: 2.987.0
-  resolution: "aws-sdk@npm:2.987.0"
-  dependencies:
-    buffer: 4.9.2
-    events: 1.1.1
-    ieee754: 1.1.13
-    jmespath: 0.15.0
-    querystring: 0.2.0
-    sax: 1.2.1
-    url: 0.10.3
-    uuid: 3.3.2
-    xml2js: 0.4.19
-  checksum: d137370095559d2871ce2dbfb423d0fb41fc112a88c1b819ec1a0c1c5c8d4b4d2b7564071bdc56a7d38c65462d6b9140fd437eb3b02a54a3124f31e5bac56cf3
-  languageName: node
-  linkType: hard
-
 "aws-sdk@npm:^2.996.0":
   version: 2.996.0
   resolution: "aws-sdk@npm:2.996.0"
@@ -907,17 +848,6 @@ __metadata:
     uuid: 3.3.2
     xml2js: 0.4.19
   checksum: a95436a2ef930163f9181393392ba328c251a84796a5bf33f8a23e60a4451f5401261dc2f26929e4c5fea2380fc7bfe9a03d3d7124c22d6afeb753ad639f4fb1
-  languageName: node
-  linkType: hard
-
-"aws-serverless-express@npm:^3.4.0":
-  version: 3.4.0
-  resolution: "aws-serverless-express@npm:3.4.0"
-  dependencies:
-    "@vendia/serverless-express": ^3.4.0
-    binary-case: ^1.0.0
-    type-is: ^1.6.16
-  checksum: f2d7e4f7db4f82ecca38e70640154af854ad27b2af9d2104784bf3f3b8a20f6b77b306d960027b936aef00cfb3683a601e3c29b9a6468036961ccd2b470656c6
   languageName: node
   linkType: hard
 
@@ -957,13 +887,6 @@ __metadata:
   dependencies:
     safe-buffer: 5.1.2
   checksum: 3419b805d5dfc518f3a05dcf42aa53aa9ce820e50b6df5097f9e186322e1bc733c36722b624802cd37e791035aa73b828ed814d8362333d42d7f5cd04d7a5e48
-  languageName: node
-  linkType: hard
-
-"binary-case@npm:^1.0.0":
-  version: 1.1.4
-  resolution: "binary-case@npm:1.1.4"
-  checksum: e3b7e5375ebd9c1f127d12d0831480310d75021c97d43955034e179ea40b9120c4f81a3de5767431f27bd7cc75e2ebc3d5352f56d8326d94873a77af21416580
   languageName: node
   linkType: hard
 
@@ -1180,13 +1103,6 @@ __metadata:
   version: 2.20.3
   resolution: "commander@npm:2.20.3"
   checksum: ab8c07884e42c3a8dbc5dd9592c606176c7eb5c1ca5ff274bcf907039b2c41de3626f684ea75ccf4d361ba004bbaff1f577d5384c155f3871e456bdf27becf9e
-  languageName: node
-  linkType: hard
-
-"commander@npm:^3.0.2":
-  version: 3.0.2
-  resolution: "commander@npm:3.0.2"
-  checksum: 6d14ad030d1904428139487ed31febcb04c1604db2b8d9fae711f60ee6718828dc0e11602249e91c8a97b0e721e9c6d53edbc166bad3cde1596851d59a8f824d
   languageName: node
   linkType: hard
 
@@ -1891,13 +1807,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob-to-regexp@npm:^0.4.1":
-  version: 0.4.1
-  resolution: "glob-to-regexp@npm:0.4.1"
-  checksum: e795f4e8f06d2a15e86f76e4d92751cf8bbfcf0157cea5c2f0f35678a8195a750b34096b1256e436f0cebc1883b5ff0888c47348443e69546a5a87f9e1eb1167
-  languageName: node
-  linkType: hard
-
 "glob@npm:7.1.6":
   version: 7.1.6
   resolution: "glob@npm:7.1.6"
@@ -1960,13 +1869,6 @@ __metadata:
     merge2: ^1.3.0
     slash: ^3.0.0
   checksum: d3e02d5e459e02ffa578b45f040381c33e3c0538ed99b958f0809230c423337999867d7b0dbf752ce93c46157d3bbf154d3fff988a93ccaeb627df8e1841775b
-  languageName: node
-  linkType: hard
-
-"graceful-fs@npm:^4.1.2":
-  version: 4.2.8
-  resolution: "graceful-fs@npm:4.2.8"
-  checksum: 5d224c8969ad0581d551dfabdb06882706b31af2561bd5e2034b4097e67cc27d05232849b8643866585fd0a41c7af152950f8776f4dd5579e9853733f31461c6
   languageName: node
   linkType: hard
 
@@ -2194,7 +2096,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "jewerly-api@workspace:."
   dependencies:
-    "@types/aws-serverless-express": ^3
     "@types/compression": ^1
     "@types/copyfiles": ^2
     "@types/cors": ^2
@@ -2219,9 +2120,7 @@ __metadata:
     "@types/yaml": ^1
     "@typescript-eslint/eslint-plugin": ^4.31.0
     "@typescript-eslint/parser": ^4.31.0
-    aws-lambda: ^1.0.6
     aws-sdk: ^2.996.0
-    aws-serverless-express: ^3.4.0
     axios: ^0.23.0
     compression: ^1.7.4
     copyfiles: ^2.4.1
@@ -3598,7 +3497,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-is@npm:1.6.18, type-is@npm:^1.6.16, type-is@npm:^1.6.4, type-is@npm:~1.6.17, type-is@npm:~1.6.18":
+"type-is@npm:1.6.18, type-is@npm:^1.6.4, type-is@npm:~1.6.17, type-is@npm:~1.6.18":
   version: 1.6.18
   resolution: "type-is@npm:1.6.18"
   dependencies:
@@ -3718,16 +3617,6 @@ typescript@^4.4.3:
   version: 1.1.2
   resolution: "vary@npm:1.1.2"
   checksum: ae0123222c6df65b437669d63dfa8c36cee20a504101b2fcd97b8bf76f91259c17f9f2b4d70a1e3c6bbcee7f51b28392833adb6b2770b23b01abec84e369660b
-  languageName: node
-  linkType: hard
-
-"watchpack@npm:^2.0.0-beta.10":
-  version: 2.2.0
-  resolution: "watchpack@npm:2.2.0"
-  dependencies:
-    glob-to-regexp: ^0.4.1
-    graceful-fs: ^4.1.2
-  checksum: e275f48fae29edee3195c51a8312b609581b9be5ce323d3102ffd082cb124f48d7a393ce05e4110239e4354379e04d78a97ceb26ae367746e7e218bf258135c8
   languageName: node
   linkType: hard
 

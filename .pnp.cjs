@@ -35,7 +35,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         [null, {
           "packageLocation": "./",
           "packageDependencies": [
-            ["@types/aws-serverless-express", "npm:3.3.5"],
             ["@types/compression", "npm:1.7.2"],
             ["@types/copyfiles", "npm:2.4.1"],
             ["@types/cors", "npm:2.8.12"],
@@ -60,9 +59,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/yaml", "npm:1.9.6"],
             ["@typescript-eslint/eslint-plugin", "virtual:5ac780be60b76ca203fe89408f0cab36a80dc51d6c762ac408b3a7e142d8b0429b41e1c660fae03c7dedeb393f230332b614efa8509d05272fbe35cfa5956b61#npm:4.31.0"],
             ["@typescript-eslint/parser", "virtual:5ac780be60b76ca203fe89408f0cab36a80dc51d6c762ac408b3a7e142d8b0429b41e1c660fae03c7dedeb393f230332b614efa8509d05272fbe35cfa5956b61#npm:4.31.0"],
-            ["aws-lambda", "npm:1.0.6"],
             ["aws-sdk", "npm:2.996.0"],
-            ["aws-serverless-express", "npm:3.4.0"],
             ["axios", "npm:0.23.0"],
             ["compression", "npm:1.7.4"],
             ["copyfiles", "npm:2.4.1"],
@@ -327,27 +324,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-accepts-npm-1.3.5-1d59cd2a7a-590b758057.zip/node_modules/@types/accepts/",
           "packageDependencies": [
             ["@types/accepts", "npm:1.3.5"],
-            ["@types/node", "npm:16.9.1"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["@types/aws-lambda", [
-        ["npm:8.10.83", {
-          "packageLocation": "./.yarn/cache/@types-aws-lambda-npm-8.10.83-ea25c75d13-5d13dd0e63.zip/node_modules/@types/aws-lambda/",
-          "packageDependencies": [
-            ["@types/aws-lambda", "npm:8.10.83"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["@types/aws-serverless-express", [
-        ["npm:3.3.5", {
-          "packageLocation": "./.yarn/cache/@types-aws-serverless-express-npm-3.3.5-d69fd26be2-fcc39ca17f.zip/node_modules/@types/aws-serverless-express/",
-          "packageDependencies": [
-            ["@types/aws-serverless-express", "npm:3.3.5"],
-            ["@types/aws-lambda", "npm:8.10.83"],
-            ["@types/express", "npm:4.17.13"],
             ["@types/node", "npm:16.9.1"]
           ],
           "linkType": "HARD",
@@ -954,17 +930,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["@vendia/serverless-express", [
-        ["npm:3.4.0", {
-          "packageLocation": "./.yarn/cache/@vendia-serverless-express-npm-3.4.0-59ba376199-706a5b70f4.zip/node_modules/@vendia/serverless-express/",
-          "packageDependencies": [
-            ["@vendia/serverless-express", "npm:3.4.0"],
-            ["binary-case", "npm:1.1.4"],
-            ["type-is", "npm:1.6.18"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["accepts", [
         ["npm:1.3.7", {
           "packageLocation": "./.yarn/cache/accepts-npm-1.3.7-0dc9de65aa-27fc8060ff.zip/node_modules/accepts/",
@@ -1170,36 +1135,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["aws-lambda", [
-        ["npm:1.0.6", {
-          "packageLocation": "./.yarn/cache/aws-lambda-npm-1.0.6-0430941d7f-ec9e1cf072.zip/node_modules/aws-lambda/",
-          "packageDependencies": [
-            ["aws-lambda", "npm:1.0.6"],
-            ["aws-sdk", "npm:2.987.0"],
-            ["commander", "npm:3.0.2"],
-            ["js-yaml", "npm:3.14.1"],
-            ["watchpack", "npm:2.2.0"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["aws-sdk", [
-        ["npm:2.987.0", {
-          "packageLocation": "./.yarn/unplugged/aws-sdk-npm-2.987.0-f00aeed459/node_modules/aws-sdk/",
-          "packageDependencies": [
-            ["aws-sdk", "npm:2.987.0"],
-            ["buffer", "npm:4.9.2"],
-            ["events", "npm:1.1.1"],
-            ["ieee754", "npm:1.1.13"],
-            ["jmespath", "npm:0.15.0"],
-            ["querystring", "npm:0.2.0"],
-            ["sax", "npm:1.2.1"],
-            ["url", "npm:0.10.3"],
-            ["uuid", "npm:3.3.2"],
-            ["xml2js", "npm:0.4.19"]
-          ],
-          "linkType": "HARD",
-        }],
         ["npm:2.996.0", {
           "packageLocation": "./.yarn/unplugged/aws-sdk-npm-2.996.0-6ebb72f52d/node_modules/aws-sdk/",
           "packageDependencies": [
@@ -1213,18 +1149,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["url", "npm:0.10.3"],
             ["uuid", "npm:3.3.2"],
             ["xml2js", "npm:0.4.19"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["aws-serverless-express", [
-        ["npm:3.4.0", {
-          "packageLocation": "./.yarn/cache/aws-serverless-express-npm-3.4.0-823910a084-f2d7e4f7db.zip/node_modules/aws-serverless-express/",
-          "packageDependencies": [
-            ["aws-serverless-express", "npm:3.4.0"],
-            ["@vendia/serverless-express", "npm:3.4.0"],
-            ["binary-case", "npm:1.1.4"],
-            ["type-is", "npm:1.6.18"]
           ],
           "linkType": "HARD",
         }]
@@ -1270,15 +1194,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["basic-auth", "npm:2.0.1"],
             ["safe-buffer", "npm:5.1.2"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["binary-case", [
-        ["npm:1.1.4", {
-          "packageLocation": "./.yarn/cache/binary-case-npm-1.1.4-d2deb26381-e3b7e5375e.zip/node_modules/binary-case/",
-          "packageDependencies": [
-            ["binary-case", "npm:1.1.4"]
           ],
           "linkType": "HARD",
         }]
@@ -1513,13 +1428,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/commander-npm-2.20.3-d8dcbaa39b-ab8c07884e.zip/node_modules/commander/",
           "packageDependencies": [
             ["commander", "npm:2.20.3"]
-          ],
-          "linkType": "HARD",
-        }],
-        ["npm:3.0.2", {
-          "packageLocation": "./.yarn/cache/commander-npm-3.0.2-7c81f1ab98-6d14ad030d.zip/node_modules/commander/",
-          "packageDependencies": [
-            ["commander", "npm:3.0.2"]
           ],
           "linkType": "HARD",
         }],
@@ -2432,15 +2340,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["glob-to-regexp", [
-        ["npm:0.4.1", {
-          "packageLocation": "./.yarn/cache/glob-to-regexp-npm-0.4.1-cd697e0fc7-e795f4e8f0.zip/node_modules/glob-to-regexp/",
-          "packageDependencies": [
-            ["glob-to-regexp", "npm:0.4.1"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["globals", [
         ["npm:13.11.0", {
           "packageLocation": "./.yarn/cache/globals-npm-13.11.0-472e1471b0-e9e5624154.zip/node_modules/globals/",
@@ -2462,15 +2361,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["ignore", "npm:5.1.8"],
             ["merge2", "npm:1.4.1"],
             ["slash", "npm:3.0.0"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["graceful-fs", [
-        ["npm:4.2.8", {
-          "packageLocation": "./.yarn/cache/graceful-fs-npm-4.2.8-37c16fc3d3-5d224c8969.zip/node_modules/graceful-fs/",
-          "packageDependencies": [
-            ["graceful-fs", "npm:4.2.8"]
           ],
           "linkType": "HARD",
         }]
@@ -2730,7 +2620,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",
           "packageDependencies": [
             ["jewerly-api", "workspace:."],
-            ["@types/aws-serverless-express", "npm:3.3.5"],
             ["@types/compression", "npm:1.7.2"],
             ["@types/copyfiles", "npm:2.4.1"],
             ["@types/cors", "npm:2.8.12"],
@@ -2755,9 +2644,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/yaml", "npm:1.9.6"],
             ["@typescript-eslint/eslint-plugin", "virtual:5ac780be60b76ca203fe89408f0cab36a80dc51d6c762ac408b3a7e142d8b0429b41e1c660fae03c7dedeb393f230332b614efa8509d05272fbe35cfa5956b61#npm:4.31.0"],
             ["@typescript-eslint/parser", "virtual:5ac780be60b76ca203fe89408f0cab36a80dc51d6c762ac408b3a7e142d8b0429b41e1c660fae03c7dedeb393f230332b614efa8509d05272fbe35cfa5956b61#npm:4.31.0"],
-            ["aws-lambda", "npm:1.0.6"],
             ["aws-sdk", "npm:2.996.0"],
-            ["aws-serverless-express", "npm:3.4.0"],
             ["axios", "npm:0.23.0"],
             ["compression", "npm:1.7.4"],
             ["copyfiles", "npm:2.4.1"],
@@ -4512,17 +4399,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/vary-npm-1.1.2-b49f70ae63-ae0123222c.zip/node_modules/vary/",
           "packageDependencies": [
             ["vary", "npm:1.1.2"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["watchpack", [
-        ["npm:2.2.0", {
-          "packageLocation": "./.yarn/cache/watchpack-npm-2.2.0-fca5986ad5-e275f48fae.zip/node_modules/watchpack/",
-          "packageDependencies": [
-            ["watchpack", "npm:2.2.0"],
-            ["glob-to-regexp", "npm:0.4.1"],
-            ["graceful-fs", "npm:4.2.8"]
           ],
           "linkType": "HARD",
         }]
