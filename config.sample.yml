@@ -20,6 +20,14 @@ app:
     channel: targetChannel without "#"
 db:
   allowSync: false
+
+mail:
+  host: "smtp.example.com"
+  port: 587
+  secure: false
+  auth:
+    user: "user"
+    password: "password"
   
 user:
   operator:

@@ -2,6 +2,7 @@ import fs from "fs";
 import YAML from "yaml";
 import path from "path";
 import { ScopeType } from "../model/scope";
+import SMTPConnection from "nodemailer/lib/smtp-connection";
 
 interface UserInfo {
   username: string;
@@ -58,6 +59,7 @@ interface ConfigObjects {
     allowSync: boolean;
     [key: string]: any;
   };
+  mail?: SMTPConnection.Options;
   user?: {
     operator?: Array<UserInfo>;
   };

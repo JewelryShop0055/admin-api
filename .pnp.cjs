@@ -49,6 +49,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/multer", "npm:1.4.7"],
             ["@types/node", "npm:16.11.6"],
             ["@types/node-cron", "npm:3.0.0"],
+            ["@types/nodemailer", "npm:6.4.4"],
             ["@types/prettier", "npm:2.3.2"],
             ["@types/rimraf", "npm:3.0.2"],
             ["@types/swagger-jsdoc", "npm:6.0.1"],
@@ -57,7 +58,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/yaml", "npm:1.9.6"],
             ["@typescript-eslint/eslint-plugin", "virtual:5ac780be60b76ca203fe89408f0cab36a80dc51d6c762ac408b3a7e142d8b0429b41e1c660fae03c7dedeb393f230332b614efa8509d05272fbe35cfa5956b61#npm:4.31.0"],
             ["@typescript-eslint/parser", "virtual:5ac780be60b76ca203fe89408f0cab36a80dc51d6c762ac408b3a7e142d8b0429b41e1c660fae03c7dedeb393f230332b614efa8509d05272fbe35cfa5956b61#npm:4.31.0"],
-            ["aws-sdk", "npm:2.1084.0"],
             ["axios", "npm:0.23.0"],
             ["compression", "npm:1.7.4"],
             ["copyfiles", "npm:2.4.1"],
@@ -75,6 +75,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mariadb", "npm:2.5.4"],
             ["multer", "npm:1.4.4"],
             ["node-cron", "npm:3.0.0"],
+            ["nodemailer", "npm:6.7.2"],
             ["patch-package", "npm:6.4.7"],
             ["postinstall-postinstall", "npm:2.1.0"],
             ["prettier", "npm:2.4.0"],
@@ -547,6 +548,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-node-cron-npm-3.0.0-2284b0440f-24cf0cdb5a.zip/node_modules/@types/node-cron/",
           "packageDependencies": [
             ["@types/node-cron", "npm:3.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/nodemailer", [
+        ["npm:6.4.4", {
+          "packageLocation": "./.yarn/cache/@types-nodemailer-npm-6.4.4-c5c500abe2-16ed1bad2c.zip/node_modules/@types/nodemailer/",
+          "packageDependencies": [
+            ["@types/nodemailer", "npm:6.4.4"],
+            ["@types/node", "npm:16.9.1"]
           ],
           "linkType": "HARD",
         }]
@@ -1038,24 +1049,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["aws-sdk", [
-        ["npm:2.1084.0", {
-          "packageLocation": "./.yarn/cache/aws-sdk-npm-2.1084.0-7edc161308-1854bd426e.zip/node_modules/aws-sdk/",
-          "packageDependencies": [
-            ["aws-sdk", "npm:2.1084.0"],
-            ["buffer", "npm:4.9.2"],
-            ["events", "npm:1.1.1"],
-            ["ieee754", "npm:1.1.13"],
-            ["jmespath", "npm:0.16.0"],
-            ["querystring", "npm:0.2.0"],
-            ["sax", "npm:1.2.1"],
-            ["url", "npm:0.10.3"],
-            ["uuid", "npm:3.3.2"],
-            ["xml2js", "npm:0.4.19"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["axios", [
         ["npm:0.23.0", {
           "packageLocation": "./.yarn/cache/axios-npm-0.23.0-2d08cb7826-879f61022b.zip/node_modules/axios/",
@@ -1071,15 +1064,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/balanced-match-npm-1.0.2-a53c126459-9706c088a2.zip/node_modules/balanced-match/",
           "packageDependencies": [
             ["balanced-match", "npm:1.0.2"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["base64-js", [
-        ["npm:1.5.1", {
-          "packageLocation": "./.yarn/cache/base64-js-npm-1.5.1-b2f7275641-669632eb37.zip/node_modules/base64-js/",
-          "packageDependencies": [
-            ["base64-js", "npm:1.5.1"]
           ],
           "linkType": "HARD",
         }]
@@ -1146,18 +1130,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["braces", "npm:3.0.2"],
             ["fill-range", "npm:7.0.1"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["buffer", [
-        ["npm:4.9.2", {
-          "packageLocation": "./.yarn/cache/buffer-npm-4.9.2-9e40b5e87a-8801bc1ba0.zip/node_modules/buffer/",
-          "packageDependencies": [
-            ["buffer", "npm:4.9.2"],
-            ["base64-js", "npm:1.5.1"],
-            ["ieee754", "npm:1.2.1"],
-            ["isarray", "npm:1.0.0"]
           ],
           "linkType": "HARD",
         }]
@@ -1946,15 +1918,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["events", [
-        ["npm:1.1.1", {
-          "packageLocation": "./.yarn/cache/events-npm-1.1.1-ca9e5d580e-40431eb005.zip/node_modules/events/",
-          "packageDependencies": [
-            ["events", "npm:1.1.1"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["express", [
         ["npm:4.17.1", {
           "packageLocation": "./.yarn/cache/express-npm-4.17.1-6815ee6bf9-d964e9e17a.zip/node_modules/express/",
@@ -2375,22 +2338,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["ieee754", [
-        ["npm:1.1.13", {
-          "packageLocation": "./.yarn/cache/ieee754-npm-1.1.13-a57522ba12-102df1ba66.zip/node_modules/ieee754/",
-          "packageDependencies": [
-            ["ieee754", "npm:1.1.13"]
-          ],
-          "linkType": "HARD",
-        }],
-        ["npm:1.2.1", {
-          "packageLocation": "./.yarn/cache/ieee754-npm-1.2.1-fb63b3caeb-5144c0c981.zip/node_modules/ieee754/",
-          "packageDependencies": [
-            ["ieee754", "npm:1.2.1"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["ignore", [
         ["npm:4.0.6", {
           "packageLocation": "./.yarn/cache/ignore-npm-4.0.6-66c0d6543e-248f82e50a.zip/node_modules/ignore/",
@@ -2604,6 +2551,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/multer", "npm:1.4.7"],
             ["@types/node", "npm:16.11.6"],
             ["@types/node-cron", "npm:3.0.0"],
+            ["@types/nodemailer", "npm:6.4.4"],
             ["@types/prettier", "npm:2.3.2"],
             ["@types/rimraf", "npm:3.0.2"],
             ["@types/swagger-jsdoc", "npm:6.0.1"],
@@ -2612,7 +2560,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/yaml", "npm:1.9.6"],
             ["@typescript-eslint/eslint-plugin", "virtual:5ac780be60b76ca203fe89408f0cab36a80dc51d6c762ac408b3a7e142d8b0429b41e1c660fae03c7dedeb393f230332b614efa8509d05272fbe35cfa5956b61#npm:4.31.0"],
             ["@typescript-eslint/parser", "virtual:5ac780be60b76ca203fe89408f0cab36a80dc51d6c762ac408b3a7e142d8b0429b41e1c660fae03c7dedeb393f230332b614efa8509d05272fbe35cfa5956b61#npm:4.31.0"],
-            ["aws-sdk", "npm:2.1084.0"],
             ["axios", "npm:0.23.0"],
             ["compression", "npm:1.7.4"],
             ["copyfiles", "npm:2.4.1"],
@@ -2630,6 +2577,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mariadb", "npm:2.5.4"],
             ["multer", "npm:1.4.4"],
             ["node-cron", "npm:3.0.0"],
+            ["nodemailer", "npm:6.7.2"],
             ["patch-package", "npm:6.4.7"],
             ["postinstall-postinstall", "npm:2.1.0"],
             ["prettier", "npm:2.4.0"],
@@ -2645,15 +2593,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["yaml", "npm:1.10.2"]
           ],
           "linkType": "SOFT",
-        }]
-      ]],
-      ["jmespath", [
-        ["npm:0.16.0", {
-          "packageLocation": "./.yarn/cache/jmespath-npm-0.16.0-d47535c65a-2d602493a1.zip/node_modules/jmespath/",
-          "packageDependencies": [
-            ["jmespath", "npm:0.16.0"]
-          ],
-          "linkType": "HARD",
         }]
       ]],
       ["js-tokens", [
@@ -3185,6 +3124,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["nodemailer", [
+        ["npm:6.7.2", {
+          "packageLocation": "./.yarn/cache/nodemailer-npm-6.7.2-ba5500b754-3c37a40928.zip/node_modules/nodemailer/",
+          "packageDependencies": [
+            ["nodemailer", "npm:6.7.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["noms", [
         ["npm:0.0.0", {
           "packageLocation": "./.yarn/cache/noms-npm-0.0.0-86eacf416e-a05f056dab.zip/node_modules/noms/",
@@ -3459,13 +3407,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["punycode", [
-        ["npm:1.3.2", {
-          "packageLocation": "./.yarn/cache/punycode-npm-1.3.2-3727a84cea-b8807fd594.zip/node_modules/punycode/",
-          "packageDependencies": [
-            ["punycode", "npm:1.3.2"]
-          ],
-          "linkType": "HARD",
-        }],
         ["npm:2.1.1", {
           "packageLocation": "./.yarn/cache/punycode-npm-2.1.1-26eb3e15cf-823bf443c6.zip/node_modules/punycode/",
           "packageDependencies": [
@@ -3479,15 +3420,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/qs-npm-6.7.0-15161a344c-dfd5f6adef.zip/node_modules/qs/",
           "packageDependencies": [
             ["qs", "npm:6.7.0"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["querystring", [
-        ["npm:0.2.0", {
-          "packageLocation": "./.yarn/cache/querystring-npm-0.2.0-421b870c92-8258d6734f.zip/node_modules/querystring/",
-          "packageDependencies": [
-            ["querystring", "npm:0.2.0"]
           ],
           "linkType": "HARD",
         }]
@@ -3674,22 +3606,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/safer-buffer-npm-2.1.2-8d5c0b705e-cab8f25ae6.zip/node_modules/safer-buffer/",
           "packageDependencies": [
             ["safer-buffer", "npm:2.1.2"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["sax", [
-        ["npm:1.2.1", {
-          "packageLocation": "./.yarn/cache/sax-npm-1.2.1-fd2ad7b223-8dca7d5e1c.zip/node_modules/sax/",
-          "packageDependencies": [
-            ["sax", "npm:1.2.1"]
-          ],
-          "linkType": "HARD",
-        }],
-        ["npm:1.2.4", {
-          "packageLocation": "./.yarn/cache/sax-npm-1.2.4-178f05f12f-d3df7d32b8.zip/node_modules/sax/",
-          "packageDependencies": [
-            ["sax", "npm:1.2.4"]
           ],
           "linkType": "HARD",
         }]
@@ -4337,17 +4253,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["url", [
-        ["npm:0.10.3", {
-          "packageLocation": "./.yarn/cache/url-npm-0.10.3-37c0b27c3c-7b83ddb106.zip/node_modules/url/",
-          "packageDependencies": [
-            ["url", "npm:0.10.3"],
-            ["punycode", "npm:1.3.2"],
-            ["querystring", "npm:0.2.0"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["util-deprecate", [
         ["npm:1.0.2", {
           "packageLocation": "./.yarn/cache/util-deprecate-npm-1.0.2-e3fe1a219c-474acf1146.zip/node_modules/util-deprecate/",
@@ -4367,13 +4272,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["uuid", [
-        ["npm:3.3.2", {
-          "packageLocation": "./.yarn/cache/uuid-npm-3.3.2-62715051ac-8793629d27.zip/node_modules/uuid/",
-          "packageDependencies": [
-            ["uuid", "npm:3.3.2"]
-          ],
-          "linkType": "HARD",
-        }],
         ["npm:8.3.2", {
           "packageLocation": "./.yarn/cache/uuid-npm-8.3.2-eca0baba53-5575a8a75c.zip/node_modules/uuid/",
           "packageDependencies": [
@@ -4463,26 +4361,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/wrappy-npm-1.0.2-916de4d4b3-159da4805f.zip/node_modules/wrappy/",
           "packageDependencies": [
             ["wrappy", "npm:1.0.2"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["xml2js", [
-        ["npm:0.4.19", {
-          "packageLocation": "./.yarn/cache/xml2js-npm-0.4.19-104b7b16eb-ca8b2fee43.zip/node_modules/xml2js/",
-          "packageDependencies": [
-            ["xml2js", "npm:0.4.19"],
-            ["sax", "npm:1.2.4"],
-            ["xmlbuilder", "npm:9.0.7"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["xmlbuilder", [
-        ["npm:9.0.7", {
-          "packageLocation": "./.yarn/cache/xmlbuilder-npm-9.0.7-44519dbccb-8193bb3238.zip/node_modules/xmlbuilder/",
-          "packageDependencies": [
-            ["xmlbuilder", "npm:9.0.7"]
           ],
           "linkType": "HARD",
         }]

@@ -4,5 +4,5 @@ export * from "./random";
 export * from "./filterUndfined";
 export * from "./cronManager";
 export * from "./slackbot";
-export * from "./ses";
 export * from "./ip";
+export * from "./mailService";

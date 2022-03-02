@@ -11,7 +11,14 @@ import sequelize, {
   UserCrenditionalRealtion,
   UserToken,
 } from "../../model";
-import { tempPasswordGenerator, SesManager, SlackBot, getIp } from "../../util";
+import {
+  getIp,
+  MailService,
+  SlackBot,
+  tempPasswordGenerator,
+} from "../../util";
+
+const manager = new MailService();
 
 const router = Router({
   mergeParams: true,
@@ -349,7 +356,6 @@ router.post(
 
       await userPasswordCrenditional.save({ transaction });
 
-      const manager = new SesManager();
       await manager.sendChangePassword(user, newPassowrd);
 
       await transaction.commit();
