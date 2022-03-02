@@ -39,7 +39,7 @@ import sequelize, {
   UploadCrenditionalBody,
 } from "../../model";
 import { paginationValidator, unitValidator } from "../../util";
-import { config } from "../../../configures/config";
+import { config } from "../../configures/config";
 
 type ShowDisable = "true" | "false";
 

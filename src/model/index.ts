@@ -1,5 +1,5 @@
 import { Model, ModelCtor, Sequelize } from "sequelize-typescript";
-import { getSequelizeConfigure, initialize } from "../../configures/sequelize";
+import { getSequelizeConfigure, initialize } from "../configures/sequelize";
 
 export * from "./user";
 export * from "./userCrenditionalRelation";

@@ -1,7 +1,7 @@
 import fs from "fs";
 import YAML from "yaml";
 import path from "path";
-import { ScopeType } from "../src/model/scope";
+import { ScopeType } from "../model/scope";
 
 interface UserInfo {
   username: string;

@@ -1,6 +1,6 @@
 import { SES } from "aws-sdk";
 import { User } from "../model";
-import { config } from "../../configures/config";
+import { config } from "../configures/config";
 import { SendEmailRequest } from "aws-sdk/clients/ses";
 import fs from "fs";
 import path from "path";

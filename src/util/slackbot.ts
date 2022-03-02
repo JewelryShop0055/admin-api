@@ -1,6 +1,6 @@
 import axios from "axios";
 import { DateTime } from "luxon";
-import { config } from "../../configures/config";
+import { config } from "../configures/config";
 
 const send = async (
   message: string,

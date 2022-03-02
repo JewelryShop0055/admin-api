@@ -22,7 +22,7 @@ import {
   ScopeTypes,
   CrenditionalType,
 } from "../model";
-import { config } from "../../configures/config";
+import { config } from "../configures/config";
 
 async function generateAccessToken(
   client: Client,
