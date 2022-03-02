@@ -21,7 +21,6 @@ export * from "./paginationQuery";
 export * from "./fileStatus";
 export * from "./fileExt";
 export * from "./paginationResponse";
-export * from "./resource";
 export * from "./searchMethod";
 
 import User from "./user";

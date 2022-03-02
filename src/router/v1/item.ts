@@ -34,9 +34,6 @@ import sequelize, {
   ItemUnitTypes,
   paginationQuery,
   PaginationResponse,
-  RequestUploadCrenditional,
-  ResourceBody,
-  UploadCrenditionalBody,
 } from "../../model";
 import { paginationValidator, unitValidator } from "../../util";
 import { config } from "../../configures/config";
@@ -1147,7 +1144,7 @@ router.delete(
 /**
  * @openapi
  *
- * /v1/item/{itemType}/{id}/resource:
+ * /v1/item/{itemType}/{id}/resource/{fileType}:
  *   post:
  *     tags:
  *       - admin-item
@@ -1159,14 +1156,6 @@ router.delete(
  *       - $ref: "#/components/parameters/ItemId"
  *     requestBody:
  *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               fileType:
- *                 $ref: "#/components/schemas/ItemFileType"
- *               ext:
- *                 $ref: "#/components/schemas/FileExt"
  *         application/x-www-form-urlencoded:
  *           schema:
  *             type: object
@@ -1176,47 +1165,8 @@ router.delete(
  *               ext:
  *                 $ref: "#/components/schemas/FileExt"
  *     responses:
- *       200:
- *         description: get s3 upload crenditional. The expiration time is a minute. <br>
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 crenditional:
- *                   description: S3 Upload Infomation. more info <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-UsingHTTPPOST.html">here</a>
- *                   required: true
- *                   type: object
- *                   properties:
- *                     url:
- *                       type: string
- *                       description: Request this URL as a POST
- *                       example: https://s3.ap-northeast-2.amazonaws.com/resource.raviluz.com
- *                     fields:
- *                       type: object
- *                       description: Request this fields as a Body. This field is flexible.
- *                       properties:
- *                         key:
- *                           type: string
- *                         bucket:
- *                           type: string
- *                         X-Amz-Algorithm:
- *                           type: string
- *                         X-Amz-Credential:
- *                           type: string
- *                         X-Amz-Date:
- *                           type: string
- *                         Policy:
- *                           type: string
- *                         X-Amz-Signature:
- *                           type: string
- *                         x-amz-meta-resourceId:
- *                           type: string
- *                 resourceId:
- *                   description: This file manage id. if sucesss, send this id to `PUT /v1/item/{itemType}/{id}/resource/{resourceId}`
- *                   required: true
- *                   type: string
- *                   example: "b80b61a3-039a-40a4-b61f-9578340e0707"
+ *       204:
+ *         $ref: "#/components/responses/204"
  *       400:
  *         $ref: "#/components/responses/GenericError"
  *       401:
@@ -1230,15 +1180,14 @@ router.post(
   "/:type/:id/resource/:fileType",
   itemTypeValidateMiddelware,
   authenticate(false),
-  upload.single("photo"),
+  upload.single("file"),
   asyncHandler(
     async (
       req: Request<
         ParamsDictionary | ItemTypeWithIdParam,
-        UploadCrenditionalBody | DefaultErrorResponse,
-        RequestUploadCrenditional
+        undefined | DefaultErrorResponse
       >,
-      res: Response<UploadCrenditionalBody | DefaultErrorResponse>,
+      res: Response<undefined | DefaultErrorResponse>,
       next: NextFunction,
     ) => {
       /** todo s3 to multer */
@@ -1338,69 +1287,6 @@ router.post(
  * @openapi
  *
  * /v1/item/{itemType}/{id}/resource/{fileType}:
- *   put:
- *     tags:
- *       - admin-item
- *       - files
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - $ref: "#/components/parameters/ItemType"
- *       - $ref: "#/components/parameters/ItemId"
- *       - $ref: "#/components/parameters/resourceId"
- *     description: request this endpoint when after Success S3 Upload.
- *     responses:
- *       200:
- *         $ref: "#/components/responses/204"
- *       400:
- *         $ref: "#/components/responses/GenericError"
- *       401:
- *         $ref: "#/components/responses/401"
- *       404:
- *         $ref: "#/components/responses/404"
- *       500:
- *         $ref: "#/components/responses/GenericError"
- */
-router.put(
-  "/:type/:id/resource/:resourceId",
-  itemTypeValidateMiddelware,
-  authenticate(false),
-  asyncHandler(
-    async (
-      req: Request<
-        ParamsDictionary | ItemTypeWithIdParam,
-        undefined,
-        ResourceBody
-      >,
-      res: Response<undefined>,
-    ) => {
-      const { id } = req.params;
-      const resourceId = req.body.resourceId;
-
-      const resource = await ItemResource.findOne({
-        where: {
-          id: resourceId,
-          itemId: id,
-        },
-      });
-
-      if (!resource) {
-        return res.sendStatus(404);
-      }
-
-      resource.status = FileStatus.done;
-
-      await resource.save();
-
-      return res.sendStatus(204);
-    },
-  ),
-);
-
-/**
- * @openapi
- *
- * /v1/item/{itemType}/{id}/resource/{fileType}:
  *   delete:
  *     tags:
  *       - admin-item
@@ -1430,15 +1316,10 @@ router.delete(
   authenticate(false),
   asyncHandler(
     async (
-      req: Request<
-        ParamsDictionary | ItemTypeWithIdParam,
-        undefined,
-        ResourceBody
-      >,
+      req: Request<ParamsDictionary | ItemTypeWithIdParam, undefined>,
       res: Response<undefined>,
     ) => {
-      const { id } = req.params;
-      const resourceId = req.body.resourceId;
+      const { id, resourceId } = req.params;
 
       const resource = await ItemResource.findOne({
         where: {
