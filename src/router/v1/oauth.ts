@@ -19,7 +19,7 @@ const router = express.Router({
 /**
  * @openapi
  *
- * /admin/auth/token:
+ * /v1/auth/token:
  *   post:
  *     tags:
  *       - "admin-auth"
@@ -95,7 +95,7 @@ router.post(
       await SlackBot.send(
         `"${req.body.username}"님의 로그인 시도가 있습니다.`,
         req.method,
-        "/admin/auth/token",
+        "/v1/auth/token",
         getIp(req),
       );
     }

@@ -50,7 +50,7 @@ const router = express.Router({
 /**
  * @openapi
  *
- * /admin/category/{itemType}:
+ * /v1/category/{itemType}:
  *   get:
  *     tags:
  *       - admin-category
@@ -162,7 +162,7 @@ router.get(
 /**
  * @openapi
  *
- * /admin/category/{itemType}:
+ * /v1/category/{itemType}:
  *   post:
  *     tags:
  *       - admin-category
@@ -249,7 +249,7 @@ router.post(
 /**
  * @openapi
  *
- * /admin/category/{itemType}/existcheck:
+ * /v1/category/{itemType}/existcheck:
  *   get:
  *     tags:
  *       - admin-category
@@ -322,7 +322,7 @@ router.get(
 /**
  * @openapi
  *
- * /admin/category/{itemType}/{id}:
+ * /v1/category/{itemType}/{id}:
  *   get:
  *     tags:
  *       - admin-category
@@ -383,7 +383,7 @@ router.get(
 /**
  * @openapi
  *
- * /admin/category/{itemType}/{id}/list:
+ * /v1/category/{itemType}/{id}/list:
  *   get:
  *     tags:
  *       - admin-category
@@ -506,7 +506,7 @@ router.get(
  *           type: string
  *
  *
- * /admin/category/{itemType}/{id}:
+ * /v1/category/{itemType}/{id}:
  *   put:
  *     tags:
  *       - admin-category
@@ -603,7 +603,7 @@ router.put(
 /**
  * @openapi
  *
- * /admin/category/{itemType}/{id}:
+ * /v1/category/{itemType}/{id}:
  *   delete:
  *     tags:
  *       - admin-category
@@ -663,7 +663,7 @@ router.delete(
 /**
  * @openapi
  *
- * /admin/category/{itemType}/{id}:
+ * /v1/category/{itemType}/{id}:
  *   post:
  *     tags:
  *       - admin-category

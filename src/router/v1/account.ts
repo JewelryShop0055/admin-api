@@ -33,7 +33,7 @@ interface UpdatePasswordBody {
 /**
  * @openapi
  *
- * /admin/account/me:
+ * /v1/account/me:
  *   get:
  *     tags:
  *       - "admin-account"
@@ -64,7 +64,7 @@ router.get(
  *
  * @openapi
  *
- * /admin/account:
+ * /v1/account:
  *   put:
  *     tags:
  *       - "admin-account"
@@ -133,7 +133,7 @@ router.put(
       await SlackBot.send(
         `"${user?.name || "unknown"}"님의 사용자 정보가 수정되있습니다.`,
         req.method,
-        "/admin/account",
+        "/v1/account",
         getIp(req),
       );
 
@@ -145,7 +145,7 @@ router.put(
 /**
  * @openapi
  *
- * /admin/account/password:
+ * /v1/account/password:
  *   put:
  *     tags:
  *       - "admin-account"
@@ -195,7 +195,7 @@ router.put(
         await SlackBot.send(
           `"${user?.name || "unknown"}"님의 비밀번호 변경 시도가 있습니다.`,
           req.method,
-          "/admin/account/password",
+          "/v1/account/password",
           getIp(req),
         );
 
@@ -246,7 +246,7 @@ router.put(
       await SlackBot.send(
         `"${user?.name || "unknown"}"님의 비밀번호 변경되있습니다.`,
         req.method,
-        "/admin/account/password",
+        "/v1/account/password",
         getIp(req),
       );
 
@@ -258,7 +258,7 @@ router.put(
 /**
  * @openapi
  *
- * /admin/account/forgot-password:
+ * /v1/account/forgot-password:
  *   post:
  *     tags:
  *       - "admin-account"
@@ -311,7 +311,7 @@ router.post(
       await SlackBot.send(
         `"${email}"님의 비밀번호 찾기 요청이 실패했니다.`,
         req.method,
-        "/admin/account/password",
+        "/v1/account/password",
         getIp(req),
       );
 
@@ -357,7 +357,7 @@ router.post(
       await SlackBot.send(
         `"${user.name}(${email})"님의 비밀번호 찾기 요청을 실행되었습니다.`,
         req.method,
-        "/admin/account/password",
+        "/v1/account/password",
         getIp(req),
       );
     } catch (e) {
@@ -372,7 +372,7 @@ router.post(
 /**
  * @openapi
  *
- * /admin/account/signout:
+ * /v1/account/signout:
  *   delete:
  *     tags:
  *       - "admin-account"

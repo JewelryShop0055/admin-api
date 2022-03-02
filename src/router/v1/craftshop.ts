@@ -35,7 +35,7 @@ const router = express.Router({
 /**
  * @openapi
  *
- * /admin/craftshop:
+ * /v1/craftshop:
  *   get:
  *     tags:
  *       - admin-craftshop
@@ -108,7 +108,7 @@ router.get(
 /**
  * @openapi
  *
- * /admin/craftshop:
+ * /v1/craftshop:
  *   post:
  *     tags:
  *       - admin-craftshop
@@ -157,7 +157,7 @@ router.post(
 /**
  * @openapi
  *
- * /admin/craftshop/{id}:
+ * /v1/craftshop/{id}:
  *   get:
  *     tags:
  *       - admin-craftshop
@@ -233,7 +233,7 @@ router.get(
  *           type: string
  *           example: "01012341234"
  *
- * /admin/craftshop/{id}:
+ * /v1/craftshop/{id}:
  *   put:
  *     tags:
  *       - admin-craftshop
@@ -304,7 +304,7 @@ router.put(
 /**
  * @openapi
  *
- * /admin/craftshop/{itemType}/{id}:
+ * /v1/craftshop/{itemType}/{id}:
  *   delete:
  *     tags:
  *       - admin-craftshop

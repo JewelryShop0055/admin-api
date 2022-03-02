@@ -94,7 +94,7 @@ const upload = multer({
  *
  * @openapi
  *
- * /admin/item/{itemType}:
+ * /v1/item/{itemType}:
  *   get:
  *     tags:
  *       - admin-item
@@ -179,7 +179,7 @@ router.get(
 
 /**
  * @openapi
- * /admin/item/{itemType}:
+ * /v1/item/{itemType}:
  *   post:
  *     tags:
  *       - admin-item
@@ -304,7 +304,7 @@ router.post(
 
 /**
  * @openapi
- * /admin/item/{itemType}/{id}:
+ * /v1/item/{itemType}/{id}:
  *   get:
  *     tags:
  *       - admin-item
@@ -389,7 +389,7 @@ router.get(
  *           type: integer
  *           required: false
  *
- * /admin/item/{itemType}/{id}:
+ * /v1/item/{itemType}/{id}:
  *   put:
  *     tags:
  *       - admin-item
@@ -478,7 +478,7 @@ router.put(
  *           required: true
  *           type: integer
  *
- * /admin/item/{itemType}/{id}/category:
+ * /v1/item/{itemType}/{id}/category:
  *   put:
  *     tags:
  *       - admin-item
@@ -568,7 +568,7 @@ router.put(
 
 /**
  * @openapi
- * /admin/item/{itemType}/{id}/craftshop:
+ * /v1/item/{itemType}/{id}/craftshop:
  *   put:
  *     tags:
  *       - admin-item
@@ -650,7 +650,7 @@ router.put(
 
 /**
  * @openapi
- * /admin/item/{itemType}/{id}:
+ * /v1/item/{itemType}/{id}:
  *   delete:
  *     tags:
  *       - admin-item
@@ -708,7 +708,7 @@ router.delete(
 
 /**
  * @openapi
- * /admin/item/{itemType}/{id}/category:
+ * /v1/item/{itemType}/{id}/category:
  *   get:
  *     tags:
  *       - admin-item
@@ -782,7 +782,7 @@ router.get(
 
 /**
  * @openapi
- * /admin/item/{itemType}/{id}/category/{categoryId}:
+ * /v1/item/{itemType}/{id}/category/{categoryId}:
  *   delete:
  *     tags:
  *       - admin-item
@@ -849,7 +849,7 @@ router.delete(
 
 /**
  * @openapi
- * /admin/item/product/{id}/parts:
+ * /v1/item/product/{id}/parts:
  *   get:
  *     tags:
  *       - admin-item
@@ -908,7 +908,7 @@ router.get(
  * @openapi
  *
  *
- * /admin/item/product/{id}/parts:
+ * /v1/item/product/{id}/parts:
  *   post:
  *     tags:
  *       - admin-item
@@ -1011,7 +1011,7 @@ router.post(
  *           format: float
  *           example: 3.14
  *
- * /admin/item/product/{id}/parts/{partsId}:
+ * /v1/item/product/{id}/parts/{partsId}:
  *   put:
  *     tags:
  *       - admin-item
@@ -1076,7 +1076,7 @@ router.put(
 /**
  * @openapi
  *
- * /admin/item/product/{id}/parts/{partsId}:
+ * /v1/item/product/{id}/parts/{partsId}:
  *   delete:
  *     tags:
  *       - admin-item
@@ -1147,7 +1147,7 @@ router.delete(
 /**
  * @openapi
  *
- * /admin/item/{itemType}/{id}/resource:
+ * /v1/item/{itemType}/{id}/resource:
  *   post:
  *     tags:
  *       - admin-item
@@ -1213,7 +1213,7 @@ router.delete(
  *                         x-amz-meta-resourceId:
  *                           type: string
  *                 resourceId:
- *                   description: This file manage id. if sucesss, send this id to `PUT /admin/item/{itemType}/{id}/resource/{resourceId}`
+ *                   description: This file manage id. if sucesss, send this id to `PUT /v1/item/{itemType}/{id}/resource/{resourceId}`
  *                   required: true
  *                   type: string
  *                   example: "b80b61a3-039a-40a4-b61f-9578340e0707"
@@ -1337,7 +1337,7 @@ router.post(
 /**
  * @openapi
  *
- * /admin/item/{itemType}/{id}/resource/{fileType}:
+ * /v1/item/{itemType}/{id}/resource/{fileType}:
  *   put:
  *     tags:
  *       - admin-item
@@ -1400,7 +1400,7 @@ router.put(
 /**
  * @openapi
  *
- * /admin/item/{itemType}/{id}/resource/{fileType}:
+ * /v1/item/{itemType}/{id}/resource/{fileType}:
  *   delete:
  *     tags:
  *       - admin-item

@@ -1,13 +1,11 @@
 import express from "express";
 import v1 from "./v1";
-import admin from "./admin";
 
 const router = express.Router({
   mergeParams: true,
 });
 
 // write here your router with prefix
-router.use("/admin", admin);
 router.use("/v1", v1);
 
 /**

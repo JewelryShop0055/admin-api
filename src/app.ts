@@ -60,8 +60,8 @@ const options: swaggereJsdoc.Options = {
           bearerFormat: "JWT",
           flows: {
             password: {
-              tokenUrl: `/admin/auth/token`,
-              refreshUrl: `/admin/auth/token`,
+              tokenUrl: `/v1/auth/token`,
+              refreshUrl: `/v1/auth/token`,
               scopes: {
                 operator: "Shop Owner",
                 customer: "Customer",

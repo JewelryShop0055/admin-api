@@ -55,7 +55,7 @@ type SearchQuery = paginationQuery &
  *
  * @openapi
  *
- * /admin/search/{target}:
+ * /v1/search/{target}:
  *   get:
  *     tags:
  *       - admin-search
@@ -160,7 +160,7 @@ router.get(
  *
  * @openapi
  *
- * /admin/search/{target}/autocomplete:
+ * /v1/search/{target}/autocomplete:
  *   get:
  *     tags:
  *       - admin-search

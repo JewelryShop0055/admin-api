@@ -73,7 +73,7 @@ export class CreateCategoryInput {
  *           required: true
  *           type: "integer"
  *         itemCount:
- *           description: "Has Item Count. only return on \"/admin/category/{itemType}\""
+ *           description: "Has Item Count. only return on \"/v1/category/{itemType}\""
  *           required: false
  *           type: "integer"
  *         createdAt:
