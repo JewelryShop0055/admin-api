@@ -11,6 +11,7 @@ export function asyncHandler(func: RequestHandler) {
     try {
       return (await (func(req, res, next) as unknown)) as AsyncHandler;
     } catch (e) {
+      console.error(e);
       return next(e);
     }
   };
