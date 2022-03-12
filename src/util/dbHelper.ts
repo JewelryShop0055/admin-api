@@ -1,51 +1,38 @@
-import { Model, ModelCtor, SequelizeOptions } from "sequelize-typescript";
+import sequelize, {
+  Client,
+  CrenditionalTypes,
+  ScopeTypes,
+  User,
+  UserCrenditional,
+  UserCrenditionalRealtion,
+} from "../model";
 import fs from "fs";
 import path from "path";
-import sequelize, {
-  CrenditionalTypes,
-  Client,
-  User,
-  ScopeTypes,
-  UserCrenditionalRealtion,
-  UserCrenditional,
-} from "../model";
-import { config } from "./config";
+import { config } from "../configures";
 
-export function getSequelizeConfigure(
-  models: ModelCtor<Model<any, any>>[],
-): SequelizeOptions {
-  try {
-    const configure: string = fs.readFileSync(
-      path.join(process.cwd(), "sequelize.json"),
-      "utf-8",
-    );
+export async function dbSync(isSync = false) {
+  if (!isSync) {
+    console.log("Skip Sync");
 
-    return {
-      models,
-      ...(JSON.parse(configure) as SequelizeOptions),
-      benchmark: process.env.NODE_ENV !== "production",
-    };
-  } catch (e) {
-    console.error(e);
-    process.exit(-1);
+    return;
   }
-}
 
-/**
- * 첫 시스템 구성시 기본 계정 설정 함수
- */
-export async function initialize() {
+  await sequelize.sync();
+
   const triggers = fs.readFileSync(
     path.join(process.cwd(), "query.sql"),
     "utf-8",
   );
 
-  sequelize.query(triggers);
+  const transaction = await sequelize.transaction();
 
-  await Promise.all(
-    config.user?.operator?.map(async (nUser) => {
-      const transaction = await sequelize.transaction();
-      try {
+  try {
+    sequelize.query(triggers, {
+      transaction,
+    });
+
+    await Promise.all(
+      config.user?.operator?.map(async (nUser) => {
         const operator = await UserCrenditional.findOne({
           where: {
             username: nUser.username,
@@ -56,8 +43,6 @@ export async function initialize() {
 
         if (operator) {
           console.info(`Already exist ${nUser.username}`);
-          await transaction.commit();
-
           return;
         }
 
@@ -96,31 +81,23 @@ export async function initialize() {
             benchmark: process.env.NODE_ENV !== "production",
           },
         );
+      }) || [],
+    );
 
-        await transaction.commit();
-      } catch (e) {
-        await transaction.rollback();
-        console.error(e);
+    await Promise.all(
+      config.client?.map(async (nClient) => {
+        const checkClient = await Client.findOne({
+          where: {
+            clientId: nClient.clientId,
+          },
+          benchmark: process.env.NODE_ENV !== "production",
+          transaction,
+        });
 
-        throw e;
-      }
-    }) || [],
-  );
+        if (checkClient) {
+          return;
+        }
 
-  await Promise.all(
-    config.client?.map(async (nClient) => {
-      const checkClient = await Client.findOne({
-        where: {
-          clientId: nClient.clientId,
-        },
-        benchmark: process.env.NODE_ENV !== "production",
-      });
-
-      if (checkClient) {
-        return;
-      }
-
-      try {
         await Client.create(
           {
             name: nClient.name,
@@ -134,11 +111,15 @@ export async function initialize() {
           },
           {
             benchmark: process.env.NODE_ENV !== "production",
+            transaction,
           },
         );
-      } catch (e) {
-        throw e;
-      }
-    }) || [],
-  );
+      }) || [],
+    );
+
+    await transaction.commit();
+  } catch (e) {
+    console.error(e);
+    await transaction.rollback();
+  }
 }

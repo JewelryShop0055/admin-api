@@ -12,7 +12,7 @@ import {
 
 import { Item } from "./item";
 import { FileStatus, FileStatusEnum, FileStatusType } from "./fileStatus";
-import { config } from "../configures/config";
+import { config } from "../configures";
 
 /**
  * @openapi

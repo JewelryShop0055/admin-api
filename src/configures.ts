@@ -1,8 +1,9 @@
 import fs from "fs";
 import YAML from "yaml";
 import path from "path";
-import { ScopeType } from "../model/scope";
+import { ScopeType } from "./model";
 import SMTPConnection from "nodemailer/lib/smtp-connection";
+import { SequelizeOptions } from "sequelize-typescript";
 
 interface UserInfo {
   username: string;
@@ -57,7 +58,7 @@ interface ConfigObjects {
   };
   db: {
     allowSync: boolean;
-    [key: string]: any;
+    config: SequelizeOptions;
   };
   mail?: SMTPConnection.Options;
   user?: {

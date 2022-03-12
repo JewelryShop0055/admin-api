@@ -20,7 +20,33 @@ app:
     channel: targetChannel without "#"
 db:
   allowSync: false
-
+  config: 
+    dialect: postgres
+    dialectOptions:
+      autoJsonMap: false
+    database: jewerly
+    username: root
+    password: password
+    host: localhost
+    port: 5432
+    sync:
+      force: false
+      alter:
+        drop: false
+    replication:
+      read:
+        - database: jewerly
+          username: root
+          password: password
+          host: localhost
+          port: 5432
+      write: 
+        database: jewerly
+        username: root
+        password: password
+        host: localhost
+        port: 5432
+    timezone: +09:00
 mail:
   host: "smtp.example.com"
   port: 587

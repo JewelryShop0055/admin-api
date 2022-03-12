@@ -1,5 +1,5 @@
 import { User } from "../model";
-import { config } from "../configures/config";
+import { config } from "../configures";
 import fs from "fs";
 import path from "path";
 import ejs from "ejs";

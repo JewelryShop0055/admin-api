@@ -1,12 +1,10 @@
 import * as http from "http";
 import { AddressInfo } from "net";
-import { config } from "./src/configures/config";
-import { app } from "./src";
-import { sync } from "./src/model";
-import { cronManager } from "./src/util";
+import { app, config } from "./src";
+import { cronManager, dbSync } from "./src/util";
 
 async function bootstrap() {
-  await sync(config.db.allowSync);
+  await dbSync(config.db.allowSync);
 
   const server = http.createServer(app);
 

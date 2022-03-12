@@ -1,5 +1,4 @@
 import { Model, ModelCtor, Sequelize } from "sequelize-typescript";
-import { getSequelizeConfigure, initialize } from "../configures/sequelize";
 
 export * from "./user";
 export * from "./userCrenditionalRelation";
@@ -36,6 +35,7 @@ import ItemRelation from "./ItemRelation";
 import CraftShop from "./craftShop";
 import ItemCraftShopRelation from "./itemCraftShopRelation";
 import ItemResource from "./itemResource";
+import { config } from "../configures";
 
 const models = [
   User,
@@ -53,16 +53,6 @@ const models = [
   ItemResource,
 ] as ModelCtor<Model<any, any>>[];
 
-export const sequelize = new Sequelize(getSequelizeConfigure(models));
-
-export async function sync(isSync = false) {
-  if (isSync) {
-    await sequelize.sync().then(async () => {
-      await initialize();
-    });
-  } else {
-    console.log("Skip Sync");
-  }
-}
+export const sequelize = new Sequelize({ ...config.db.config, models });
 
 export default sequelize;

@@ -6,3 +6,4 @@ export * from "./cronManager";
 export * from "./slackbot";
 export * from "./ip";
 export * from "./mailService";
+export * from "./dbHelper";

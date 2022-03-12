@@ -6,7 +6,7 @@ import SwaggerUi from "swagger-ui-express";
 import router from "./router";
 import * as middleware from "./middleware";
 import swaggereJsdoc, { Components, SecurityScheme } from "swagger-jsdoc";
-import { config, swaggerHelmetSetting } from "./configures/config";
+import { config, swaggerHelmetSetting } from "./configures";
 
 const app: express.Application = express();
 app.use(cors());

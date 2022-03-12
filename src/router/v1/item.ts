@@ -36,7 +36,7 @@ import sequelize, {
   PaginationResponse,
 } from "../../model";
 import { paginationValidator, unitValidator } from "../../util";
-import { config } from "../../configures/config";
+import { config } from "../../configures";
 
 type ShowDisable = "true" | "false";
 
