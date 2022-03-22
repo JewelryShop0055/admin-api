@@ -91,10 +91,11 @@ export class ItemController {
   async getGategories(
     @Param("type") type: ItemType,
     @Param("id") id: string,
-    @Query("offset") offset = 0,
+    @Query("page") page = 1,
     @Query("limit") limit = 10,
   ) {
-    return await this.itemService.getCategories(id, type, +offset, +limit);
+    const offset = limit * (page > 1 ? page - 1 : 0);
+    return await this.itemService.getCategories(id, type, offset, +limit);
   }
 
   @Put(":type/:id/category")
@@ -157,10 +158,11 @@ export class ItemController {
   async getCompany(
     @Param("type") type: ItemType,
     @Param("id") id: string,
-    @Query("offset") offset = 0,
+    @Query("page") page = 1,
     @Query("limit") limit = 10,
   ) {
-    return await this.itemService.getCompanies(id, type, +offset, +limit);
+    const offset = limit * (page > 1 ? page - 1 : 0);
+    return await this.itemService.getCompanies(id, type, offset, +limit);
   }
 
   @Put(":type/:id/company")
