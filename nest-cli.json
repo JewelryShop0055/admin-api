@@ -1,0 +1,17 @@
+{
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "deleteOutDir": true,
+  "compilerOptions": {
+    "assets": ["**/*.yml", "**/*.sql"]
+  },
+  "assets": [
+    {
+      "include": "**/*.yml",
+      "exclude": "**/*.sample.yml",
+      "watchAssets": true
+    },
+    "**/*.sql"
+  ],
+  "watchAssets": true
+}

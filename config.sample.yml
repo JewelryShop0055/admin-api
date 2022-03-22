@@ -1,0 +1,57 @@
+app:
+  http2:
+    enable: false
+    key: key_path
+    cert: cert_path
+    passphrase: passphrase
+    port: 3002
+  port: 3001
+  resource:
+    region: "ap-northeast-2"
+    imageResourcePath: "/app/resource"
+    address: resource.example.com
+  serviceName: service
+  serviceUrl: http://localhost:3000
+  jwtSecret: secret
+
+db:
+  allowSync: false
+  config: 
+    dialect: postgres
+    dialectOptions:
+      autoJsonMap: false
+    database: jewerly
+    username: root
+    password: password
+    host: localhost
+    port: 5432
+    sync:
+      force: false
+      alter:
+        drop: false
+    replication:
+      read:
+        - database: jewerly
+          username: root
+          password: password
+          host: localhost
+          port: 5432
+      write: 
+        database: jewerly
+        username: root
+        password: password
+        host: localhost
+        port: 5432
+    timezone: +09:00
+
+swagger:
+  enable: true
+  urls:
+    - url: https://api.staging.example.com
+      name: staging
+    - url: http://localhost:3001
+      name: local
+    - url: https://api.example.com
+      name: product
+
+NODE_ENV: development
