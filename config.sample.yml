@@ -1,10 +1,4 @@
 app:
-  http2:
-    enable: false
-    key: key_path
-    cert: cert_path
-    passphrase: passphrase
-    port: 3002
   port: 3001
   resource:
     region: "ap-northeast-2"
@@ -43,6 +37,15 @@ db:
         host: localhost
         port: 5432
     timezone: +09:00
+
+keycloak:
+  authServerUrl: http://localhost:8180/auth
+  realm: nest-example
+  clientId: nest-api
+  secret: 05c1ff5e-f9ba-4622-98e3-c4c9d280546e
+  cookieKey: KEYCLOAK_JWT
+  logLevels:
+    - info
 
 swagger:
   enable: true
