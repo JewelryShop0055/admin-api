@@ -13,14 +13,14 @@ export const databaseProvider: Provider = {
   provide: "SEQUELIZE",
   inject: [ConfigService],
   useFactory: async (configService: ConfigService) => {
-    // const sequelize = new Sequelize({
-    //   ...configService.get("db").config,
-    //   models: entities,
-    // });
-    // if (configService.get("db").allowSync) {
-    //   await sequelize.sync();
-    //   sequelize.query(readQueryFile());
-    // }
-    // return sequelize;
+    const sequelize = new Sequelize({
+      ...configService.get("db").config,
+      models: entities,
+    });
+    if (configService.get("db").allowSync) {
+      await sequelize.sync();
+      sequelize.query(readQueryFile());
+    }
+    return sequelize;
   },
 };
