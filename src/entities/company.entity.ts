@@ -6,12 +6,12 @@ import {
   Model,
   BelongsToMany,
   HasMany,
+  Index,
 } from "sequelize-typescript";
 import Item from "./item.entity";
-import { UUID, UUIDV4 } from "sequelize";
+import { UUID, UUIDV4, DataTypes } from "sequelize";
 import { CreateCompanyDto } from "../dto";
-import ItemCompanyRelation from "./itemCompanyRelation.entry";
-import { ENUM } from "sequelize";
+import { ItemCompanyRelation } from "./itemCompanyRelation.entry";
 import {
   CompanyTypeEnum,
   CompanyTypes,
@@ -20,12 +20,20 @@ import {
 
 @Table({
   charset: "utf8",
-  indexes: [
-    {
-      type: "FULLTEXT",
-      fields: ["name", "address", "detailAddress", "phone"],
+  hooks: {
+    beforeValidate: (item: Company) => {
+      item.name = item.name?.trim();
+      item.postCode = item.postCode?.trim();
+      item.address = item.address?.trim();
+      item.detailAddress = item.detailAddress?.trim();
+      item.phone = item.phone?.trim();
     },
-  ],
+  },
+  defaultScope: {
+    attributes: {
+      exclude: ["tsvector"],
+    },
+  },
 })
 export class Company extends Model<Company, CreateCompanyDto> {
   @PrimaryKey
@@ -71,6 +79,14 @@ export class Company extends Model<Company, CreateCompanyDto> {
     allowNull: false,
   })
   phone!: string;
+
+  @Column(DataTypes.TSVECTOR)
+  @Index({
+    name: "company_search",
+    type: "FULLTEXT",
+    using: "GIN",
+  })
+  tsvector?: unknown;
 
   @HasMany(() => ItemCompanyRelation, {
     onDelete: "CASCADE",

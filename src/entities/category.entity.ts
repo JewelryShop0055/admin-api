@@ -1,9 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { VIRTUAL } from "sequelize";
+import { VIRTUAL, DataTypes } from "sequelize";
 import {
   AutoIncrement,
   Column,
   HasMany,
+  Index,
   Model,
   NotNull,
   PrimaryKey,
@@ -17,12 +18,16 @@ import ItemCategoryRelation from "./ItemCategoryRelation.entry";
 @Table({
   charset: "utf8",
   paranoid: false,
-  indexes: [
-    {
-      type: "FULLTEXT",
-      fields: ["name"],
+  hooks: {
+    beforeValidate: (item: Category) => {
+      item.name = item.name?.trim();
     },
-  ],
+  },
+  defaultScope: {
+    attributes: {
+      exclude: ["tsvector"],
+    },
+  },
 })
 export class Category extends Model<Category, CreateCategoryDto> {
   @ApiProperty()
@@ -52,6 +57,14 @@ export class Category extends Model<Category, CreateCategoryDto> {
   @ApiProperty()
   @Column(VIRTUAL)
   itemCount?: number;
+
+  @Column(DataTypes.TSVECTOR)
+  @Index({
+    name: "category_search",
+    type: "FULLTEXT",
+    using: "GIN",
+  })
+  tsvector?: unknown;
 
   @HasMany(() => ItemCategoryRelation)
   itemRelations?: ItemCategoryRelation[];

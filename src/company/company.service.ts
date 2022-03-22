@@ -1,7 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { WhereOptions } from "sequelize";
+import { WhereOptions, Op } from "sequelize";
 import { CreateCompanyDto, UpdateCompanyDto } from "../dto";
 import { Company, Category } from "../entities";
+import sequelize from "sequelize";
 
 @Injectable()
 export class CompanyService {
@@ -17,8 +18,12 @@ export class CompanyService {
     });
   }
 
-  async count() {
-    return await Category.count();
+  async count(whereOpstion?: WhereOptions<Company>) {
+    return await Category.count({
+      where: {
+        ...whereOpstion,
+      },
+    });
   }
 
   async findOne(id: string) {
@@ -43,5 +48,27 @@ export class CompanyService {
         id,
       },
     });
+  }
+
+  async search(preWhereOptions: WhereOptions, offset = 0, limit = 10) {
+    return await Company.findAll({
+      where: preWhereOptions,
+      limit,
+      offset,
+      order: [
+        [
+          sequelize.fn(
+            "ts_rank_cd",
+            sequelize.col("tsvector"),
+            preWhereOptions["tsvector"][Op.match],
+          ),
+          "desc",
+        ],
+      ],
+    });
+  }
+
+  async autoComplete(preWhereOptions: WhereOptions, limit = 10) {
+    return (await this.search(preWhereOptions, 0, limit)).map((v) => v.name);
   }
 }

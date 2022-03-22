@@ -17,6 +17,7 @@ import {
   ItemRelation,
 } from "../entities";
 import { ItemType, ItemTypes } from "../types";
+import sequelize from "sequelize";
 
 @Injectable()
 export class ItemService {
@@ -49,11 +50,15 @@ export class ItemService {
     });
   }
 
-  async count(type: ItemType) {
+  async count(type: ItemType | "all", whereOpstion?: WhereOptions<Item>) {
+    if (type !== "all") {
+      whereOpstion["type"] = type;
+    }
+
     return await Item.count({
       where: {
-        type,
         disable: false,
+        ...whereOpstion,
       },
     });
   }
@@ -274,5 +279,44 @@ export class ItemService {
         companyId,
       },
     });
+  }
+
+  async search(
+    type: ItemType | "all",
+    preWhereOptions: WhereOptions,
+    offset = 0,
+    limit = 10,
+  ) {
+    if (type !== "all") {
+      preWhereOptions["type"] = type;
+    }
+
+    preWhereOptions["disable"] = false;
+
+    return await Item.findAll({
+      where: preWhereOptions,
+      limit,
+      offset,
+      order: [
+        [
+          sequelize.fn(
+            "ts_rank_cd",
+            sequelize.col("tsvector"),
+            preWhereOptions["tsvector"][Op.match],
+          ),
+          "desc",
+        ],
+      ],
+    });
+  }
+
+  async autoComplete(
+    type: ItemType | "all",
+    preWhereOptions: WhereOptions,
+    limit = 10,
+  ) {
+    return (await this.search(type, preWhereOptions, 0, limit)).map(
+      (v) => v.name,
+    );
   }
 }

@@ -1,8 +1,9 @@
-import { TEXT, UUID, UUIDV4 } from "sequelize";
+import { TEXT, UUID, UUIDV4, DataTypes } from "sequelize";
 import {
   BelongsToMany,
   Column,
   HasMany,
+  Index,
   Model,
   NotNull,
   PrimaryKey,
@@ -27,27 +28,21 @@ import { ItemRelation } from "./itemRelation.entity";
 
 @Table({
   charset: "utf8",
-  indexes: [
-    {
-      unique: true,
-      name: "part_unique",
-      fields: ["partNo", "revNo"],
-    },
-    {
-      type: "FULLTEXT",
-      fields: ["name", "partNo", "memo"],
-    },
-  ],
   hooks: {
     beforeValidate: (item: Item) => {
       if (item.type === ItemTypes.parts) {
         if (!item.partNo || item.partNo === "") {
           item.partNo = uuidv4();
         }
-
-        item.name = item.name?.trim();
-        item.partNo = item.partNo?.trim();
       }
+
+      item.name = item.name?.trim();
+      item.partNo = item.partNo?.trim();
+    },
+  },
+  defaultScope: {
+    attributes: {
+      exclude: ["tsvector"],
     },
   },
 })
@@ -68,20 +63,26 @@ export class Item extends Model<Item, CreateItemDto> {
   })
   type!: ItemType;
 
-  @Column
   @NotNull
   @Column({
     allowNull: false,
     unique: "part_unique",
   })
+  @Index({
+    unique: true,
+    name: "part_unique",
+  })
   partNo!: string;
 
-  @Column
   @NotNull
   @Column({
     allowNull: false,
     unique: "part_unique",
     defaultValue: 0,
+  })
+  @Index({
+    unique: true,
+    name: "part_unique",
   })
   revNo!: number;
 
@@ -146,6 +147,14 @@ export class Item extends Model<Item, CreateItemDto> {
     defaultValue: "",
   })
   memo?: string;
+
+  @Column(DataTypes.TSVECTOR)
+  @Index({
+    name: "item_search",
+    type: "FULLTEXT",
+    using: "GIN",
+  })
+  tsvector?: unknown;
 
   @HasMany(() => ItemCategoryRelation, {
     onDelete: "CASCADE",
