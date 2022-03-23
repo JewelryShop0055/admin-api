@@ -39,7 +39,8 @@ export class CompanyService {
       where: {
         id,
       },
-    });
+      returning: true,
+    })[0][1];
   }
 
   async remove(id: string) {

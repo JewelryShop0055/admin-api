@@ -61,7 +61,7 @@ export class CategoryService {
     });
   }
 
-  async count(type: ItemType | "all", where?: WhereOptions<Category>) {
+  async count(type: ItemType | "all", where: WhereOptions<Category> = {}) {
     if (type !== "all") {
       where["type"] = type;
     }
@@ -92,7 +92,8 @@ export class CategoryService {
         id,
         type,
       },
-    });
+      returning: true,
+    })[0][1];
   }
 
   async remove(id: number, type: ItemType) {

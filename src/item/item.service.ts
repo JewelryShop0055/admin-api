@@ -71,18 +71,17 @@ export class ItemService {
   }
 
   async update(id: string, type: ItemType, updateItemDto: UpdateItemDto) {
-    return await Item.update(updateItemDto, {
-      where: {
-        id,
-        type,
-      },
-    });
-  }
-
+    return (
+      await Item.update(updateItemDto, {
         where: {
           id,
           type,
         },
+        returning: true,
+      })
+    )[1][0];
+  }
+
   async remove(id: string, type: ItemType) {
     return await Item.destroy({
       where: {

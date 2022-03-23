@@ -63,7 +63,11 @@ export class CompanyController {
     @Param("id", new ParseUUIDPipe()) id: string,
     @Body() updateCompanyDto: UpdateCompanyDto,
   ) {
-    return this.companyService.update(id, updateCompanyDto);
+    const result = await this.companyService.update(id, updateCompanyDto);
+
+    if (!result) {
+      throw new NotFoundException();
+    }
   }
 
   @Delete(":id")

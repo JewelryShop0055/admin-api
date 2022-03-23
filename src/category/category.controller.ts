@@ -137,7 +137,15 @@ export class CategoryController {
     id: number,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
-    return this.categoryService.update(+id, type, updateCategoryDto);
+    const result = await this.categoryService.update(
+      id,
+      type,
+      updateCategoryDto,
+    );
+
+    if (!result) {
+      throw new NotFoundException();
+    }
   }
 
   @Delete(":type/:id")

@@ -109,7 +109,10 @@ export class ItemController {
     @Param("id", new ParseUUIDPipe()) id: string,
     @Body() updateItemDto: UpdateItemDto,
   ) {
-    return this.itemService.update(id, type, updateItemDto);
+    const result = await this.itemService.update(id, type, updateItemDto);
+    if (!result) {
+      throw new NotFoundException();
+    }
   }
 
   @Delete(":type/:id")
