@@ -43,21 +43,19 @@ export class ItemService {
       where: {
         ...where,
         type,
-        disable: false,
       },
       offset,
       limit,
     });
   }
 
-  async count(type: ItemType | "all", whereOpstion?: WhereOptions<Item>) {
+  async count(type: ItemType | "all", whereOpstion: WhereOptions<Item> = {}) {
     if (type !== "all") {
       whereOpstion["type"] = type;
     }
 
     return await Item.count({
       where: {
-        disable: false,
         ...whereOpstion,
       },
     });
@@ -81,18 +79,17 @@ export class ItemService {
     });
   }
 
-  async remove(id: string, type: ItemType) {
-    return await Item.update(
-      {
-        disable: true,
-      },
-      {
         where: {
           id,
           type,
         },
+  async remove(id: string, type: ItemType) {
+    return await Item.destroy({
+      where: {
+        id,
+        type,
       },
-    );
+    });
   }
 
   async getCategories(id: string, type: ItemType, offset = 0, limit = 10) {
@@ -168,7 +165,6 @@ export class ItemService {
 
   async getParts(prodcutId: string) {
     return await Item.findAll({
-      where: { disable: false },
       include: [
         {
           model: ItemRelation,
