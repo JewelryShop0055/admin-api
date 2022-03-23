@@ -10,7 +10,6 @@ import {
   Table,
 } from "sequelize-typescript";
 import { v4 as uuidv4 } from "uuid";
-
 import { CreateItemDto } from "../dto";
 import {
   ItemType,
@@ -25,6 +24,7 @@ import { Company } from "./company.entity";
 import { ItemCategoryRelation } from "./ItemCategoryRelation.entry";
 import { ItemCompanyRelation } from "./itemCompanyRelation.entry";
 import { ItemRelation } from "./itemRelation.entity";
+import { ApiProperty, ApiHideProperty } from "@nestjs/swagger";
 
 @Table({
   charset: "utf8",
@@ -55,12 +55,17 @@ export class Item extends Model<Item, CreateItemDto> {
     defaultValue: UUIDV4,
     allowNull: false,
   })
+  @ApiProperty()
   id!: string;
 
   @NotNull
   @Column({
     allowNull: false,
     type: ItemTypeEnum,
+  })
+  @ApiProperty({
+    enumName: "ItemTypeEnum",
+    enum: Object.keys(ItemTypes).map((v) => ItemTypes[v]),
   })
   type!: ItemType;
 
@@ -73,6 +78,7 @@ export class Item extends Model<Item, CreateItemDto> {
     unique: true,
     name: "part_unique",
   })
+  @ApiProperty()
   partNo!: string;
 
   @NotNull
@@ -85,12 +91,14 @@ export class Item extends Model<Item, CreateItemDto> {
     unique: true,
     name: "part_unique",
   })
+  @ApiProperty()
   revNo!: number;
 
   @NotNull
   @Column({
     allowNull: false,
   })
+  @ApiProperty()
   name!: string;
 
   @NotNull
@@ -98,6 +106,10 @@ export class Item extends Model<Item, CreateItemDto> {
     type: ItemUnitTypeEnum,
     allowNull: false,
     defaultValue: ItemUnitTypes.ea,
+  })
+  @ApiProperty({
+    enumName: "ItemUnitType",
+    enum: Object.keys(ItemUnitTypes).map((v) => ItemUnitTypes[v]),
   })
   unit!: ItemUnitType;
 
@@ -109,6 +121,7 @@ export class Item extends Model<Item, CreateItemDto> {
     allowNull: false,
     defaultValue: 0,
   })
+  @ApiProperty()
   defaultFee!: number;
 
   /**
@@ -119,6 +132,7 @@ export class Item extends Model<Item, CreateItemDto> {
     allowNull: false,
     defaultValue: 0,
   })
+  @ApiProperty()
   extraFee!: number;
 
   @NotNull
@@ -126,6 +140,7 @@ export class Item extends Model<Item, CreateItemDto> {
     allowNull: false,
     defaultValue: false,
   })
+  @ApiProperty()
   displayable!: boolean;
 
   @NotNull
@@ -133,6 +148,7 @@ export class Item extends Model<Item, CreateItemDto> {
     allowNull: false,
     defaultValue: false,
   })
+  @ApiProperty()
   soldOut!: boolean;
 
   @Column({
@@ -140,6 +156,7 @@ export class Item extends Model<Item, CreateItemDto> {
     allowNull: true,
     defaultValue: "",
   })
+  @ApiProperty()
   memo?: string;
 
   @Column(DataTypes.TSVECTOR)
@@ -148,6 +165,7 @@ export class Item extends Model<Item, CreateItemDto> {
     type: "FULLTEXT",
     using: "GIN",
   })
+  @ApiHideProperty()
   tsvector?: unknown;
 
   @HasMany(() => ItemCategoryRelation, {

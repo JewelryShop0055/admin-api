@@ -12,6 +12,7 @@ import Item from "./item.entity";
 import { UUID, UUIDV4, DataTypes } from "sequelize";
 import { CreateCompanyDto } from "../dto";
 import { ItemCompanyRelation } from "./itemCompanyRelation.entry";
+import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
 import {
   CompanyTypeEnum,
   CompanyTypes,
@@ -44,6 +45,7 @@ export class Company extends Model<Company, CreateCompanyDto> {
     defaultValue: UUIDV4,
     allowNull: false,
   })
+  @ApiProperty()
   id!: string;
 
   @NotNull
@@ -52,33 +54,42 @@ export class Company extends Model<Company, CreateCompanyDto> {
     defaultValue: CompanyTypes.craftshop,
     allowNull: false,
   })
+  @ApiProperty({
+    enumName: "CompanyTypeEnum",
+    enum: Object.keys(CompanyTypes).map((v) => CompanyTypes[v]),
+  })
   type!: CompanyType;
 
   @NotNull
   @Column({
     allowNull: false,
   })
+  @ApiProperty()
   name!: string;
 
   @NotNull
   @Column({
     allowNull: false,
   })
+  @ApiProperty()
   postCode!: string;
 
   @NotNull
   @Column({
     allowNull: false,
   })
+  @ApiProperty()
   address!: string;
 
   @Column({})
+  @ApiProperty()
   detailAddress?: string;
 
   @NotNull
   @Column({
     allowNull: false,
   })
+  @ApiProperty()
   phone!: string;
 
   @Column(DataTypes.TSVECTOR)

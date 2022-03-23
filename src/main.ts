@@ -6,7 +6,7 @@ import {
 import { AppModule } from "./app.module";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { fastifyHelmet } from "fastify-helmet";
-import { VersioningType } from "@nestjs/common";
+import { ValidationPipe, VersioningType } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
 async function bootstrap() {
@@ -37,6 +37,12 @@ async function bootstrap() {
     deepScanRoutes: true,
   });
   SwaggerModule.setup("docs", app, document);
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    }),
+  );
 
   await app.listen(config.port || 3000);
 }

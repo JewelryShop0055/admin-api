@@ -1,4 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, ApiHideProperty } from "@nestjs/swagger";
 import { VIRTUAL, DataTypes } from "sequelize";
 import {
   AutoIncrement,
@@ -64,6 +64,7 @@ export class Category extends Model<Category, CreateCategoryDto> {
     type: "FULLTEXT",
     using: "GIN",
   })
+  @ApiHideProperty()
   tsvector?: unknown;
 
   @HasMany(() => ItemCategoryRelation)

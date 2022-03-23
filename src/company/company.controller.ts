@@ -7,14 +7,18 @@ import {
   Param,
   Delete,
   Query,
-  UseGuards,
+  ParseUUIDPipe,
+  DefaultValuePipe,
+  NotFoundException,
 } from "@nestjs/common";
 import { CompanyService } from "./company.service";
 import { CreateCompanyDto, UpdateCompanyDto } from "../dto";
-import { ApiBearerAuth } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { PaginationResponse } from "../types/paginationResponse.type";
 import { Company } from "../entities";
+import { ParseIntPipe } from "@nestjs/common";
 
+@ApiTags("company")
 @Controller({
   path: "company",
   version: "1",
@@ -23,52 +27,48 @@ export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
   @Post()
-  @UseGuards()
   @ApiBearerAuth()
   create(@Body() createCompanyDto: CreateCompanyDto) {
     return this.companyService.create(createCompanyDto);
   }
 
   @Get()
-  @UseGuards()
   @ApiBearerAuth()
   async findAll(
-    @Query("page") page = 1,
-    @Query("limit") limit = 10,
+    @Query("page", new DefaultValuePipe(1), ParseIntPipe) page = 1,
+    @Query("limit", new DefaultValuePipe(10), ParseIntPipe) limit = 10,
   ): Promise<PaginationResponse<Company>> {
-    const offset = limit * (page > 1 ? page - 1 : 0);
-    const data = await this.companyService.findAll({}, +offset, +limit);
+    const currentPage = page > 1 ? page : 1;
+    const offset = limit * (currentPage - 1);
+    const data = await this.companyService.findAll({}, offset, limit);
     const totalItemCount = await this.companyService.count();
 
     return new PaginationResponse<Company>({
       data,
-      currentPage: page,
+      currentPage,
       totalItemCount,
       limit,
     });
   }
 
   @Get(":id")
-  @UseGuards()
   @ApiBearerAuth()
-  async findOne(@Param("id") id: string) {
+  async findOne(@Param("id", new ParseUUIDPipe()) id: string) {
     return this.companyService.findOne(id);
   }
 
   @Put(":id")
-  @UseGuards()
   @ApiBearerAuth()
   async update(
-    @Param("id") id: string,
+    @Param("id", new ParseUUIDPipe()) id: string,
     @Body() updateCompanyDto: UpdateCompanyDto,
   ) {
     return this.companyService.update(id, updateCompanyDto);
   }
 
   @Delete(":id")
-  @UseGuards()
   @ApiBearerAuth()
-  remove(@Param("id") id: string) {
+  remove(@Param("id", new ParseUUIDPipe()) id: string) {
     return this.companyService.remove(id);
   }
 }

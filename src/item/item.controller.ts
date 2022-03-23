@@ -1,21 +1,29 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
+  DefaultValuePipe,
   Delete,
   Get,
+  HttpStatus,
+  NotFoundException,
   Param,
+  ParseIntPipe,
+  ParseUUIDPipe,
   Post,
   Put,
   Query,
-  UseGuards,
+  UploadedFiles,
+  UseInterceptors,
 } from "@nestjs/common";
-import { ApiBearerAuth } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
 
 import { CreateItemDto, CreateItemRelationDto, UpdateItemDto } from "../dto";
-import { ItemType, PaginationResponse } from "../types";
-import { ItemService } from "./item.service";
 import { Item } from "../entities";
+import { ItemType, ItemTypes, PaginationResponse } from "../types";
+import { ItemService } from "./item.service";
 
+@ApiTags("item")
 @Controller({
   path: "item",
   version: "1",
@@ -24,8 +32,12 @@ export class ItemController {
   constructor(private readonly itemService: ItemService) {}
 
   @Post(":type")
-  @UseGuards()
   @ApiBearerAuth()
+  @ApiParam({
+    name: "type",
+    enumName: "ItemType",
+    enum: Object.keys(ItemTypes).map((v) => ItemTypes[v]),
+  })
   async create(
     @Param("type") type: ItemType,
     @Body() createItemDto: CreateItemDto,
@@ -34,19 +46,30 @@ export class ItemController {
   }
 
   @Get(":type")
-  @UseGuards()
   @ApiBearerAuth()
+  @ApiQuery({
+    name: "partNo",
+    required: false,
+  })
+  @ApiParam({
+    name: "type",
+    enumName: "ItemType",
+    enum: Object.keys(ItemTypes).map((v) => ItemTypes[v]),
+  })
   async findAll(
-    @Param("type") type: ItemType,
-    @Query("partNo") partNo?: string,
-    @Query("page")
+    @Param("type")
+    type: ItemType,
+    @Query("partNo")
+    partNo?: string,
+    @Query("page", new DefaultValuePipe(1), ParseIntPipe)
     page = 1,
-    @Query("limit") limit = 10,
+    @Query("limit", new DefaultValuePipe(10), ParseIntPipe) limit = 10,
   ) {
-    const offset = limit * (page > 1 ? page - 1 : 0);
+    const currentPage = page > 1 ? page : 1;
+    const offset = limit * (currentPage - 1);
     const data = await this.itemService.findAll(
       type,
-      { partNo },
+      partNo ? { partNo } : undefined,
       offset,
       limit,
     );
@@ -54,84 +77,129 @@ export class ItemController {
 
     return new PaginationResponse<Item>({
       data,
-      currentPage: page,
+      currentPage,
       totalItemCount,
       limit,
     });
   }
 
   @Get(":type/:id")
-  @UseGuards()
   @ApiBearerAuth()
-  async findOne(@Param("type") type: ItemType, @Param("id") id: string) {
+  @ApiParam({
+    name: "type",
+    enumName: "ItemType",
+    enum: Object.keys(ItemTypes).map((v) => ItemTypes[v]),
+  })
+  async findOne(
+    @Param("type") type: ItemType,
+    @Param("id", new ParseUUIDPipe()) id: string,
+  ) {
     return this.itemService.findOne(id, type);
   }
 
   @Put(":type/:id")
-  @UseGuards()
   @ApiBearerAuth()
+  @ApiParam({
+    name: "type",
+    enumName: "ItemType",
+    enum: Object.keys(ItemTypes).map((v) => ItemTypes[v]),
+  })
   async update(
     @Param("type") type: ItemType,
-    @Param("id") id: string,
+    @Param("id", new ParseUUIDPipe()) id: string,
     @Body() updateItemDto: UpdateItemDto,
   ) {
     return this.itemService.update(id, type, updateItemDto);
   }
 
   @Delete(":type/:id")
-  @UseGuards()
   @ApiBearerAuth()
-  async remove(@Param("type") type: ItemType, @Param("id") id: string) {
+  @ApiParam({
+    name: "type",
+    enumName: "ItemType",
+    enum: Object.keys(ItemTypes).map((v) => ItemTypes[v]),
+  })
+  async remove(
+    @Param("type") type: ItemType,
+    @Param("id", new ParseUUIDPipe()) id: string,
+  ) {
     return this.itemService.remove(id, type);
   }
 
   @Get(":type/:id/category")
-  @UseGuards()
   @ApiBearerAuth()
+  @ApiParam({
+    name: "type",
+    enumName: "ItemType",
+    enum: Object.keys(ItemTypes).map((v) => ItemTypes[v]),
+  })
   async getGategories(
     @Param("type") type: ItemType,
-    @Param("id") id: string,
-    @Query("page") page = 1,
-    @Query("limit") limit = 10,
+    @Param("id", new ParseUUIDPipe()) id: string,
+    @Query("page", new DefaultValuePipe(1), ParseIntPipe) page = 1,
+    @Query("limit", new DefaultValuePipe(10), ParseIntPipe) limit = 10,
   ) {
     const offset = limit * (page > 1 ? page - 1 : 0);
     return await this.itemService.getCategories(id, type, offset, +limit);
   }
 
   @Put(":type/:id/category")
-  @UseGuards()
   @ApiBearerAuth()
+  @ApiParam({
+    name: "type",
+    enumName: "ItemType",
+    enum: Object.keys(ItemTypes).map((v) => ItemTypes[v]),
+  })
   async updateCategory(
     @Param("type") type: ItemType,
-    @Param("id") id: string,
-    @Body("categoryId") categoryId: number,
+    @Param("id", new ParseUUIDPipe()) id: string,
+    @Body("categoryId", ParseIntPipe) categoryId: number,
   ) {
     return this.itemService.updateCategory(id, type, +categoryId);
   }
 
   @Delete(":type/:id/category/:categoryId")
-  @UseGuards()
   @ApiBearerAuth()
+  @ApiParam({
+    name: "type",
+    enumName: "ItemType",
+    enum: Object.keys(ItemTypes).map((v) => ItemTypes[v]),
+  })
   async removeCategory(
     @Param("type") type: ItemType,
-    @Param("id") id: string,
-    @Param("categoryId") categoryId: number,
+    @Param("id", new ParseUUIDPipe()) id: string,
+    @Param(
+      "categoryId",
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
+    )
+    categoryId: number,
   ) {
     return this.itemService.removeCategory(id, type, +categoryId);
   }
 
   @Get("product/:id/parts")
-  @UseGuards()
   @ApiBearerAuth()
-  async getParts(@Param("type") type: ItemType, @Param("id") id: string) {
+  @ApiParam({
+    name: "type",
+    enumName: "ItemType",
+    enum: Object.keys(ItemTypes).map((v) => ItemTypes[v]),
+  })
+  async getParts(
+    @Param("type") type: ItemType,
+    @Param("id", new ParseUUIDPipe()) id: string,
+  ) {
     return await this.itemService.getParts(id);
   }
 
   @Put("product/:id/parts")
-  @UseGuards()
   @ApiBearerAuth()
+  @ApiParam({
+    name: "type",
+    enumName: "ItemType",
+    enum: Object.keys(ItemTypes).map((v) => ItemTypes[v]),
+  })
   async addParts(
-    @Param("id") id: string,
+    @Param("id", new ParseUUIDPipe()) id: string,
     @Body() createItemRelationDto: CreateItemRelationDto,
   ) {
     return this.itemService.addParts({
@@ -141,48 +209,62 @@ export class ItemController {
   }
 
   @Delete("product/:id/parts/:partsId")
-  @UseGuards()
   @ApiBearerAuth()
+  @ApiParam({
+    name: "type",
+    enumName: "ItemType",
+    enum: Object.keys(ItemTypes).map((v) => ItemTypes[v]),
+  })
   async removeParts(
-    @Param("id") id: string,
-    @Param("partsId") partsId: string,
+    @Param("id", new ParseUUIDPipe()) id: string,
+    @Param("partsId", new ParseUUIDPipe()) partsId: string,
   ) {
     return this.itemService.removeParts(id, partsId);
   }
 
-  ////admin/item/{itemType}/{id}/
-
   @Get(":type/:id/company")
-  @UseGuards()
   @ApiBearerAuth()
+  @ApiParam({
+    name: "type",
+    enumName: "ItemType",
+    enum: Object.keys(ItemTypes).map((v) => ItemTypes[v]),
+  })
   async getCompany(
     @Param("type") type: ItemType,
-    @Param("id") id: string,
-    @Query("page") page = 1,
-    @Query("limit") limit = 10,
+    @Param("id", new ParseUUIDPipe()) id: string,
+    @Query("page", new DefaultValuePipe(1), ParseIntPipe) page = 1,
+    @Query("limit", new DefaultValuePipe(10), ParseIntPipe) limit = 10,
   ) {
     const offset = limit * (page > 1 ? page - 1 : 0);
     return await this.itemService.getCompanies(id, type, offset, +limit);
   }
 
   @Put(":type/:id/company")
-  @UseGuards()
   @ApiBearerAuth()
+  @ApiParam({
+    name: "type",
+    enumName: "ItemType",
+    enum: Object.keys(ItemTypes).map((v) => ItemTypes[v]),
+  })
   async addCompany(
-    @Param("id") id: string,
+    @Param("id", new ParseUUIDPipe()) id: string,
     @Param("type") type: ItemType,
-    @Body("companyId") companyId: string,
+    @Body("companyId", new ParseUUIDPipe()) companyId: string,
   ) {
     return this.itemService.addCompany(id, type, companyId);
   }
 
   @Delete(":type/:id/company/:companyId")
-  @UseGuards()
   @ApiBearerAuth()
+  @ApiParam({
+    name: "type",
+    enumName: "ItemType",
+    enum: Object.keys(ItemTypes).map((v) => ItemTypes[v]),
+  })
   async removeCompany(
-    @Param("id") id: string,
+    @Param("id", new ParseUUIDPipe()) id: string,
     @Param("type") type: ItemType,
-    @Param("companyId") companyId: string,
+    @Param("companyId", new ParseUUIDPipe()) companyId: string,
   ) {
     return this.itemService.removeCompany(id, type, companyId);
   }
