@@ -163,6 +163,8 @@ export class CategoryController {
     )
     id: number,
   ) {
-    return this.categoryService.remove(+id, type);
+    if (!this.categoryService.remove(+id, type)) {
+      throw new NotFoundException();
+    }
   }
 }

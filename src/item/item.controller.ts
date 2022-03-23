@@ -125,7 +125,9 @@ export class ItemController {
     @Param("type") type: ItemType,
     @Param("id", new ParseUUIDPipe()) id: string,
   ) {
-    return this.itemService.remove(id, type);
+    if (!this.itemService.remove(id, type)) {
+      throw new NotFoundException();
+    }
   }
 
   @Get(":type/:id/category")
@@ -176,7 +178,9 @@ export class ItemController {
     )
     categoryId: number,
   ) {
-    return this.itemService.removeCategory(id, type, +categoryId);
+    if (this.itemService.removeCategory(id, type, +categoryId)) {
+      throw new NotFoundException();
+    }
   }
 
   @Get(":type/:id/company")
@@ -223,7 +227,9 @@ export class ItemController {
     @Param("type") type: ItemType,
     @Param("companyId", new ParseUUIDPipe()) companyId: string,
   ) {
-    return this.itemService.removeCompany(id, type, companyId);
+    if (this.itemService.removeCompany(id, type, companyId)) {
+      throw new NotFoundException();
+    }
   }
 
   // @Post(":type/:id/resource/:fileType")

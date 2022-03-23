@@ -73,6 +73,8 @@ export class CompanyController {
   @Delete(":id")
   @ApiBearerAuth()
   remove(@Param("id", new ParseUUIDPipe()) id: string) {
-    return this.companyService.remove(id);
+    if (!this.companyService.remove(id)) {
+      throw new NotFoundException();
+    }
   }
 }
