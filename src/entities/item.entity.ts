@@ -28,6 +28,7 @@ import { ItemRelation } from "./itemRelation.entity";
 
 @Table({
   charset: "utf8",
+  paranoid: true,
   hooks: {
     beforeValidate: (item: Item) => {
       if (item.type === ItemTypes.parts) {
@@ -42,7 +43,7 @@ import { ItemRelation } from "./itemRelation.entity";
   },
   defaultScope: {
     attributes: {
-      exclude: ["tsvector"],
+      exclude: ["tsvector", "deletedAt"],
     },
   },
 })
@@ -119,13 +120,6 @@ export class Item extends Model<Item, CreateItemDto> {
     defaultValue: 0,
   })
   extraFee!: number;
-
-  @NotNull
-  @Column({
-    allowNull: false,
-    defaultValue: false,
-  })
-  disable!: boolean;
 
   @NotNull
   @Column({

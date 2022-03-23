@@ -20,6 +20,7 @@ import {
 
 @Table({
   charset: "utf8",
+  paranoid: true,
   hooks: {
     beforeValidate: (item: Company) => {
       item.name = item.name?.trim();
@@ -31,7 +32,7 @@ import {
   },
   defaultScope: {
     attributes: {
-      exclude: ["tsvector"],
+      exclude: ["tsvector", "deletedAt"],
     },
   },
 })
@@ -86,6 +87,7 @@ export class Company extends Model<Company, CreateCompanyDto> {
     type: "FULLTEXT",
     using: "GIN",
   })
+  @ApiHideProperty()
   tsvector?: unknown;
 
   @HasMany(() => ItemCompanyRelation, {

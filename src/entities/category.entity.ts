@@ -17,7 +17,7 @@ import ItemCategoryRelation from "./ItemCategoryRelation.entry";
 
 @Table({
   charset: "utf8",
-  paranoid: false,
+  paranoid: true,
   hooks: {
     beforeValidate: (item: Category) => {
       item.name = item.name?.trim();
@@ -25,7 +25,7 @@ import ItemCategoryRelation from "./ItemCategoryRelation.entry";
   },
   defaultScope: {
     attributes: {
-      exclude: ["tsvector"],
+      exclude: ["tsvector", "deletedAt"],
     },
   },
 })

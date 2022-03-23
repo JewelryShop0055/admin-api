@@ -29,7 +29,7 @@ CREATE TRIGGER autoRevTrigger BEFORE INSERT on "Items"
  for each row execute procedure autoRev();
    END IF;
 END;
-$$
+$$;
 
 -- 아래부터 검색어 트리거
 
