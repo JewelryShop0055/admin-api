@@ -1,6 +1,5 @@
 import {
   Body,
-  ClassSerializerInterceptor,
   Controller,
   DefaultValuePipe,
   Delete,
@@ -180,51 +179,6 @@ export class ItemController {
     return this.itemService.removeCategory(id, type, +categoryId);
   }
 
-  @Get("product/:id/parts")
-  @ApiBearerAuth()
-  @ApiParam({
-    name: "type",
-    enumName: "ItemType",
-    enum: Object.keys(ItemTypes).map((v) => ItemTypes[v]),
-  })
-  async getParts(
-    @Param("type") type: ItemType,
-    @Param("id", new ParseUUIDPipe()) id: string,
-  ) {
-    return await this.itemService.getParts(id);
-  }
-
-  @Put("product/:id/parts")
-  @ApiBearerAuth()
-  @ApiParam({
-    name: "type",
-    enumName: "ItemType",
-    enum: Object.keys(ItemTypes).map((v) => ItemTypes[v]),
-  })
-  async addParts(
-    @Param("id", new ParseUUIDPipe()) id: string,
-    @Body() createItemRelationDto: CreateItemRelationDto,
-  ) {
-    return this.itemService.addParts({
-      ...createItemRelationDto,
-      productId: id,
-    });
-  }
-
-  @Delete("product/:id/parts/:partsId")
-  @ApiBearerAuth()
-  @ApiParam({
-    name: "type",
-    enumName: "ItemType",
-    enum: Object.keys(ItemTypes).map((v) => ItemTypes[v]),
-  })
-  async removeParts(
-    @Param("id", new ParseUUIDPipe()) id: string,
-    @Param("partsId", new ParseUUIDPipe()) partsId: string,
-  ) {
-    return this.itemService.removeParts(id, partsId);
-  }
-
   @Get(":type/:id/company")
   @ApiBearerAuth()
   @ApiParam({
@@ -270,5 +224,59 @@ export class ItemController {
     @Param("companyId", new ParseUUIDPipe()) companyId: string,
   ) {
     return this.itemService.removeCompany(id, type, companyId);
+  }
+
+  // @Post(":type/:id/resource/:fileType")
+  // // @FastifyFilesInterceptor("imgs", 5, {
+  // //   storage: multerS3(),
+  // //   // fileFilter: imageFileFilter,
+  // // })
+  // uploadFile(@UploadedFiles() file: File) {
+  //   return file;
+  // }
+
+  @Get("product/:id/parts")
+  @ApiBearerAuth()
+  @ApiParam({
+    name: "type",
+    enumName: "ItemType",
+    enum: Object.keys(ItemTypes).map((v) => ItemTypes[v]),
+  })
+  async getParts(
+    @Param("type") type: ItemType,
+    @Param("id", new ParseUUIDPipe()) id: string,
+  ) {
+    return await this.itemService.getParts(id);
+  }
+
+  @Put("product/:id/parts")
+  @ApiBearerAuth()
+  @ApiParam({
+    name: "type",
+    enumName: "ItemType",
+    enum: Object.keys(ItemTypes).map((v) => ItemTypes[v]),
+  })
+  async addParts(
+    @Param("id", new ParseUUIDPipe()) id: string,
+    @Body() createItemRelationDto: CreateItemRelationDto,
+  ) {
+    return this.itemService.addParts({
+      ...createItemRelationDto,
+      productId: id,
+    });
+  }
+
+  @Delete("product/:id/parts/:partsId")
+  @ApiBearerAuth()
+  @ApiParam({
+    name: "type",
+    enumName: "ItemType",
+    enum: Object.keys(ItemTypes).map((v) => ItemTypes[v]),
+  })
+  async removeParts(
+    @Param("id", new ParseUUIDPipe()) id: string,
+    @Param("partsId", new ParseUUIDPipe()) partsId: string,
+  ) {
+    return this.itemService.removeParts(id, partsId);
   }
 }
