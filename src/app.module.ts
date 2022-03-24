@@ -18,6 +18,7 @@ import { SearchModule } from "./search/search.module";
 import { KeycloakConfigService } from "./auth/keycloak-config.service";
 import { AuthModule } from "./auth/auth.module";
 import { APP_GUARD } from "@nestjs/core";
+import { AwsModule } from "./aws/aws.module";
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { APP_GUARD } from "@nestjs/core";
     CompanyModule,
     DatabaseModule,
     SearchModule,
+    AwsModule,
   ],
   controllers: [AppController],
   providers: [

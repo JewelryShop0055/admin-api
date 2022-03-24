@@ -1,7 +1,6 @@
 app:
   port: 3001
   resource:
-    region: "ap-northeast-2"
     imageResourcePath: "/app/resource"
     address: resource.example.com
   serviceName: service
@@ -10,6 +9,7 @@ app:
 
 db:
   allowSync: false
+  # sequelize-typscript
   config: 
     dialect: postgres
     dialectOptions:
@@ -37,6 +37,16 @@ db:
         host: localhost
         port: 5432
     timezone: +09:00
+
+# aws-sdk ConfigurationOptions
+aws:
+  signatureVersion: v4
+  region: "ap-northeast-2"
+  # IF USE AWS. not required
+  s3Endpoint: "http://127.0.0.1:9000"
+  credentials:
+    - accessKeyId: somekey
+      secretAccessKey: somesecret
 
 keycloak:
   authServerUrl: http://localhost:8180/auth

@@ -8,12 +8,15 @@ import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { fastifyHelmet } from "fastify-helmet";
 import { ValidationPipe, VersioningType } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { contentParser } from "fastify-multer";
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter({ logger: true }),
   );
+
+  await app.register(contentParser);
 
   app.register(fastifyHelmet, {
     contentSecurityPolicy: {
