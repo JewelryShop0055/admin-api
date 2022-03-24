@@ -115,7 +115,6 @@ export class ItemService {
           model: Item,
           as: "product",
           where: {
-            disable: false,
             type,
             id,
           },
@@ -162,14 +161,13 @@ export class ItemService {
     });
   }
 
-  async getParts(prodcutId: string) {
+  async getParts(productId: string) {
     return await Item.findAll({
       include: [
         {
           model: ItemRelation,
           where: {
-            prodcutId,
-            disable: false,
+            productId,
           },
           as: "productRelation",
         },
@@ -240,7 +238,6 @@ export class ItemService {
           model: Item,
           as: "product",
           where: {
-            disable: false,
             type,
             id,
           },
@@ -285,8 +282,6 @@ export class ItemService {
     if (type !== "all") {
       preWhereOptions["type"] = type;
     }
-
-    preWhereOptions["disable"] = false;
 
     return await Item.findAll({
       where: preWhereOptions,
