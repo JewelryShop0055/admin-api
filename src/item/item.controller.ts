@@ -241,28 +241,27 @@ export class ItemController {
   //   return file;
   // }
 
-  @Get("product/:id/parts")
+  @Get(":type/:id/parts")
   @ApiBearerAuth()
   @ApiParam({
     name: "type",
-    enumName: "ItemType",
-    enum: Object.keys(ItemTypes).map((v) => ItemTypes[v]),
+    enum: ["product"],
   })
   async getParts(
-    @Param("type") type: ItemType,
+    @Param("type") type: "product",
     @Param("id", new ParseUUIDPipe()) id: string,
   ) {
     return await this.itemService.getParts(id);
   }
 
-  @Put("product/:id/parts")
+  @Put(":type/:id/parts")
   @ApiBearerAuth()
   @ApiParam({
     name: "type",
-    enumName: "ItemType",
-    enum: Object.keys(ItemTypes).map((v) => ItemTypes[v]),
+    enum: ["product"],
   })
   async addParts(
+    @Param("type") type: "product",
     @Param("id", new ParseUUIDPipe()) id: string,
     @Body() createItemRelationDto: CreateItemRelationDto,
   ) {
@@ -272,14 +271,14 @@ export class ItemController {
     });
   }
 
-  @Delete("product/:id/parts/:partsId")
+  @Delete(":type/:id/parts/:partsId")
   @ApiBearerAuth()
   @ApiParam({
     name: "type",
-    enumName: "ItemType",
-    enum: Object.keys(ItemTypes).map((v) => ItemTypes[v]),
+    enum: ["product"],
   })
   async removeParts(
+    @Param("type") type: "product",
     @Param("id", new ParseUUIDPipe()) id: string,
     @Param("partsId", new ParseUUIDPipe()) partsId: string,
   ) {
