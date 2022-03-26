@@ -2974,9 +2974,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"admin-api-nest@workspace:.":
+"admin-api@workspace:.":
   version: 0.0.0-use.local
-  resolution: "admin-api-nest@workspace:."
+  resolution: "admin-api@workspace:."
   dependencies:
     "@compodoc/compodoc": ^1.1.19
     "@nestjs/cli": ^8.0.0

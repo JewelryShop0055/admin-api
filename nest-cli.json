@@ -3,7 +3,8 @@
   "sourceRoot": "src",
   "deleteOutDir": true,
   "compilerOptions": {
-    "assets": ["**/*.yml", "**/*.sql"]
+    "assets": ["**/*.yml", "**/*.sql"],
+    "plugins": ["@nestjs/swagger"]
   },
   "assets": [
     {
