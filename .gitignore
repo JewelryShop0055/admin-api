@@ -37,3 +37,4 @@ lerna-debug.log*
 # Project 
 src/**/*.yml
 src/**/*.yaml
+config.yml
