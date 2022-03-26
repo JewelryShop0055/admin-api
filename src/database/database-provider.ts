@@ -9,6 +9,10 @@ function readQueryFile() {
   return readFileSync(join(__dirname, "query.sql"), "utf-8");
 }
 
+function readMecabQueryFile() {
+  return readFileSync(join(__dirname, "ts_mecab_ko.sql"), "utf-8");
+}
+
 export const databaseProvider: Provider = {
   provide: "SEQUELIZE",
   inject: [ConfigService],
@@ -19,7 +23,10 @@ export const databaseProvider: Provider = {
     });
     if (configService.get("db").allowSync) {
       await sequelize.sync();
-      sequelize.query(readQueryFile());
+      await sequelize.query(readQueryFile());
+      await sequelize
+        .query(readMecabQueryFile())
+        .catch((err) => console.error(err));
     }
     return sequelize;
   },
