@@ -24,9 +24,15 @@ export const databaseProvider: Provider = {
     if (configService.get("db").allowSync) {
       await sequelize.sync();
       await sequelize.query(readQueryFile());
-      await sequelize
-        .query(readMecabQueryFile())
-        .catch((err) => console.error(err));
+
+      if (configService.get("db").initKorDic) {
+
+        await sequelize
+          .query(readMecabQueryFile(), {
+            raw: true,
+          })
+          .catch((err) => console.error(err));
+      }
     }
     return sequelize;
   },

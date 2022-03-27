@@ -8,6 +8,7 @@ app:
 
 db:
   allowSync: false
+  initKorDic: false
   # sequelize-typscript
   config: 
     dialect: postgres
