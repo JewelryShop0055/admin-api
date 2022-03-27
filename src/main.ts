@@ -47,6 +47,6 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(config.port || 3000);
+  await app.listen(config.port || 3001, "0.0.0.0");
 }
 bootstrap();
