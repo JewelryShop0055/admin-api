@@ -2,6 +2,8 @@ import { Injectable, Logger } from "@nestjs/common";
 import {
   KeycloakConnectOptions,
   KeycloakConnectOptionsFactory,
+  PolicyEnforcementMode,
+  TokenValidation,
 } from "nest-keycloak-connect";
 import { ConfigService } from "@nestjs/config";
 
@@ -15,6 +17,8 @@ export class KeycloakConfigService implements KeycloakConnectOptionsFactory {
     Logger.debug(this.configService);
     return {
       ...config,
+      policyEnforcement: PolicyEnforcementMode.PERMISSIVE,
+      tokenValidation: TokenValidation.ONLINE,
     };
   }
 }

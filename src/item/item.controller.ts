@@ -15,13 +15,21 @@ import {
   UploadedFiles,
   UseInterceptors,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiParam,
+  ApiQuery,
+  ApiTags,
+} from "@nestjs/swagger";
 
 import { CreateItemDto, CreateItemRelationDto, UpdateItemDto } from "../dto";
 import { Item } from "../entities";
 import { ItemType, ItemTypes, PaginationResponse } from "../types";
 import { ItemService } from "./item.service";
+import { Roles } from "nest-keycloak-connect";
 
+@Roles({ roles: ["realm:READ_ITEM"] })
 @ApiTags("item")
 @Controller({
   path: "item",
@@ -30,6 +38,7 @@ import { ItemService } from "./item.service";
 export class ItemController {
   constructor(private readonly itemService: ItemService) {}
 
+  @Roles({ roles: ["realm:WRITE_ITEM"] })
   @Post(":type")
   @ApiBearerAuth()
   @ApiParam({
@@ -96,6 +105,7 @@ export class ItemController {
     return this.itemService.findOne(id, type);
   }
 
+  @Roles({ roles: ["realm:WRITE_ITEM"] })
   @Put(":type/:id")
   @ApiBearerAuth()
   @ApiParam({
@@ -114,6 +124,7 @@ export class ItemController {
     }
   }
 
+  @Roles({ roles: ["realm:REMOVE_ITEM"] })
   @Delete(":type/:id")
   @ApiBearerAuth()
   @ApiParam({
@@ -130,6 +141,7 @@ export class ItemController {
     }
   }
 
+  @Roles({ roles: ["realm:READ_CATEOGRY"] })
   @Get(":type/:id/category")
   @ApiBearerAuth()
   @ApiParam({
@@ -147,6 +159,7 @@ export class ItemController {
     return await this.itemService.getCategories(id, type, offset, +limit);
   }
 
+  @Roles({ roles: ["realm:WRITE_ITEM"] })
   @Put(":type/:id/category")
   @ApiBearerAuth()
   @ApiParam({
@@ -162,6 +175,7 @@ export class ItemController {
     return this.itemService.updateCategory(id, type, +categoryId);
   }
 
+  @Roles({ roles: ["realm:WRITE_ITEM"] })
   @Delete(":type/:id/category/:categoryId")
   @ApiBearerAuth()
   @ApiParam({
@@ -183,6 +197,7 @@ export class ItemController {
     }
   }
 
+  @Roles({ roles: ["realm:READ_COMPANY"] })
   @Get(":type/:id/company")
   @ApiBearerAuth()
   @ApiParam({
@@ -200,6 +215,7 @@ export class ItemController {
     return await this.itemService.getCompanies(id, type, offset, +limit);
   }
 
+  @Roles({ roles: ["realm:WRITE_ITEM"] })
   @Put(":type/:id/company")
   @ApiBearerAuth()
   @ApiParam({
@@ -215,6 +231,7 @@ export class ItemController {
     return this.itemService.addCompany(id, type, companyId);
   }
 
+  @Roles({ roles: ["realm:WRITE_ITEM"] })
   @Delete(":type/:id/company/:companyId")
   @ApiBearerAuth()
   @ApiParam({
@@ -232,14 +249,6 @@ export class ItemController {
     }
   }
 
-  // @Post(":type/:id/resource/:fileType")
-  // // @FastifyFilesInterceptor("imgs", 5, {
-  // //   storage: multerS3(),
-  // //   // fileFilter: imageFileFilter,
-  // // })
-  // uploadFile(@UploadedFiles() file: File) {
-  //   return file;
-  // }
 
   @Get(":type/:id/parts")
   @ApiBearerAuth()
@@ -254,6 +263,7 @@ export class ItemController {
     return await this.itemService.getParts(id);
   }
 
+  @Roles({ roles: ["realm:WRITE_ITEM"] })
   @Put(":type/:id/parts")
   @ApiBearerAuth()
   @ApiParam({
@@ -271,6 +281,7 @@ export class ItemController {
     });
   }
 
+  @Roles({ roles: ["realm:WRITE_ITEM"] })
   @Delete(":type/:id/parts/:partsId")
   @ApiBearerAuth()
   @ApiParam({

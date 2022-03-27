@@ -17,7 +17,9 @@ import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { PaginationResponse } from "../types/paginationResponse.type";
 import { Company } from "../entities";
 import { ParseIntPipe } from "@nestjs/common";
+import { Roles } from "nest-keycloak-connect";
 
+@Roles({ roles: ["realm:READ_COMPANY"] })
 @ApiTags("company")
 @Controller({
   path: "company",
@@ -26,6 +28,7 @@ import { ParseIntPipe } from "@nestjs/common";
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
+  @Roles({ roles: ["realm:WRITE_COMPANY"] })
   @Post()
   @ApiBearerAuth()
   create(@Body() createCompanyDto: CreateCompanyDto) {
@@ -57,6 +60,7 @@ export class CompanyController {
     return this.companyService.findOne(id);
   }
 
+  @Roles({ roles: ["realm:WRITE_COMPANY"] })
   @Put(":id")
   @ApiBearerAuth()
   async update(
@@ -70,6 +74,7 @@ export class CompanyController {
     }
   }
 
+  @Roles({ roles: ["realm:REMOVE_COMPANY"] })
   @Delete(":id")
   @ApiBearerAuth()
   remove(@Param("id", new ParseUUIDPipe()) id: string) {

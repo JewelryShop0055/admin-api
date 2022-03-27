@@ -25,7 +25,9 @@ import { Category } from "../entities";
 import { ItemType, PaginationResponse } from "../types";
 import { CategoryService } from "./category.service";
 import { ItemTypes } from "../types/itemType.type";
+import { Roles } from "nest-keycloak-connect";
 
+@Roles({ roles: ["realm:READ_CATEGORY"] })
 @ApiTags("category")
 @Controller({
   path: "category",
@@ -34,6 +36,7 @@ import { ItemTypes } from "../types/itemType.type";
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
+  @Roles({ roles: ["realm:WRITE_CATEGORY"] })
   @Post(":type")
   @ApiBearerAuth()
   @ApiResponse({
@@ -116,6 +119,7 @@ export class CategoryController {
     return this.categoryService.findOne(+id, type);
   }
 
+  @Roles({ roles: ["realm:WRITE_CATEGORY"] })
   @Put(":type/:id")
   @ApiBearerAuth()
   @ApiResponse({
@@ -148,6 +152,7 @@ export class CategoryController {
     }
   }
 
+  @Roles({ roles: ["realm:REMOVE_CATEGORY"] })
   @Delete(":type/:id")
   @ApiBearerAuth()
   @ApiParam({
