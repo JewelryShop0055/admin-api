@@ -35,7 +35,7 @@ import { DatabaseModule } from "../database/database.module";
                 return cb(new Error("Not Allow File Field"));
               }
               cb(
-                false,
+                undefined,
                 `img/${req.params["id"]}/${req.query["rav_uuid_gen"]}-${
                   file.fieldname
                 }.${file.originalname.split(".").reverse()[0]}`,

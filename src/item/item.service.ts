@@ -408,7 +408,7 @@ export class ItemService {
     try {
       await ItemResource.update(
         {
-          order: Sequelize.fn("order + 1"),
+          order: Sequelize.literal('"order" + 1'),
         },
         {
           where: {
@@ -426,7 +426,7 @@ export class ItemService {
         {
           id: resourceId,
           type: fileType,
-          item,
+          itemId: id,
           paths,
           order,
         },
@@ -434,6 +434,8 @@ export class ItemService {
           transaction,
         },
       );
+
+      await transaction.commit();
 
       return {
         ...result.toJSON(),
@@ -445,6 +447,7 @@ export class ItemService {
         }, {}),
       };
     } catch (e) {
+      console.error(e);
       await transaction.rollback().catch((err) => Logger.error(err));
       throw new InternalServerErrorException();
     }
@@ -477,7 +480,7 @@ export class ItemService {
 
       await ItemResource.update(
         {
-          order: Sequelize.fn("order - 1"),
+          order: Sequelize.literal('"order" - 1'),
         },
         {
           where: {
@@ -496,6 +499,8 @@ export class ItemService {
           async (r) => await this.s3Service.delete(resource.paths[r]),
         ),
       );
+
+      await transaction.commit();
     } catch (e) {
       console.error(e);
       await transaction.rollback().catch((err) => Logger.error(err));
