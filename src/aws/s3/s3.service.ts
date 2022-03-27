@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import * as AWS from "aws-sdk";
 
@@ -19,9 +19,27 @@ export class S3Service {
         process.env.secretAccessKey,
     },
     endpoint: this.configService.get("aws").s3Endpoint,
+    apiVersion: this.configService.get("aws").signatureVersion,
   });
 
   getInstance() {
     return this.s3;
+  }
+
+  async delete(key: string): Promise<AWS.S3.DeleteObjectOutput | void> {
+    const result = await this.s3
+      .deleteObject({
+        Key: key,
+        Bucket: this.configService.get("aws").bucketName,
+      })
+      .promise();
+
+    Logger.log(`removed ${key}`);
+
+    if (result.$response.error) {
+      throw result.$response.error;
+    }
+
+    return result.$response.data;
   }
 }

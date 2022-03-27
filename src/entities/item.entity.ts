@@ -25,6 +25,7 @@ import { ItemCategoryRelation } from "./ItemCategoryRelation.entry";
 import { ItemCompanyRelation } from "./itemCompanyRelation.entry";
 import { ItemRelation } from "./itemRelation.entity";
 import { ApiProperty, ApiHideProperty } from "@nestjs/swagger";
+import { ItemResource } from "./itemResource.entity";
 
 @Table({
   charset: "utf8",
@@ -197,6 +198,12 @@ export class Item extends Model<Item, CreateItemDto> {
     as: "partsRelations",
   })
   partsRelations?: ItemRelation[];
+
+  @HasMany(() => ItemResource, {
+    onDelete: "CASCADE",
+    foreignKey: "itemId",
+  })
+  resources?: ItemResource[];
 
   @BelongsToMany(() => Item, {
     through: () => ItemRelation,

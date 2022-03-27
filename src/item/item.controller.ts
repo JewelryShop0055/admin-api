@@ -13,6 +13,7 @@ import {
   Put,
   Query,
   UploadedFiles,
+  UseFilters,
   UseInterceptors,
 } from "@nestjs/common";
 import {
@@ -27,7 +28,13 @@ import { CreateItemDto, CreateItemRelationDto, UpdateItemDto } from "../dto";
 import { Item } from "../entities";
 import { ItemType, ItemTypes, PaginationResponse } from "../types";
 import { ItemService } from "./item.service";
+import { File } from "fastify-multer/lib/interfaces";
+import { S3Service } from "../aws/s3/s3.service";
 import { Roles } from "nest-keycloak-connect";
+import { FileFieldsInterceptor } from "../multer/interceptors/file-fields.interceptor";
+import { UuidGenerationInterceptor } from "./interceptors/uuidGeneration.Interceptor";
+import { ItemFileType } from "../types/itemFile.type";
+import { FileErrorFilter } from "./filters/fileError.filter";
 
 @Roles({ roles: ["realm:READ_ITEM"] })
 @ApiTags("item")
@@ -36,7 +43,10 @@ import { Roles } from "nest-keycloak-connect";
   version: "1",
 })
 export class ItemController {
-  constructor(private readonly itemService: ItemService) {}
+  constructor(
+    private readonly itemService: ItemService,
+    private readonly s3Service: S3Service,
+  ) {}
 
   @Roles({ roles: ["realm:WRITE_ITEM"] })
   @Post(":type")
@@ -249,6 +259,95 @@ export class ItemController {
     }
   }
 
+  @Roles({ roles: ["realm:READ_ITEM"] })
+  @Get(":type/:id/resource")
+  async getResource(
+    @Param("id", new ParseUUIDPipe()) id: string,
+    @Param("type") type: ItemType,
+    @Query("fileType") fileType: ItemFileType,
+    @Query("order") order?: number,
+  ) {
+    const results = await this.itemService.getResource(
+      id,
+      type,
+      fileType,
+      order,
+    );
+
+    return results.map((result) => {
+      return {
+        id: result.id,
+        itemId: result.itemId,
+        type: result.type,
+        paths: result.paths,
+        order: result.order,
+      };
+    });
+  }
+
+  @Roles({ roles: ["realm:WRITE_ITEM"] })
+  @Post(":type/:id/resource/:fileType")
+  @ApiConsumes("multipart/form-data")
+  @UseInterceptors(
+    UuidGenerationInterceptor(),
+    FileFieldsInterceptor([
+      {
+        name: "origin",
+        maxCount: 1,
+      },
+      {
+        name: "1000x1000",
+        maxCount: 1,
+      },
+      {
+        name: "500x500",
+        maxCount: 1,
+      },
+      {
+        name: "100x100",
+        maxCount: 1,
+      },
+    ]),
+  )
+  @UseFilters(FileErrorFilter)
+  async uploadFile(
+    @Query("rav_uuid_gen") resourceId: string,
+    @Param("id", new ParseUUIDPipe()) id: string,
+    @Param("type") type: ItemType,
+    @Param("fileType") fileType: ItemFileType,
+    @UploadedFiles() files: (File | any)[],
+    @Body("order") order?: number,
+  ) {
+    const result = await this.itemService.addResource(
+      id,
+      type,
+      resourceId,
+      fileType,
+      Object.keys(files).reduce((p, v) => {
+        p[v] = files[v]?.[0]?.key;
+        return p;
+      }, {}),
+      order,
+    );
+
+    return {
+      id: result.id,
+      itemId: result.itemId,
+      type: result.type,
+      paths: result.paths,
+      order: result.order,
+    };
+  }
+
+  @Roles({ roles: ["realm:WRITE_ITEM"] })
+  @Delete(":type/:id/resource/:resourceId")
+  async removeResource(
+    @Param("id", new ParseUUIDPipe()) id: string,
+    @Param("type") type: ItemType,
+    @Param("resourceId", new ParseUUIDPipe()) resourceId: string,
+  ) {
+    await this.itemService.removeResource(id, type, resourceId);
+  }
 
   @Get(":type/:id/parts")
   @ApiBearerAuth()

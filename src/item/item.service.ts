@@ -3,9 +3,11 @@ import {
   forwardRef,
   Inject,
   Injectable,
+  InternalServerErrorException,
+  Logger,
   NotFoundException,
 } from "@nestjs/common";
-import { Op, WhereOptions } from "sequelize";
+import { Op, WhereOptions, Sequelize } from "sequelize";
 
 import { CategoryService } from "../category/category.service";
 import { CompanyService } from "../company/company.service";
@@ -15,9 +17,12 @@ import {
   ItemCategoryRelation,
   ItemCompanyRelation,
   ItemRelation,
+  ItemResource,
 } from "../entities";
-import { ItemType, ItemTypes } from "../types";
+import { ItemType, ItemTypes, ResourcePath } from "../types";
 import sequelize from "sequelize";
+import { ItemFileType } from "../types/itemFile.type";
+import { S3Service } from "../aws/s3/s3.service";
 
 @Injectable()
 export class ItemService {
@@ -27,6 +32,11 @@ export class ItemService {
 
     // @Inject(forwardRef(() => CompanyService))
     private readonly companyService: CompanyService,
+
+    private readonly s3Service: S3Service,
+
+    @Inject("SEQUELIZE")
+    private readonly sequelizeInstance: Sequelize,
   ) {}
 
   async create(createItemDto: CreateItemDto) {
@@ -308,5 +318,165 @@ export class ItemService {
     return (await this.search(type, preWhereOptions, 0, limit)).map(
       (v) => v.name,
     );
+  }
+
+  async getResourceCount(id: string, fileType?: ItemFileType) {
+    const where = {
+      itemId: id,
+    };
+
+    if (fileType) {
+      where["type"] = fileType;
+    }
+
+    return await ItemResource.count({
+      where,
+    });
+  }
+
+  async getResource(
+    id: string,
+    type: string,
+    fileType?: string,
+    order?: number,
+  ) {
+    const where = {
+      type: fileType,
+    };
+
+    if (order) {
+      where["order"] = order;
+    }
+
+    return await ItemResource.findAll({
+      where,
+      include: [
+        {
+          model: Item,
+          where: {
+            id,
+            type,
+          },
+        },
+      ],
+    });
+  }
+
+  async addResource(
+    id: string,
+    type: ItemType,
+    resourceId: string,
+    fileType: ItemFileType,
+    paths: ResourcePath,
+    order?: number,
+  ) {
+    const item = await Item.findOne({
+      where: {
+        id,
+        type,
+      },
+    });
+
+    if (!item) {
+      throw new NotFoundException(`Not Exist ${type}:${id}`);
+    }
+
+    const currentCount = await this.getResourceCount(id, fileType);
+    order = order ? order : currentCount;
+
+    if (fileType === "thumbnail" && currentCount >= 5) {
+      throw new BadRequestException("Thumail is not over 5 images");
+    }
+
+    const transaction = await this.sequelizeInstance.transaction();
+
+    try {
+      await ItemResource.update(
+        {
+          order: Sequelize.fn("order + 1"),
+        },
+        {
+          where: {
+            type: fileType,
+            itemId: id,
+            order: {
+              [Op.gte]: order,
+            },
+          },
+          transaction,
+        },
+      );
+
+      const result = await ItemResource.create(
+        {
+          id: resourceId,
+          type: fileType,
+          item,
+          paths,
+          order,
+        },
+        {
+          transaction,
+        },
+      );
+
+      return result;
+    } catch (e) {
+      await transaction.rollback().catch((err) => Logger.error(err));
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async removeResource(id: string, type: ItemType, resourceId: string) {
+    const resource = await ItemResource.findOne({
+      where: {
+        id: resourceId,
+      },
+      include: [
+        {
+          model: Item,
+          where: {
+            id,
+            type,
+          },
+        },
+      ],
+    });
+
+    if (!resource) {
+      throw new NotFoundException(`Not Fount Resource ${resourceId} of ${id}`);
+    }
+
+    const transaction = await this.sequelizeInstance.transaction();
+
+    try {
+      await resource.destroy({ transaction });
+
+      await ItemResource.update(
+        {
+          order: Sequelize.fn("order - 1"),
+        },
+        {
+          where: {
+            type: resource.type,
+            itemId: id,
+            order: {
+              [Op.gte]: resource.order,
+            },
+          },
+          transaction,
+        },
+      );
+
+      await Promise.all(
+        Object.keys(resource.paths).map(
+          async (r) => await this.s3Service.delete(resource.paths[r]),
+        ),
+      );
+    } catch (e) {
+      console.error(e);
+      await transaction.rollback().catch((err) => Logger.error(err));
+      throw e;
+    }
   }
 }
