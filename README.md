@@ -74,7 +74,7 @@ db:
   >  * [sequelize-typescript npm page](https://www.npmjs.com/package/sequelize-typescript#configuration)
   > * [sequelzie api document](https://sequelize.org/v6/class/src/sequelize.js~Sequelize.html#instance-constructor-constructor)
 
- > Postgres 이외의 
+ > Postgres 이외의 DB 사용시 match 쿼리의 호환성에 문제가 발생할 수있습니다.
 
 ### aws
 ```yaml
