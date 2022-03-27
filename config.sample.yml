@@ -1,10 +1,7 @@
 app:
   port: 3001
-  resource:
-    imageResourcePath: "/app/resource"
-    address: resource.example.com
-  serviceName: service
-  serviceUrl: http://localhost:3000
+  resourceAddress: resource.example.com
+
 
 db:
   allowSync: false
@@ -49,8 +46,8 @@ aws:
 
 keycloak:
   authServerUrl: http://keycloak:8080/auth
-  realm: operator-dev
-  clientId: sms-api
-  secret: 07y38dgtt73A6tm0lJZRnXevPUI0XuBa
+  realm: raviluz
+  clientId: admin-api
+  secret: 318ce042-8f42-42f1-965c-88f3c48c0e7d
 
 NODE_ENV: development
