@@ -23,6 +23,7 @@ import { ItemType, ItemTypes, ResourcePath } from "../types";
 import sequelize from "sequelize";
 import { ItemFileType } from "../types/itemFile.type";
 import { S3Service } from "../aws/s3/s3.service";
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class ItemService {
@@ -37,6 +38,8 @@ export class ItemService {
 
     @Inject("SEQUELIZE")
     private readonly sequelizeInstance: Sequelize,
+
+    private readonly configService: ConfigService,
   ) {}
 
   async create(createItemDto: CreateItemDto) {
@@ -348,7 +351,7 @@ export class ItemService {
       where["order"] = order;
     }
 
-    return await ItemResource.findAll({
+    const results = await ItemResource.findAll({
       where,
       include: [
         {
@@ -359,6 +362,18 @@ export class ItemService {
           },
         },
       ],
+    });
+
+    return results.map((v) => {
+      return {
+        ...v.toJSON(),
+        paths: Object.keys(v.paths).reduce((p, k) => {
+          p[k] = `${this.configService.get("app").resourceAddress}/${
+            v.paths[k]
+          }`;
+          return p;
+        }, {}),
+      };
     });
   }
 
@@ -420,7 +435,15 @@ export class ItemService {
         },
       );
 
-      return result;
+      return {
+        ...result.toJSON(),
+        paths: Object.keys(result.paths).reduce((p, k) => {
+          p[k] = `${this.configService.get("app").resourceAddress}/${
+            result.paths[k]
+          }`;
+          return p;
+        }, {}),
+      };
     } catch (e) {
       await transaction.rollback().catch((err) => Logger.error(err));
       throw new InternalServerErrorException();

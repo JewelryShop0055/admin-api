@@ -37,23 +37,28 @@ $ yarn run test:e2e
 $ yarn run test:cov
 ```
 
-
 ## Configuration
- copy to `src/configure/config.yml`(devleop or standalon) or `/app/configure/config.yml` (use docker) from `config.sample.yml`
+
+copy to `src/configure/config.yml`(devleop or standalon) or `/app/configure/config.yml` (use docker) from `config.sample.yml`
 
 ### app
+
 ```yaml
 app:
   port: 3001
+  resourceAddress: htts://example.com
 ```
- * `port` (optional, default: 3001 ): litens port
+
+- `port` (optional, default: 3001 ): litens port
+- `resourceAddress` (required): image resource 서버 주소
 
 ### db
+
 ```yaml
 db:
   allowSync: false
   initKorDic: false
-  config: 
+  config:
     dialect: postgres
     dialectOptions:
       autoJsonMap: false
@@ -63,20 +68,23 @@ db:
     host: postgres
     port: 5432
 ```
- * `allowSync` (optional, default: false): db 동기화 사용 여부
- * `initKorDic` (optional, default: false): 한국어 형태소 관련 쿼리 실행 여부(최초 1회 필요)
 
- * config: 
-  
-  > `SequelizeOptions` 타입에 관한 부분입니다.
-  >
-  > 관련 문서: 
-  >  * [sequelize-typescript npm page](https://www.npmjs.com/package/sequelize-typescript#configuration)
-  > * [sequelzie api document](https://sequelize.org/v6/class/src/sequelize.js~Sequelize.html#instance-constructor-constructor)
+- `allowSync` (optional, default: false): db 동기화 사용 여부
+- `initKorDic` (optional, default: false): 한국어 형태소 관련 쿼리 실행 여부(최초 1회 필요)
 
- > Postgres 이외의 DB 사용시 match 쿼리의 호환성에 문제가 발생할 수있습니다.
+- config:
+
+> `SequelizeOptions` 타입에 관한 부분입니다.
+>
+> 관련 문서:
+>
+> - [sequelize-typescript npm page](https://www.npmjs.com/package/sequelize-typescript#configuration)
+> - [sequelzie api document](https://sequelize.org/v6/class/src/sequelize.js~Sequelize.html#instance-constructor-constructor)
+
+> Postgres 이외의 DB 사용시 match 쿼리의 호환성에 문제가 발생할 수있습니다.
 
 ### aws
+
 ```yaml
 aws:
   signatureVersion: v4
@@ -87,14 +95,15 @@ aws:
   secretAccessKey: secret key
 ```
 
- * `signatureVersion` (optional) : aws api version.
- * `region` (required): : aws region
- * `bucketName` (required): 이미지 리소스 저장 버킷
- * `s3Endpoint`  (optional): AWS가 아닌 셀프 호스트 서비스를 사용할 때 필요. (예, [minio](https://min.io/) )
- * `accessKeyId`: aws accessKeyId
- * `secretAccessKey`: aws secretAccessKey
+- `signatureVersion` (optional) : aws api version.
+- `region` (required): : aws region
+- `bucketName` (required): 이미지 리소스 저장 버킷
+- `s3Endpoint` (optional): AWS가 아닌 셀프 호스트 서비스를 사용할 때 필요. (예, [minio](https://min.io/) )
+- `accessKeyId`: aws accessKeyId
+- `secretAccessKey`: aws secretAccessKey
 
 ### keycloak
+
 ```yaml
 keycloak:
   authServerUrl: http://keycloak:8080/auth
@@ -102,14 +111,14 @@ keycloak:
   clientId: admin-api
   secret: 318ce042-8f42-42f1-965c-88f3c48c0e7d
 ```
- > `KeycloakConnectOptions` 타입에 관한 부분입니다.
- >
- > 관련 문서: 
- > * [nest-keycloak-connect](https://www.npmjs.com/package/nest-keycloak-connect#user-content-configuration-options)
 
+> `KeycloakConnectOptions` 타입에 관한 부분입니다.
+>
+> 관련 문서:
+>
+> - [nest-keycloak-connect](https://www.npmjs.com/package/nest-keycloak-connect#user-content-configuration-options)
 
- * `authServerUrl` (required) : keycloak address
- * `realm` (required) : realm name
- * `clientId` (required): client id
- * `secret` (required): client secret
-
+- `authServerUrl` (required) : keycloak address
+- `realm` (required) : realm name
+- `clientId` (required): client id
+- `secret` (required): client secret
