@@ -1510,6 +1510,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fastify/error@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@fastify/error@npm:2.0.0"
+  checksum: ecf0834966b2bfb33ff834e3d55fe4dc04cbe9f822fda6c937b12cce4f162be4f8b0577ee665bc856d7012b1640c12472a1829a22ae38d287342c90b0f33a595
+  languageName: node
+  linkType: hard
+
 "@foliojs-fork/fontkit@npm:^1.9.1":
   version: 1.9.1
   resolution: "@foliojs-fork/fontkit@npm:1.9.1"
@@ -3007,7 +3014,7 @@ __metadata:
     eslint: ^7.30.0
     eslint-config-prettier: ^8.3.0
     eslint-plugin-prettier: ^3.4.0
-    fastify: ^3.27.4
+    fastify: ^3.29.4
     fastify-helmet: ^7.0.1
     fastify-multer: ^2.0.2
     fastify-swagger: ^5.0.0
@@ -4243,6 +4250,13 @@ __metadata:
   dependencies:
     safe-buffer: 5.2.1
   checksum: afb9d545e296a5171d7574fcad634b2fdf698875f4006a9dd04a3e1333880c5c0c98d47b560d01216fb6505a54a2ba6a843ee3a02ec86d7e911e8315255f56c3
+  languageName: node
+  linkType: hard
+
+"content-type@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "content-type@npm:1.0.4"
+  checksum: 3d93585fda985d1554eca5ebd251994327608d2e200978fdbfba21c0c679914d5faf266d17027de44b34a72c7b0745b18584ecccaa7e1fdfb6a68ac7114f12e0
   languageName: node
   linkType: hard
 
@@ -5561,7 +5575,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify@npm:3.27.4, fastify@npm:^3.27.4":
+"fastify@npm:3.27.4":
   version: 3.27.4
   resolution: "fastify@npm:3.27.4"
   dependencies:
@@ -5581,6 +5595,30 @@ __metadata:
     semver: ^7.3.2
     tiny-lru: ^8.0.1
   checksum: 1f5e84c133398946d66a1a94c4070a0fdf9ae49ba20b3f922608b9f230a3e9c13856feba2b3438f9088698eec3e90ddf4d3d85c7ea9b5b0b7456f78e7feb2385
+  languageName: node
+  linkType: hard
+
+"fastify@npm:^3.29.4":
+  version: 3.29.4
+  resolution: "fastify@npm:3.29.4"
+  dependencies:
+    "@fastify/ajv-compiler": ^1.0.0
+    "@fastify/error": ^2.0.0
+    abstract-logging: ^2.0.0
+    avvio: ^7.1.2
+    content-type: ^1.0.4
+    fast-json-stringify: ^2.5.2
+    find-my-way: ^4.5.0
+    flatstr: ^1.0.12
+    light-my-request: ^4.2.0
+    pino: ^6.13.0
+    process-warning: ^1.0.0
+    proxy-addr: ^2.0.7
+    rfdc: ^1.1.4
+    secure-json-parse: ^2.0.0
+    semver: ^7.3.2
+    tiny-lru: ^8.0.1
+  checksum: add73f5bccf87c86f8edc08cad13b7ed942f7639ecaf3caa0502f069d9c9d39c3dd1257d403d3d845c7fa3099eee25ad4d1023223d6116f82bce84f0e724169a
   languageName: node
   linkType: hard
 

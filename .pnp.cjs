@@ -62,7 +62,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint", "npm:7.32.0"],\
             ["eslint-config-prettier", "virtual:8b651dbfd3547b63da45b87955553c85a9fd8e409381dca915b2da547c6a6b8204fa6984387dc68baf46570154d9da77b67d226dbef7681568cada8d854e4ccb#npm:8.5.0"],\
             ["eslint-plugin-prettier", "virtual:8b651dbfd3547b63da45b87955553c85a9fd8e409381dca915b2da547c6a6b8204fa6984387dc68baf46570154d9da77b67d226dbef7681568cada8d854e4ccb#npm:3.4.1"],\
-            ["fastify", "npm:3.27.4"],\
+            ["fastify", "npm:3.29.4"],\
             ["fastify-helmet", "npm:7.0.1"],\
             ["fastify-multer", "npm:2.0.2"],\
             ["fastify-swagger", "npm:5.0.0"],\
@@ -2708,6 +2708,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["@fastify/error", [\
+        ["npm:2.0.0", {\
+          "packageLocation": "./.yarn/cache/@fastify-error-npm-2.0.0-9960848f02-ecf0834966.zip/node_modules/@fastify/error/",\
+          "packageDependencies": [\
+            ["@fastify/error", "npm:2.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["@foliojs-fork/fontkit", [\
         ["npm:1.9.1", {\
           "packageLocation": "./.yarn/cache/@foliojs-fork-fontkit-npm-1.9.1-140ba7c062-5d37eca2c5.zip/node_modules/@foliojs-fork/fontkit/",\
@@ -4657,7 +4666,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint", "npm:7.32.0"],\
             ["eslint-config-prettier", "virtual:8b651dbfd3547b63da45b87955553c85a9fd8e409381dca915b2da547c6a6b8204fa6984387dc68baf46570154d9da77b67d226dbef7681568cada8d854e4ccb#npm:8.5.0"],\
             ["eslint-plugin-prettier", "virtual:8b651dbfd3547b63da45b87955553c85a9fd8e409381dca915b2da547c6a6b8204fa6984387dc68baf46570154d9da77b67d226dbef7681568cada8d854e4ccb#npm:3.4.1"],\
-            ["fastify", "npm:3.27.4"],\
+            ["fastify", "npm:3.29.4"],\
             ["fastify-helmet", "npm:7.0.1"],\
             ["fastify-multer", "npm:2.0.2"],\
             ["fastify-swagger", "npm:5.0.0"],\
@@ -6174,6 +6183,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["content-type", [\
+        ["npm:1.0.4", {\
+          "packageLocation": "./.yarn/cache/content-type-npm-1.0.4-3b1a5ca16b-3d93585fda.zip/node_modules/content-type/",\
+          "packageDependencies": [\
+            ["content-type", "npm:1.0.4"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["convert-source-map", [\
         ["npm:1.8.0", {\
           "packageLocation": "./.yarn/cache/convert-source-map-npm-1.8.0-037f671dde-985d974a2d.zip/node_modules/convert-source-map/",\
@@ -7596,6 +7614,29 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["avvio", "npm:7.2.5"],\
             ["fast-json-stringify", "npm:2.7.13"],\
             ["fastify-error", "npm:0.3.1"],\
+            ["find-my-way", "npm:4.5.1"],\
+            ["flatstr", "npm:1.0.12"],\
+            ["light-my-request", "npm:4.8.0"],\
+            ["pino", "npm:6.14.0"],\
+            ["process-warning", "npm:1.0.0"],\
+            ["proxy-addr", "npm:2.0.7"],\
+            ["rfdc", "npm:1.3.0"],\
+            ["secure-json-parse", "npm:2.4.0"],\
+            ["semver", "npm:7.3.5"],\
+            ["tiny-lru", "npm:8.0.2"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:3.29.4", {\
+          "packageLocation": "./.yarn/cache/fastify-npm-3.29.4-42f3d4e84a-add73f5bcc.zip/node_modules/fastify/",\
+          "packageDependencies": [\
+            ["fastify", "npm:3.29.4"],\
+            ["@fastify/ajv-compiler", "npm:1.1.0"],\
+            ["@fastify/error", "npm:2.0.0"],\
+            ["abstract-logging", "npm:2.0.1"],\
+            ["avvio", "npm:7.2.5"],\
+            ["content-type", "npm:1.0.4"],\
+            ["fast-json-stringify", "npm:2.7.13"],\
             ["find-my-way", "npm:4.5.1"],\
             ["flatstr", "npm:1.0.12"],\
             ["light-my-request", "npm:4.8.0"],\
