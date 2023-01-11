@@ -58,7 +58,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@typescript-eslint/parser", "virtual:8b651dbfd3547b63da45b87955553c85a9fd8e409381dca915b2da547c6a6b8204fa6984387dc68baf46570154d9da77b67d226dbef7681568cada8d854e4ccb#npm:4.33.0"],\
             ["aws-sdk", "npm:2.1098.0"],\
             ["class-transformer", "npm:0.5.1"],\
-            ["class-validator", "npm:0.13.2"],\
+            ["class-validator", "npm:0.14.0"],\
             ["eslint", "npm:7.32.0"],\
             ["eslint-config-prettier", "virtual:8b651dbfd3547b63da45b87955553c85a9fd8e409381dca915b2da547c6a6b8204fa6984387dc68baf46570154d9da77b67d226dbef7681568cada8d854e4ccb#npm:8.5.0"],\
             ["eslint-plugin-prettier", "virtual:8b651dbfd3547b63da45b87955553c85a9fd8e409381dca915b2da547c6a6b8204fa6984387dc68baf46570154d9da77b67d226dbef7681568cada8d854e4ccb#npm:3.4.1"],\
@@ -3122,7 +3122,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["axios", "npm:0.26.1"],\
             ["cache-manager", null],\
             ["class-transformer", "npm:0.5.1"],\
-            ["class-validator", "npm:0.13.2"],\
+            ["class-validator", "npm:0.14.0"],\
             ["iterare", "npm:1.2.1"],\
             ["reflect-metadata", "npm:0.1.13"],\
             ["rxjs", "npm:7.5.5"],\
@@ -3294,7 +3294,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/nestjs__common", null],\
             ["@types/reflect-metadata", null],\
             ["class-transformer", "npm:0.5.1"],\
-            ["class-validator", "npm:0.13.2"],\
+            ["class-validator", "npm:0.14.0"],\
             ["reflect-metadata", "npm:0.1.13"]\
           ],\
           "packagePeers": [\
@@ -4090,6 +4090,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/validator", "npm:13.7.1"]\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["npm:13.7.10", {\
+          "packageLocation": "./.yarn/cache/@types-validator-npm-13.7.10-80d6b32ae6-7b142c0801.zip/node_modules/@types/validator/",\
+          "packageDependencies": [\
+            ["@types/validator", "npm:13.7.10"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["@types/yargs", [\
@@ -4653,7 +4660,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@typescript-eslint/parser", "virtual:8b651dbfd3547b63da45b87955553c85a9fd8e409381dca915b2da547c6a6b8204fa6984387dc68baf46570154d9da77b67d226dbef7681568cada8d854e4ccb#npm:4.33.0"],\
             ["aws-sdk", "npm:2.1098.0"],\
             ["class-transformer", "npm:0.5.1"],\
-            ["class-validator", "npm:0.13.2"],\
+            ["class-validator", "npm:0.14.0"],\
             ["eslint", "npm:7.32.0"],\
             ["eslint-config-prettier", "virtual:8b651dbfd3547b63da45b87955553c85a9fd8e409381dca915b2da547c6a6b8204fa6984387dc68baf46570154d9da77b67d226dbef7681568cada8d854e4ccb#npm:8.5.0"],\
             ["eslint-plugin-prettier", "virtual:8b651dbfd3547b63da45b87955553c85a9fd8e409381dca915b2da547c6a6b8204fa6984387dc68baf46570154d9da77b67d226dbef7681568cada8d854e4ccb#npm:3.4.1"],\
@@ -5899,11 +5906,12 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["class-validator", [\
-        ["npm:0.13.2", {\
-          "packageLocation": "./.yarn/cache/class-validator-npm-0.13.2-915206252c-0deb4c29fa.zip/node_modules/class-validator/",\
+        ["npm:0.14.0", {\
+          "packageLocation": "./.yarn/cache/class-validator-npm-0.14.0-b600d5fe72-f62e4a0ad2.zip/node_modules/class-validator/",\
           "packageDependencies": [\
-            ["class-validator", "npm:0.13.2"],\
-            ["libphonenumber-js", "npm:1.9.50"],\
+            ["class-validator", "npm:0.14.0"],\
+            ["@types/validator", "npm:13.7.10"],\
+            ["libphonenumber-js", "npm:1.10.18"],\
             ["validator", "npm:13.7.0"]\
           ],\
           "linkType": "HARD"\
@@ -9897,10 +9905,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["libphonenumber-js", [\
-        ["npm:1.9.50", {\
-          "packageLocation": "./.yarn/cache/libphonenumber-js-npm-1.9.50-878a654901-ebb80c59b5.zip/node_modules/libphonenumber-js/",\
+        ["npm:1.10.18", {\
+          "packageLocation": "./.yarn/cache/libphonenumber-js-npm-1.10.18-154a7b087a-df0a4b8adf.zip/node_modules/libphonenumber-js/",\
           "packageDependencies": [\
-            ["libphonenumber-js", "npm:1.9.50"]\
+            ["libphonenumber-js", "npm:1.10.18"]\
           ],\
           "linkType": "HARD"\
         }]\
