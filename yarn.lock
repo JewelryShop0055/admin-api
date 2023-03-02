@@ -3013,7 +3013,7 @@ __metadata:
     fastify-swagger: ^5.0.0
     jest: ^27.0.6
     js-yaml: ^4.1.0
-    keycloak-connect: ^17.0.0
+    keycloak-connect: ^21.0.1
     multer-s3: ^2.10.0
     nest-keycloak-connect: ^1.8.1
     passport: ^0.5.2
@@ -7467,16 +7467,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"keycloak-connect@npm:^17.0.0":
-  version: 17.0.0
-  resolution: "keycloak-connect@npm:17.0.0"
+"keycloak-connect@npm:^21.0.1":
+  version: 21.0.1
+  resolution: "keycloak-connect@npm:21.0.1"
   dependencies:
     chromedriver: latest
     jwk-to-pem: ^2.0.0
   dependenciesMeta:
     chromedriver:
       optional: true
-  checksum: 15143fdb7af52f9aed055a286f092691fd1d839cbe02caf9858111c575c2bb1b98a2c6a38482307e401881ead9d7335e5ba369f1f53fb4fc3c756cd2e359f5fa
+  checksum: 2dc57d3388072f1ccd6502e5de85253eb60055d721418f2ea5b56b418a579055a31c7ed72b790c0dea761791fce1a62804235916fda33ea6273dec62f946e703
   languageName: node
   linkType: hard
 

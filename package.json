@@ -37,7 +37,7 @@
     "fastify-multer": "^2.0.2",
     "fastify-swagger": "^5.0.0",
     "js-yaml": "^4.1.0",
-    "keycloak-connect": "^17.0.0",
+    "keycloak-connect": "^21.0.1",
     "multer-s3": "^2.10.0",
     "nest-keycloak-connect": "^1.8.1",
     "passport": "^0.5.2",
