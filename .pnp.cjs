@@ -68,7 +68,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["fastify-swagger", "npm:5.0.0"],\
             ["jest", "virtual:8b651dbfd3547b63da45b87955553c85a9fd8e409381dca915b2da547c6a6b8204fa6984387dc68baf46570154d9da77b67d226dbef7681568cada8d854e4ccb#npm:27.5.1"],\
             ["js-yaml", "npm:4.1.0"],\
-            ["keycloak-connect", "npm:17.0.0"],\
+            ["keycloak-connect", "npm:21.0.1"],\
             ["multer-s3", "npm:2.10.0"],\
             ["nest-keycloak-connect", "virtual:8b651dbfd3547b63da45b87955553c85a9fd8e409381dca915b2da547c6a6b8204fa6984387dc68baf46570154d9da77b67d226dbef7681568cada8d854e4ccb#npm:1.8.1"],\
             ["passport", "npm:0.5.2"],\
@@ -4663,7 +4663,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["fastify-swagger", "npm:5.0.0"],\
             ["jest", "virtual:8b651dbfd3547b63da45b87955553c85a9fd8e409381dca915b2da547c6a6b8204fa6984387dc68baf46570154d9da77b67d226dbef7681568cada8d854e4ccb#npm:27.5.1"],\
             ["js-yaml", "npm:4.1.0"],\
-            ["keycloak-connect", "npm:17.0.0"],\
+            ["keycloak-connect", "npm:21.0.1"],\
             ["multer-s3", "npm:2.10.0"],\
             ["nest-keycloak-connect", "virtual:8b651dbfd3547b63da45b87955553c85a9fd8e409381dca915b2da547c6a6b8204fa6984387dc68baf46570154d9da77b67d226dbef7681568cada8d854e4ccb#npm:1.8.1"],\
             ["passport", "npm:0.5.2"],\
@@ -9848,10 +9848,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["keycloak-connect", [\
-        ["npm:17.0.0", {\
-          "packageLocation": "./.yarn/cache/keycloak-connect-npm-17.0.0-d105ccc3a6-15143fdb7a.zip/node_modules/keycloak-connect/",\
+        ["npm:21.0.1", {\
+          "packageLocation": "./.yarn/cache/keycloak-connect-npm-21.0.1-164db4f309-2dc57d3388.zip/node_modules/keycloak-connect/",\
           "packageDependencies": [\
-            ["keycloak-connect", "npm:17.0.0"],\
+            ["keycloak-connect", "npm:21.0.1"],\
             ["chromedriver", "npm:99.0.0"],\
             ["jwk-to-pem", "npm:2.0.5"]\
           ],\
@@ -10589,7 +10589,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/nestjs__common", null],\
             ["@types/nestjs__core", null],\
             ["@types/nestjs__graphql", null],\
-            ["keycloak-connect", "npm:17.0.0"]\
+            ["keycloak-connect", "npm:21.0.1"]\
           ],\
           "packagePeers": [\
             "@nestjs/common",\
